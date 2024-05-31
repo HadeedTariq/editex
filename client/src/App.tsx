@@ -1,35 +1,91 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import "./App.css";
+import LoginUser from "./routes/auth/pages/LoginUser";
+import RegisterUser from "./routes/auth/pages/RegisterUser";
+import Home from "./routes/app/pages/Home";
+import NavBar from "./components/Navbar";
+import { useEffect } from "react";
+import { useTheme } from "./hooks/useTheme";
+import { useMutation } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { authApi } from "./lib/axios";
+import { setUser } from "./reducers/fullAppReducer";
+import { useFullApp } from "./hooks/useFullApp";
+import AuthProtector from "./routes/auth/components/AuthProtector";
+import ProjectHandler from "./routes/app/components/ProjectHandler";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { theme } = useTheme();
+  const { user } = useFullApp();
+  const dispatch = useDispatch();
+  const { mutate: authUser } = useMutation({
+    mutationKey: ["authenticateUser"],
+    mutationFn: async () => {
+      const { data } = await authApi.get("/");
+      dispatch(setUser(data));
+    },
+  });
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  useEffect(() => {
+    if (!user) {
+      authUser();
+    }
+    const root = window.document.documentElement;
+
+    root.classList.remove("light", "dark");
+
+    if (theme === "system") {
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light";
+
+      root.classList.add(systemTheme);
+      return;
+    }
+
+    root.classList.add(theme);
+  }, [theme]);
+
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <NavBar />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/auth",
+          children: [
+            {
+              path: "login",
+              element: (
+                <AuthProtector>
+                  <LoginUser />
+                </AuthProtector>
+              ),
+            },
+            {
+              path: "register",
+              element: (
+                <AuthProtector>
+                  <RegisterUser />
+                </AuthProtector>
+              ),
+            },
+          ],
+        },
+        {
+          path: "/project",
+          element: <ProjectHandler />,
+        },
+      ],
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
