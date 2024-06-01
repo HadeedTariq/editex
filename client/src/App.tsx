@@ -13,6 +13,9 @@ import { setUser } from "./reducers/fullAppReducer";
 import { useFullApp } from "./hooks/useFullApp";
 import AuthProtector from "./routes/auth/components/AuthProtector";
 import ProjectHandler from "./routes/app/components/ProjectHandler";
+import ProjectPage from "./routes/app/pages/ProjectPage";
+import CodeEditor from "./routes/app/components/CodeEditor";
+import DefaultEditor from "./routes/app/pages/DefaultEditor";
 
 function App() {
   const { theme } = useTheme();
@@ -80,6 +83,16 @@ function App() {
         {
           path: "/project",
           element: <ProjectHandler />,
+        },
+        {
+          path: "/project/:id",
+          element: <ProjectPage />,
+          children: [
+            {
+              index: true,
+              element: <DefaultEditor />,
+            },
+          ],
         },
       ],
     },

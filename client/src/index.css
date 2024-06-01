@@ -5,6 +5,11 @@
 #root {
   padding: 0;
 }
+.CodeMirror {
+  width: 100%;
+  height: 100%;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
 
 @layer base {
   :root {

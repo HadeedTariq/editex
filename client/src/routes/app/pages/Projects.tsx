@@ -15,11 +15,13 @@ import { toast } from "@/components/ui/use-toast";
 import { useDispatch } from "react-redux";
 import { setProjects } from "../reducer/appReducer";
 import EditProject from "../components/EditProject";
+import { useNavigate } from "react-router-dom";
 
 const Projects = () => {
   const dispatch = useDispatch();
   const { user } = useFullApp();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { data: myProjects, isLoading } = useQuery({
     queryKey: ["getMyProjects"],
@@ -76,7 +78,10 @@ const Projects = () => {
             <p className="text-[18px] font-[400] text-yellow-500">
               Created at: {format(new Date(project.createdAt), "dd/MM/yyyy")}
             </p>
-            <Button className="w-full" variant={"project"}>
+            <Button
+              className="w-full"
+              variant={"project"}
+              onClick={() => navigate(`${project._id}`)}>
               See Full
             </Button>
             <Button
