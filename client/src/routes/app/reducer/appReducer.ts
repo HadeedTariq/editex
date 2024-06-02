@@ -1,24 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export interface Items {
+  id: string;
+  name: string;
+  isFolder: boolean;
+  items: Items[];
+}
 export interface ProjectFilesFoldersType {
   projectName: string;
-  fileName: string;
-  folderName: string;
+  projectId: string;
+  items: Items[];
 }
 export interface AppRouteState {
   isProjectPublic: boolean;
   projects: ProjectsType[];
-  file: boolean;
-  folder: boolean;
   projectFilesFolders: ProjectFilesFoldersType[];
+  currentProjectFP: ProjectFilesFoldersType | null;
 }
 
 const initialState: AppRouteState = {
   isProjectPublic: true,
   projects: [],
-  file: false,
-  folder: false,
   projectFilesFolders: [],
+  currentProjectFP: null,
 };
 
 const appReducer = createSlice({
@@ -31,16 +35,23 @@ const appReducer = createSlice({
     setProjects: (state, { payload }: { payload: ProjectsType[] }) => {
       state.projects = payload;
     },
-    setFile(state, { payload }: { payload: boolean }) {
-      state.file = payload;
+    setCurrentProjectFP: (
+      state,
+      { payload }: { payload: ProjectFilesFoldersType }
+    ) => {
+      state.currentProjectFP = payload;
     },
-    setFolder(state, { payload }: { payload: boolean }) {
-      state.folder = payload;
+    setItemsCP: (state, { payload }: { payload: Items }) => {
+      state.currentProjectFP?.items.push(payload);
     },
   },
 });
 
 export default appReducer.reducer;
 
-export const { setProjectPublic, setProjects, setFile, setFolder } =
-  appReducer.actions;
+export const {
+  setProjectPublic,
+  setProjects,
+  setCurrentProjectFP,
+  setItemsCP,
+} = appReducer.actions;

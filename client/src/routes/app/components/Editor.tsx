@@ -4,7 +4,6 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import FolderFileSturucture from "./FolderFileSturucture";
-import CodeEditor from "./CodeEditor";
 import { Outlet } from "react-router-dom";
 
 export function Editor() {
