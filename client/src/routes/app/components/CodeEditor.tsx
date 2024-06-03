@@ -1,17 +1,20 @@
 import { UnControlled as CodeMirror } from "react-codemirror2";
-import "codemirror/theme/cobalt.css";
+import "codemirror/theme/gruvbox-dark.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/javascript/javascript";
 import "codemirror/addon/hint/show-hint.css";
-import "codemirror/addon/hint/javascript-hint";
+import "codemirror/addon/lint/lint.css";
+
 import { useRef } from "react";
 
 const CodeEditor = () => {
-  const editor = useRef();
-  const wrapper = useRef();
+  const editor = useRef<any>();
+  const wrapper = useRef<any>();
   const editorWillUnmount = () => {
-    editor.current.display.wrapper.remove();
-    wrapper.current.hydrated = false;
+    if (editor.current && wrapper.current) {
+      editor.current.display.wrapper.remove();
+      wrapper.current.hydrated = false;
+    }
   };
   return (
     <div className="h-[91vh]">
@@ -20,8 +23,15 @@ const CodeEditor = () => {
         options={{
           lineNumbers: true,
           mode: "javascript",
-          theme: "cobalt",
+          theme: "gruvbox-dark",
           extraKeys: { "Ctrl-Space": "autocomplete" },
+          linerWrapping: true,
+          lint: true,
+          autoCloseBrackets: true,
+          lineHighlight: {
+            from: 1,
+            to: 10,
+          },
         }}
         editorDidMount={(e) => (editor.current = e)}
         editorWillUnmount={editorWillUnmount}

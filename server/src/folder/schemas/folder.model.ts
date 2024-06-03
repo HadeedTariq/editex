@@ -15,6 +15,10 @@ const itemSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Project',
   },
+  creator: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
   items: [],
 });
 export const Item = model('Item', itemSchema);

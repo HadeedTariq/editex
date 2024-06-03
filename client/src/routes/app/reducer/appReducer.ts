@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface Items {
-  id: string;
+  _id: string;
   name: string;
   isFolder: boolean;
   items: Items[];
@@ -14,14 +14,12 @@ export interface ProjectFilesFoldersType {
 export interface AppRouteState {
   isProjectPublic: boolean;
   projects: ProjectsType[];
-  projectFilesFolders: ProjectFilesFoldersType[];
   currentProjectFP: ProjectFilesFoldersType | null;
 }
 
 const initialState: AppRouteState = {
   isProjectPublic: true,
   projects: [],
-  projectFilesFolders: [],
   currentProjectFP: null,
 };
 

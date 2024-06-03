@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useAppRouter } from "../hooks/useAppRouter";
 import { FileJson, FilePlus, Folder, FolderPlus } from "lucide-react";
 import { useState } from "react";
@@ -12,10 +12,13 @@ import { Input } from "@/components/ui/input";
 import { useDispatch } from "react-redux";
 import { setItemsCP } from "../reducer/appReducer";
 import { v4 as uuid } from "uuid";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "@/components/ui/use-toast";
+import { itemApi } from "@/lib/axios";
 
 const FolderFileSturucture = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { id, filename } = useParams();
   const { currentProjectFP } = useAppRouter();
   const [showInput, setShowInput] = useState({
     visible: false,
@@ -25,35 +28,79 @@ const FolderFileSturucture = () => {
   const [folder, setFolder] = useState("");
   if (!id || id.length !== 24) return <Navigate to={"/"} />;
   if (!currentProjectFP) return <Navigate to={"/"} />;
+
+  const { mutate: folderCreation, isPending: isFolderCreating } = useMutation({
+    mutationKey: [`createFolder`],
+    mutationFn: async () => {
+      const { data } = await itemApi.post(`/createFolder`, {
+        name: folder,
+        isFolder: true,
+        projectId: id,
+      });
+      return data;
+    },
+    onSuccess() {
+      setShowInput({ ...showInput, visible: false });
+      setFolder("");
+    },
+    onError(err: ServerError) {
+      toast({
+        title: err.response.data.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const { mutate: fileCreation, isPending: isFileCreating } = useMutation({
+    mutationKey: [`createFile`],
+    mutationFn: async () => {
+      const { data } = await itemApi.post(`/createFile`, {
+        name: file,
+        isFolder: false,
+        projectId: id,
+      });
+      return data;
+    },
+    onSuccess() {
+      setShowInput({ ...showInput, visible: false });
+      setFile("");
+    },
+    onError(err: ServerError) {
+      toast({
+        title: err.response.data.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const createFile = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       dispatch(
         setItemsCP({
-          id: uuid(),
+          _id: uuid(),
           isFolder: false,
           items: [],
           name: file,
         })
       );
-      setShowInput({ ...showInput, visible: false });
-      setFile("");
+      fileCreation();
     }
   };
   const createFolder = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       dispatch(
         setItemsCP({
-          id: uuid(),
+          _id: uuid(),
           isFolder: true,
           items: [],
           name: folder,
         })
       );
-      setShowInput({ ...showInput, visible: false });
-      setFolder("");
+      folderCreation();
     }
   };
 
+  const navigate = useNavigate();
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="item-1">
@@ -92,6 +139,7 @@ const FolderFileSturucture = () => {
                   autoFocus
                   onBlur={() => setShowInput({ ...showInput, visible: false })}
                   onChange={(e) => setFolder(e.target.value)}
+                  disabled={isFolderCreating}
                   onKeyDown={createFolder}
                 />
               </div>
@@ -104,20 +152,25 @@ const FolderFileSturucture = () => {
                   autoFocus
                   onBlur={() => setShowInput({ ...showInput, visible: false })}
                   onChange={(e) => setFile(e.target.value)}
+                  disabled={isFileCreating}
                   onKeyDown={createFile}
                 />
               </div>
             ))}
           <div className="flex flex-col gap-2 px-2">
             {currentProjectFP.items?.map((exp) => (
-              <div className="flex flex-col ">
+              <div className="flex flex-col " key={exp._id}>
                 {exp.isFolder ? (
                   <p className="flex items-center gap-2">
                     <Folder color="yellow" />
                     {exp.name}
                   </p>
                 ) : (
-                  <p className="flex items-center gap-2">
+                  <p
+                    className={`flex items-center gap-2 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-300 transition duration-300 ${
+                      filename === exp.name && "bg-gray-300 dark:bg-gray-700"
+                    }`}
+                    onClick={() => navigate(`js/${exp.name}`)}>
                     <FileJson color="green" />
                     {exp.name}
                   </p>

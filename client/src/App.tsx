@@ -92,6 +92,10 @@ function App() {
               index: true,
               element: <DefaultEditor />,
             },
+            {
+              path: "js/:filename",
+              element: <CodeEditor />,
+            },
           ],
         },
       ],
