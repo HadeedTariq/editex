@@ -4,7 +4,10 @@ export interface Items {
   _id: string;
   name: string;
   isFolder: boolean;
-  items: Items[];
+  items: {
+    name: string;
+    isFolder: boolean;
+  }[];
 }
 export interface ProjectFilesFoldersType {
   projectName: string;
@@ -15,12 +18,14 @@ export interface AppRouteState {
   isProjectPublic: boolean;
   projects: ProjectsType[];
   currentProjectFP: ProjectFilesFoldersType | null;
+  currentProjectOpenFiles: string[];
 }
 
 const initialState: AppRouteState = {
   isProjectPublic: true,
   projects: [],
   currentProjectFP: null,
+  currentProjectOpenFiles: [],
 };
 
 const appReducer = createSlice({
@@ -42,6 +47,24 @@ const appReducer = createSlice({
     setItemsCP: (state, { payload }: { payload: Items }) => {
       state.currentProjectFP?.items.push(payload);
     },
+    setCurrentProjectOpenFiles: (state, { payload }: { payload: string }) => {
+      if (state.currentProjectOpenFiles.includes(payload)) {
+        return;
+      }
+      if (state.currentProjectOpenFiles.length === 4) {
+        state.currentProjectOpenFiles.shift();
+      }
+      state.currentProjectOpenFiles.push(payload);
+    },
+    setCurrentProjectOpenFilesEmpty: (state) => {
+      state.currentProjectOpenFiles = [];
+    },
+    removeFile: (state, { payload }: { payload: string }) => {
+      const currentFiles = state.currentProjectOpenFiles.filter(
+        (file) => file !== payload
+      );
+      state.currentProjectOpenFiles = currentFiles;
+    },
   },
 });
 
@@ -52,4 +75,7 @@ export const {
   setProjects,
   setCurrentProjectFP,
   setItemsCP,
+  setCurrentProjectOpenFiles,
+  setCurrentProjectOpenFilesEmpty,
+  removeFile,
 } = appReducer.actions;

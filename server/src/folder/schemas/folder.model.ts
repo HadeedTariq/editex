@@ -19,6 +19,11 @@ const itemSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
   },
-  items: [],
+  items: [
+    {
+      name:String,
+      isFolder:Boolean
+    }
+  ],
 });
 export const Item = model('Item', itemSchema);

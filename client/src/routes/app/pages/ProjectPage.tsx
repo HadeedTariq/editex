@@ -2,7 +2,10 @@ import { Navigate, useParams } from "react-router-dom";
 import { useAppRouter } from "../hooks/useAppRouter";
 import { Editor } from "../components/Editor";
 import { useDispatch } from "react-redux";
-import { setCurrentProjectFP } from "../reducer/appReducer";
+import {
+  setCurrentProjectFP,
+  setCurrentProjectOpenFilesEmpty,
+} from "../reducer/appReducer";
 import { useQuery } from "@tanstack/react-query";
 import { itemApi } from "@/lib/axios";
 import Loading from "@/components/ui/loading";
@@ -26,7 +29,10 @@ const ProjectPage = () => {
           items: data,
         })
       );
+      dispatch(setCurrentProjectOpenFilesEmpty());
     },
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
 
   if (isLoading) return <Loading />;

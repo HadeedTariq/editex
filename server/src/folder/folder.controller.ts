@@ -43,13 +43,8 @@ export class FolderController {
     return this.folderService.getProjectFilesAndFolders(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFolderDto: UpdateFolderDto) {
-    return this.folderService.update(+id, updateFolderDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.folderService.remove(+id);
+  @Patch('/updateFolder/:id')
+  update(@Param('id') id: string, @Body() name: string) {
+    return this.folderService.addFileToFolder(id, name);
   }
 }

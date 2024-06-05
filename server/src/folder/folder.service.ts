@@ -3,6 +3,7 @@ import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
 import { Request } from 'express';
 import { Item } from './schemas/folder.model';
+import { CustomException } from 'src/custom.exception';
 
 @Injectable()
 export class FolderService {
@@ -37,14 +38,24 @@ export class FolderService {
       projectId,
     }).select('name isFolder items _id');
 
+    console.log(projectFileAndFolders);
+
     return projectFileAndFolders;
   }
 
-  update(id: number, updateFolderDto: UpdateFolderDto) {
-    return `This action updates a #${id} folder`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} folder`;
+  async addFileToFolder(folderId: string, fileName: string) {
+    const createFileInFolder = await Item.findByIdAndUpdate(folderId, {
+      $push: {
+        items: {
+          name: fileName,
+          isFolder: false,
+        },
+      },
+    });
+    if (createFileInFolder) {
+      return { message: 'File created successfully' };
+    } else {
+      throw new CustomException('Something went wrong');
+    }
   }
 }
