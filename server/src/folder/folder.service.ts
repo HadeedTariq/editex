@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFolderDto } from './dto/create-folder.dto';
-import { UpdateFolderDto } from './dto/update-folder.dto';
 import { Request } from 'express';
 import { Item } from './schemas/folder.model';
 import { CustomException } from 'src/custom.exception';
+import * as sanitize from 'mongo-sanitize';
 
 @Injectable()
 export class FolderService {
@@ -38,7 +38,7 @@ export class FolderService {
       projectId,
     }).select('name isFolder items _id');
 
-    console.log(projectFileAndFolders);
+    // console.log(projectFileAndFolders);
 
     return projectFileAndFolders;
   }
@@ -54,6 +54,25 @@ export class FolderService {
     });
     if (createFileInFolder) {
       return { message: 'File created successfully' };
+    } else {
+      throw new CustomException('Something went wrong');
+    }
+  }
+
+  async saveCode(code: string, fileId: string) {
+    const realCode = sanitize(code);
+    const savedCode = await Item.findOneAndUpdate(
+      {
+        _id: fileId,
+        isFolder: false,
+      },
+      {
+        code: realCode,
+      },
+    );
+
+    if (savedCode) {
+      return { message: 'Code saved successfully' };
     } else {
       throw new CustomException('Something went wrong');
     }

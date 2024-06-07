@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import {
   setCurrentProjectFP,
   setCurrentProjectOpenFilesEmpty,
+  setProjectCode,
 } from "../reducer/appReducer";
 import { useQuery } from "@tanstack/react-query";
 import { itemApi } from "@/lib/axios";
@@ -30,6 +31,12 @@ const ProjectPage = () => {
         })
       );
       dispatch(setCurrentProjectOpenFilesEmpty());
+      dispatch(
+        setProjectCode({
+          projectId: id,
+          filesCode: [],
+        })
+      );
     },
     refetchOnWindowFocus: false,
     refetchOnMount: false,

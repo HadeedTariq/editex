@@ -1,7 +1,5 @@
 import { Schema, model } from 'mongoose';
 
-//! When a user create a folder\file in root of the project than only create function for this item schema is call But when the user create a subFolder\subFile in a folder then we find folder id and push the created folder/file with {name,isFolder,items} in the item schema items array
-
 const itemSchema = new Schema({
   name: {
     type: String,
@@ -21,9 +19,13 @@ const itemSchema = new Schema({
   },
   items: [
     {
-      name:String,
-      isFolder:Boolean
-    }
+      name: String,
+      isFolder: Boolean,
+    },
   ],
+  code: String,
 });
+
+itemSchema.index({ name: 1, projectId: 1 }, { unique: true });
+
 export const Item = model('Item', itemSchema);

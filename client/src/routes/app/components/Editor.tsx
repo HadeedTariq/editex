@@ -5,8 +5,16 @@ import {
 } from "@/components/ui/resizable";
 import FolderFileSturucture from "./FolderFileSturucture";
 import { Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { toast } from "@/components/ui/use-toast";
 
 export function Editor() {
+  useEffect(() => {
+    toast({
+      title: "Save the code",
+      description: "Please save the code So that you don't lose it",
+    });
+  }, []);
   return (
     <ResizablePanelGroup
       direction="horizontal"

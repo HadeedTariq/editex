@@ -93,7 +93,7 @@ function App() {
               element: <DefaultEditor />,
             },
             {
-              path: "js/:filename",
+              path: "js/:filename/:fileId",
               element: <CodeEditor />,
             },
           ],
