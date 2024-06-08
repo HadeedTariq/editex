@@ -4,6 +4,7 @@ export interface Items {
   _id: string;
   name: string;
   isFolder: boolean;
+  code?: string;
   items: {
     name: string;
     isFolder: boolean;
@@ -105,8 +106,6 @@ const appReducer = createSlice({
       state,
       { payload }: { payload: { fileId: string; code: string } }
     ) => {
-      console.log(payload);
-
       const projectFile = state.projectCode?.filesCode.find(
         (fileCode) => fileCode.fileId === payload.fileId
       );

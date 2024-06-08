@@ -23,6 +23,13 @@ const ProjectPage = () => {
     queryKey: [`getProjectFileFolders${id}`],
     queryFn: async () => {
       const { data } = await itemApi.get(`/${id}`);
+
+      const filesCode = data.map((file: any) => {
+        const code = file.code ? file.code : "";
+        const fileId = file._id;
+        return { code, fileId };
+      });
+
       dispatch(
         setCurrentProjectFP({
           projectName: project.name,
@@ -34,13 +41,16 @@ const ProjectPage = () => {
       dispatch(
         setProjectCode({
           projectId: id,
-          filesCode: [],
+          filesCode: filesCode || [],
         })
       );
+      return data;
     },
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });
+
+  // const {} = useQuery({});
 
   if (isLoading) return <Loading />;
 

@@ -36,7 +36,7 @@ export class FolderService {
   async getProjectFilesAndFolders(projectId: string) {
     const projectFileAndFolders = await Item.find({
       projectId,
-    }).select('name isFolder items _id');
+    }).select('name isFolder items _id code');
 
     // console.log(projectFileAndFolders);
 
@@ -73,6 +73,20 @@ export class FolderService {
 
     if (savedCode) {
       return { message: 'Code saved successfully' };
+    } else {
+      throw new CustomException('Something went wrong');
+    }
+  }
+
+  async getProjectCode(id: string) {
+    const projectCode = await Item.find({
+      projectId: id,
+    });
+
+    console.log(projectCode);
+
+    if (projectCode) {
+      return projectCode;
     } else {
       throw new CustomException('Something went wrong');
     }

@@ -17,6 +17,8 @@ import { useAppRouter } from "../hooks/useAppRouter";
 import { Button } from "@/components/ui/button";
 import { Save, X } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { itemApi } from "@/lib/axios";
+import { toast } from "@/components/ui/use-toast";
 
 const CodeEditor = () => {
   const editor = useRef<any>();
@@ -60,10 +62,21 @@ const CodeEditor = () => {
   // });
 
   // ! Save file code
-  // const {}=useMutation({
-  //   mutationKey:[`saveFileCode${fileId}`],
-  //   mutationFn:async()=>{}
-  // })
+  const { mutate: saveCode, isPending } = useMutation({
+    mutationKey: [`saveFileCode${fileId}`],
+    mutationFn: async () => {
+      const { data } = await itemApi.post("saveCode", {
+        code: FileCode?.code,
+        fileId,
+      });
+      return data;
+    },
+    onSuccess: (data: any) => {
+      toast({
+        title: data.message || "Code saved successfully",
+      });
+    },
+  });
 
   return (
     <div className="h-[91vh] flex flex-col">
@@ -92,7 +105,10 @@ const CodeEditor = () => {
             </Button>
           ))}
         </div>
-        <Button variant={"edit"}>
+        <Button
+          variant={"edit"}
+          onClick={() => saveCode()}
+          disabled={isPending}>
           <Save />
         </Button>
       </div>

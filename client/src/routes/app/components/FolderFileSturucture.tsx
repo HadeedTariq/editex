@@ -12,11 +12,16 @@ import { Input } from "@/components/ui/input";
 import { useDispatch } from "react-redux";
 import { setItemsCP } from "../reducer/appReducer";
 import { v4 as uuid } from "uuid";
-import { useMutation } from "@tanstack/react-query";
+import {
+  InvalidateQueryFilters,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { itemApi } from "@/lib/axios";
 
 const FolderFileSturucture = () => {
+  const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { id, filename } = useParams();
   const { currentProjectFP } = useAppRouter();
@@ -64,6 +69,10 @@ const FolderFileSturucture = () => {
     onSuccess() {
       setShowInput({ ...showInput, visible: false });
       setFile("");
+      queryClient.invalidateQueries([
+        `getProjectFileFolders${id}`,
+        0,
+      ] as InvalidateQueryFilters);
     },
     onError(err: ServerError) {
       toast({
