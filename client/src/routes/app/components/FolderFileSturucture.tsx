@@ -97,11 +97,11 @@ const FolderFileSturucture = () => {
         (project) => project.isFolder === false
       );
 
-      const isFileAlreadyExist = files.find(
+      const fileAlreadyExist = files.find(
         (projectFile) => projectFile.name === file
       );
 
-      if (isFileAlreadyExist) {
+      if (fileAlreadyExist) {
         toast({
           title: "File already Exist",
           variant: "destructive",
