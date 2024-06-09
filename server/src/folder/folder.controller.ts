@@ -36,13 +36,6 @@ export class FolderController {
     return this.folderService.createFile(createFile, req);
   }
 
-  @Get("projectCode/:id")
-  getFileCode(
-    @Param("id") id:string
-  ){
-    return this.folderService.getProjectCode(id)
-  }
-
   @Post('saveCode')
   saveCode(@Body() { code, fileId }: { code: string; fileId: string }) {
     return this.folderService.saveCode(code, fileId);

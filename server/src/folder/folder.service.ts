@@ -38,8 +38,6 @@ export class FolderService {
       projectId,
     }).select('name isFolder items _id code');
 
-    // console.log(projectFileAndFolders);
-
     return projectFileAndFolders;
   }
 
@@ -78,17 +76,4 @@ export class FolderService {
     }
   }
 
-  async getProjectCode(id: string) {
-    const projectCode = await Item.find({
-      projectId: id,
-    });
-
-    console.log(projectCode);
-
-    if (projectCode) {
-      return projectCode;
-    } else {
-      throw new CustomException('Something went wrong');
-    }
-  }
 }
