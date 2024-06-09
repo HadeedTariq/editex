@@ -16,7 +16,7 @@ import {
 import { useAppRouter } from "../hooks/useAppRouter";
 import { Button } from "@/components/ui/button";
 import { Save, X } from "lucide-react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { itemApi } from "@/lib/axios";
 import { toast } from "@/components/ui/use-toast";
 
@@ -55,11 +55,6 @@ const CodeEditor = () => {
       })
     );
   };
-  // ! get File code
-  // const { isLoading } = useQuery({
-  //   queryKey: [`${fileId}Code`],
-  //   queryFn: async () => {},
-  // });
 
   // ! Save file code
   const { mutate: saveCode, isPending } = useMutation({
@@ -90,7 +85,7 @@ const CodeEditor = () => {
           ${filename === file.name && "bg-gray-200 dark:bg-gray-700"} gap-6`}>
               <p
                 onClick={() =>
-                  navigate(`/project/${id}/js/${file.name}/${file._id}`)
+                  navigate(`/project/${id}/html/${file.name}/${file._id}`)
                 }>
                 {file.name}
               </p>

@@ -22,17 +22,8 @@ const Projects = () => {
   const { user } = useFullApp();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
-  const { data: myProjects, isLoading } = useQuery({
-    queryKey: ["getMyProjects"],
-    queryFn: async () => {
-      const { data } = await projectApi.get("/");
-      dispatch(setProjects(data));
-      return data as ProjectsType[];
-    },
-  });
   const { mutate: deleteProject, isPending } = useMutation({
-    mutationKey: ["deleteProject"],
+    mutationKey: [`deleteProject${user?.id}`],
     mutationFn: async (id: string) => {
       if (!user) {
         toast({
@@ -58,6 +49,15 @@ const Projects = () => {
         title: err.response.data.message,
         variant: "destructive",
       });
+    },
+  });
+
+  const { data: myProjects, isLoading } = useQuery({
+    queryKey: ["getMyProjects"],
+    queryFn: async () => {
+      const { data } = await projectApi.get("/");
+      dispatch(setProjects(data));
+      return data as ProjectsType[];
     },
   });
 

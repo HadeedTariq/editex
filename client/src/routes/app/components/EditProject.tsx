@@ -20,6 +20,7 @@ import {
 } from "@tanstack/react-query";
 import { useFullApp } from "@/hooks/useFullApp";
 import { projectApi } from "@/lib/axios";
+import { Navigate } from "react-router-dom";
 
 interface EditProjectType {
   projectId: string;
@@ -30,12 +31,13 @@ const EditProject = ({ projectId }: EditProjectType) => {
   const { user } = useFullApp();
   const queryClient = useQueryClient();
   const project = projects.find((proj) => proj._id === projectId);
-  if (!project) return <p>Project not found</p>;
   const [name, setName] = useState(project?.name);
   const [password, setPassword] = useState(project?.password);
-  const [publicProject, setPublicProject] = useState(project.public);
+  const [publicProject, setPublicProject] = useState(
+    project?.public ? true : false
+  );
   const { mutate: editProject, isPending } = useMutation({
-    mutationKey: [`editProject${project._id}`],
+    mutationKey: [`editProject${project?._id}`],
     mutationFn: async () => {
       if (!user) {
         toast({
@@ -44,7 +46,7 @@ const EditProject = ({ projectId }: EditProjectType) => {
         return;
       }
 
-      const { data } = await projectApi.put(`/${project._id}`, {
+      const { data } = await projectApi.put(`/${project?._id}`, {
         name,
         public: publicProject,
         password: password ? password : null,
@@ -67,6 +69,7 @@ const EditProject = ({ projectId }: EditProjectType) => {
       });
     },
   });
+  if (!project) return <p>Project not found</p>;
 
   return (
     <AlertDialog>
