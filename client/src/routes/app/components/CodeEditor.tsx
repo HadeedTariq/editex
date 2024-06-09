@@ -1,9 +1,5 @@
-import { UnControlled as CodeMirror } from "react-codemirror2";
-import "codemirror/theme/gruvbox-dark.css";
-import "codemirror/lib/codemirror.css";
-import "codemirror/mode/javascript/javascript";
-import "codemirror/addon/hint/show-hint.css";
-import "codemirror/addon/lint/lint.css";
+import { LiveProvider, LivePreview } from "react-live";
+import { Editor } from "@monaco-editor/react";
 
 import { SetStateAction, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -43,11 +39,7 @@ const CodeEditor = () => {
       dispatch(setCurrentProjectOpenFiles({ _id: fileId, name: filename }));
     }
   }, [filename, fileId]);
-  const handleEditorChange = (
-    _: any,
-    __: any,
-    value: SetStateAction<string>
-  ) => {
+  const handleEditorChange = (value: string) => {
     dispatch(
       updateProjectCode({
         code: value as string,
@@ -107,28 +99,27 @@ const CodeEditor = () => {
           <Save />
         </Button>
       </div>
-
-      <CodeMirror
-        ref={wrapper}
-        value={FileCode?.code}
-        onChange={handleEditorChange}
-        options={{
-          lineNumbers: true,
-          mode: "javascript",
-          theme: "gruvbox-dark",
-          extraKeys: { "Ctrl-Space": "autocomplete" },
-          linerWrapping: true,
-          lint: true,
-          autoCloseBrackets: true,
-          lineHighlight: {
-            from: 1,
-            to: 10,
-          },
-        }}
-        editorDidMount={(e) => (editor.current = e)}
-        editorWillUnmount={editorWillUnmount}
-        className="text-start h-full text-[18px]"
-      />
+      <div className="flex">
+        <Editor
+          height="90vh"
+          width={"600px"}
+          defaultLanguage="javascript"
+          defaultValue={FileCode?.code}
+          onChange={(val) => handleEditorChange(val as string)}
+          theme="vs-dark"
+          options={{
+            fontSize: 18,
+            minimap: {
+              enabled: false,
+            },
+            contextmenu: false,
+          }}
+        />
+        ;
+        <LiveProvider>
+          <LivePreview />
+        </LiveProvider>
+      </div>
     </div>
   );
 };
