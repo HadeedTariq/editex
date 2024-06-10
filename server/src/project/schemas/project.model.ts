@@ -23,10 +23,6 @@ export const projectSchema = new Schema<ProjectDocument>(
       type: Schema.Types.ObjectId,
       required: true,
     },
-    reader: {
-      type: [Schema.Types.ObjectId],
-      required: true,
-    },
     contributor: {
       type: [Schema.Types.ObjectId],
       required: true,

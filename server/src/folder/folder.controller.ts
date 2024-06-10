@@ -40,7 +40,6 @@ export class FolderController {
   saveCode(@Body() { code, fileId }: { code: string; fileId: string }) {
     return this.folderService.saveCode(code, fileId);
   }
-
   @Get(':id')
   getProjectFilesAndFolders(@Param('id') id: string) {
     return this.folderService.getProjectFilesAndFolders(id);

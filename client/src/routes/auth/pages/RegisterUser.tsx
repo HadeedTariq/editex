@@ -42,7 +42,7 @@ export default function RegisterUser() {
         title: "User registered successfully",
       });
       form.reset();
-      navigate("/login");
+      navigate("/auth/login");
     },
     onError: (err: ServerError) => {
       toast({

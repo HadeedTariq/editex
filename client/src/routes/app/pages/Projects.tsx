@@ -16,6 +16,8 @@ import { useDispatch } from "react-redux";
 import { setProjects } from "../reducer/appReducer";
 import EditProject from "../components/EditProject";
 import { useNavigate } from "react-router-dom";
+import { Share } from "lucide-react";
+import ShareCode from "../components/ShareCode";
 
 const Projects = () => {
   const dispatch = useDispatch();
@@ -92,6 +94,7 @@ const Projects = () => {
               Delete Project
             </Button>
             <EditProject projectId={project._id} />
+            {project.public === false && <ShareCode projectId={project._id} />}
           </CardContent>
         </Card>
       ))}

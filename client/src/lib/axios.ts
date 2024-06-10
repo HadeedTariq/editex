@@ -17,4 +17,9 @@ const itemApi = axios.create({
   withCredentials: true,
 });
 
-export { authApi, projectApi, itemApi };
+const shareCodeApi = axios.create({
+  baseURL: `${url}/share-code`,
+  withCredentials: true,
+});
+
+export { authApi, projectApi, itemApi, shareCodeApi };

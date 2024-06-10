@@ -10,7 +10,7 @@ import {
 } from "../reducer/appReducer";
 import { useAppRouter } from "../hooks/useAppRouter";
 import { Button } from "@/components/ui/button";
-import { Save, X } from "lucide-react";
+import { Save, Share, X } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { itemApi } from "@/lib/axios";
 import { toast } from "@/components/ui/use-toast";
@@ -18,7 +18,7 @@ import CodeOutput from "./CodeOutput";
 
 const CodeEditor = () => {
   const dispatch = useDispatch();
-  const { currentProjectOpenFiles, projectCode } = useAppRouter();
+  const { currentProjectOpenFiles, projectCode, projects } = useAppRouter();
 
   const navigate = useNavigate();
   const { filename, fileId, id } = useParams();

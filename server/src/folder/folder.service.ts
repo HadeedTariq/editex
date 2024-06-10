@@ -4,6 +4,8 @@ import { Request } from 'express';
 import { Item } from './schemas/folder.model';
 import { CustomException } from 'src/custom.exception';
 import * as sanitize from 'mongo-sanitize';
+import { User } from 'src/auth/schema/auth.model';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class FolderService {
@@ -75,5 +77,4 @@ export class FolderService {
       throw new CustomException('Something went wrong');
     }
   }
-
 }
