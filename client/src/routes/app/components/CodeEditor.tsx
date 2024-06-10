@@ -1,7 +1,6 @@
-import { LiveProvider, LivePreview } from "react-live";
 import { Editor } from "@monaco-editor/react";
 
-import { SetStateAction, useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
@@ -15,20 +14,13 @@ import { Save, X } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import { itemApi } from "@/lib/axios";
 import { toast } from "@/components/ui/use-toast";
+import CodeOutput from "./CodeOutput";
 
 const CodeEditor = () => {
-  const editor = useRef<any>();
-  const wrapper = useRef<any>();
   const dispatch = useDispatch();
   const { currentProjectOpenFiles, projectCode } = useAppRouter();
 
   const navigate = useNavigate();
-  const editorWillUnmount = () => {
-    if (editor.current && wrapper.current) {
-      editor.current.display.wrapper.remove();
-      wrapper.current.hydrated = false;
-    }
-  };
   const { filename, fileId, id } = useParams();
   const FileCode = projectCode?.filesCode.find(
     (fileCode) => fileCode.fileId === fileId
@@ -95,30 +87,29 @@ const CodeEditor = () => {
         <Button
           variant={"edit"}
           onClick={() => saveCode()}
+          className="mx-2"
+          title="Save"
           disabled={isPending}>
           <Save />
         </Button>
       </div>
-      <div className="flex">
-        <Editor
-          height="90vh"
-          width={"600px"}
-          defaultLanguage="javascript"
-          defaultValue={FileCode?.code}
-          onChange={(val) => handleEditorChange(val as string)}
-          theme="vs-dark"
-          options={{
-            fontSize: 18,
-            minimap: {
-              enabled: false,
-            },
-            contextmenu: false,
-          }}
-        />
-        ;
-        <LiveProvider>
-          <LivePreview />
-        </LiveProvider>
+      <div className="flex max-[700px]:flex-col">
+        <div className="w-[60%] max-[700px]:w-[100%] h-[90vh] max-[700px]:h-[50vh]">
+          <Editor
+            defaultLanguage="javascript"
+            value={FileCode?.code}
+            onChange={(val) => handleEditorChange(val as string)}
+            theme="vs-dark"
+            options={{
+              fontSize: 18,
+              minimap: {
+                enabled: false,
+              },
+              contextmenu: false,
+            }}
+          />
+        </div>
+        <CodeOutput sourceCode={FileCode?.code as string} />
       </div>
     </div>
   );

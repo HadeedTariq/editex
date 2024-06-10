@@ -85,9 +85,9 @@ const FolderFileSturucture = () => {
   const createFile = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.code === "Enter") {
       const realFile = file.split(".")[1];
-      if (!realFile || realFile !== "html") {
+      if (!realFile || realFile !== "js") {
         toast({
-          title: "File Extrension must include html",
+          title: "File Extrension must include js",
           variant: "destructive",
         });
         return;
@@ -171,7 +171,9 @@ const FolderFileSturucture = () => {
                   value={folder}
                   className="border-none outline-none"
                   autoFocus
-                  onBlur={() => setShowInput({ ...showInput, visible: false })}
+                  onBlur={() => {
+                    setShowInput({ ...showInput, visible: false });
+                  }}
                   onChange={(e) => setFolder(e.target.value)}
                   disabled={isFolderCreating}
                   onKeyDown={createFolder}
@@ -184,7 +186,10 @@ const FolderFileSturucture = () => {
                   value={file}
                   className="border-none outline-none"
                   autoFocus
-                  onBlur={() => setShowInput({ ...showInput, visible: false })}
+                  onBlur={() => {
+                    setShowInput({ ...showInput, visible: false });
+                    setFile("");
+                  }}
                   onChange={(e) => setFile(e.target.value)}
                   disabled={isFileCreating}
                   onKeyDown={createFile}
