@@ -16,6 +16,7 @@ import ProjectHandler from "./routes/app/components/ProjectHandler";
 import ProjectPage from "./routes/app/pages/ProjectPage";
 import CodeEditor from "./routes/app/components/CodeEditor";
 import DefaultEditor from "./routes/app/pages/DefaultEditor";
+import PublicProjects from "./routes/app/pages/PublicProjects";
 
 function App() {
   const { theme } = useTheme();
@@ -83,6 +84,10 @@ function App() {
         {
           path: "/project",
           element: <ProjectHandler />,
+        },
+        {
+          path: "/project/publicProjects",
+          element: <PublicProjects />,
         },
         {
           path: "/project/:id",

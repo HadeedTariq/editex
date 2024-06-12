@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { User } from 'src/auth/schema/auth.model';
 import { CustomException } from 'src/custom.exception';
 import { Project } from 'src/project/schemas/project.model';
+import { Notification } from './schemas/notification.model';
 
 @Injectable()
 export class ShareCodeService {
@@ -34,6 +35,17 @@ export class ShareCodeService {
   ) {
     const { user } = req.body;
 
+    const isUserAlreadyExistInContributors = await Project.findOne({
+      _id: projectId,
+      contributor: {
+        $in: allowUserIds,
+      },
+    });
+
+    if (isUserAlreadyExistInContributors) {
+      return { message: 'These users already exist in contributors' };
+    }
+
     const updateProject = await Project.findOneAndUpdate(
       {
         creator: user.id,
@@ -49,9 +61,16 @@ export class ShareCodeService {
       { new: true },
     );
 
-    console.log(updateProject);
-
     if (updateProject) {
+      Array.from({ length: allowUserIds.length }, async (_, i) => {
+        const newNotification = new Notification({
+          reciever: allowUserIds[i],
+          sender: user.id ,
+          message: 'You recieved access to code repository',
+        });
+        await newNotification.save();
+      });
+
       return { message: 'Contributors updated Successfully' };
     } else {
       throw new CustomException('Someting went wrong');

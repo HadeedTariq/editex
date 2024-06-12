@@ -1,0 +1,35 @@
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+
+const SideBar = () => {
+  const { pathname } = useLocation();
+  console.log(pathname);
+
+  return (
+    <Sheet>
+      <SheetTrigger className="mx-0">
+        <Menu />
+      </SheetTrigger>
+      <SheetContent side={"left"} className="w-[250px] px-0">
+        <div className="flex flex-col gap-3 mt-8">
+          <Link
+            to={""}
+            className="dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md">
+            Notifications
+          </Link>
+          <Link
+            to={"/project/publicProjects"}
+            className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
+              pathname === "/project/publicProjects" &&
+              "dark:bg-slate-700 bg-slate-400"
+            }`}>
+            Public Projects
+          </Link>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+};
+
+export default SideBar;

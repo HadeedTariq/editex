@@ -81,4 +81,26 @@ export class ProjectService {
       throw new CustomException('Something went worng');
     }
   }
+
+  async getAllPublicProjects() {
+    const getProjects = await Project.aggregate([
+      {
+        $match: {
+          public: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'items',
+          foreignField: 'projectId',
+          localField: '_id',
+          as: 'projectCode',
+        },
+      },
+    ]);
+
+    console.log(getProjects);
+
+    return getProjects;
+  }
 }

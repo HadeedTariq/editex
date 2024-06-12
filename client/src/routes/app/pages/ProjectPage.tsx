@@ -50,8 +50,6 @@ const ProjectPage = () => {
     refetchOnMount: false,
   });
 
-  // const {} = useQuery({});
-
   if (isLoading) return <Loading />;
 
   return <Editor />;

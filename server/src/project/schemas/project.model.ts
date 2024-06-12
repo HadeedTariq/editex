@@ -26,6 +26,7 @@ export const projectSchema = new Schema<ProjectDocument>(
     contributor: {
       type: [Schema.Types.ObjectId],
       required: true,
+      unique: true,
     },
     password: {
       type: String,

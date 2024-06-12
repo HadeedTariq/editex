@@ -1,9 +1,9 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-// import { NavDrawer } from "./NavDrawer";
 import { useFullApp } from "@/hooks/useFullApp";
 import { Button } from "./ui/button";
 import { authApi } from "@/lib/axios";
 import ThemeHandler from "./ThemeHandler";
+import SideBar from "./SideBar";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -24,9 +24,8 @@ const NavBar = () => {
                 onClick={() => navigate("/")}>
                 Editex
               </h1>
-              <nav aria-label="Global" className="hidden md:block"></nav>
 
-              <div className="flex items-center gap-4 max-[640px]:hidden">
+              <div className="flex items-center gap-4">
                 {user ? (
                   <Button variant={"destructive"} onClick={logout}>
                     Logout
@@ -46,13 +45,10 @@ const NavBar = () => {
                     </Link>
                   </>
                 )}
-                <div>
+                <div className="flex items-center gap-2">
                   <ThemeHandler />
+                  <SideBar />
                 </div>
-              </div>
-              <div className="min-[640px]:hidden flex items-center gap-2 mx-6">
-                {/* <NavDrawer /> */}
-                <ThemeHandler />
               </div>
             </div>
           </div>

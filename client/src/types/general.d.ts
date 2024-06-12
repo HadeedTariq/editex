@@ -18,7 +18,12 @@ interface ProjectsType {
   _id: string;
   name: string;
   public: boolean;
-  reader: [];
   contributor: [];
   password?: string;
+  projectCode?: {
+    _id: string;
+    name: string;
+    isFolder: boolean;
+    code: string;
+  };
 }

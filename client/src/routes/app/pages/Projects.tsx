@@ -16,7 +16,6 @@ import { useDispatch } from "react-redux";
 import { setProjects } from "../reducer/appReducer";
 import EditProject from "../components/EditProject";
 import { useNavigate } from "react-router-dom";
-import { Share } from "lucide-react";
 import ShareCode from "../components/ShareCode";
 
 const Projects = () => {
@@ -65,40 +64,44 @@ const Projects = () => {
 
   if (isLoading) return <ProjectSkeleton />;
   return (
-    <div className="flex flex-wrap items-center gap-2 px-4">
-      {myProjects?.map((project) => (
-        <Card key={project._id} className="w-[300px] p-2 shadow-md">
-          <CardContent className="p-0 flex flex-col items-start gap-2">
-            <div className="flex items-center justify-between gap-3 w-full">
-              <p className="text-[20px] font-semibold capitalize">
-                {project.name}
+    <>
+      <div className="flex flex-wrap items-center gap-2 px-4">
+        {myProjects?.map((project) => (
+          <Card key={project._id} className="w-[300px] p-2 shadow-md">
+            <CardContent className="p-0 flex flex-col items-start gap-2">
+              <div className="flex items-center justify-between gap-3 w-full">
+                <p className="text-[20px] font-semibold capitalize">
+                  {project.name}
+                </p>
+                <Badge variant={project.public ? "payment" : "default"}>
+                  {project.public ? "Public" : "Private"}
+                </Badge>
+              </div>
+              <p className="text-[18px] font-[400] text-yellow-500">
+                Created at: {format(new Date(project.createdAt), "dd/MM/yyyy")}
               </p>
-              <Badge variant={project.public ? "payment" : "default"}>
-                {project.public ? "Public" : "Private"}
-              </Badge>
-            </div>
-            <p className="text-[18px] font-[400] text-yellow-500">
-              Created at: {format(new Date(project.createdAt), "dd/MM/yyyy")}
-            </p>
-            <Button
-              className="w-full"
-              variant={"project"}
-              onClick={() => navigate(`${project._id}`)}>
-              See Full
-            </Button>
-            <Button
-              disabled={isPending}
-              className="w-full"
-              variant={"destructive"}
-              onClick={() => deleteProject(project._id)}>
-              Delete Project
-            </Button>
-            <EditProject projectId={project._id} />
-            {project.public === false && <ShareCode projectId={project._id} />}
-          </CardContent>
-        </Card>
-      ))}
-    </div>
+              <Button
+                className="w-full"
+                variant={"project"}
+                onClick={() => navigate(`${project._id}`)}>
+                See Full
+              </Button>
+              <Button
+                disabled={isPending}
+                className="w-full"
+                variant={"destructive"}
+                onClick={() => deleteProject(project._id)}>
+                Delete Project
+              </Button>
+              <EditProject projectId={project._id} />
+              {project.public === false && (
+                <ShareCode projectId={project._id} />
+              )}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </>
   );
 };
 

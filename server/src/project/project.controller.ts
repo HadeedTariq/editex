@@ -43,6 +43,12 @@ export class ProjectController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('publicProjects')
+  getAllPublicProjects() {
+    return this.projectService.getAllPublicProjects();
+  }
+
+  @UseGuards(AuthGuard)
   @Get(':id')
   getProjectById(@Param('id') id: string, @Req() req: Request) {
     return this.projectService.getProjectById(id, req);
