@@ -37,7 +37,7 @@ const PublicProjects = () => {
   });
   if (isLoading) return <Loading />;
   return (
-    <div className="flex flex-wrap items-center gap-2 px-4">
+    <div className="flex justify-center flex-wrap items-center gap-2 px-4">
       {publicProjects?.map((project) => (
         <Card key={project._id} className="w-[300px] p-2 shadow-md">
           <CardContent className="p-0 flex flex-col items-start gap-2">

@@ -69,7 +69,7 @@ const CodeEditor = () => {
           ${filename === file.name && "bg-gray-200 dark:bg-gray-700"} gap-6`}>
               <p
                 onClick={() =>
-                  navigate(`/project/${id}/html/${file.name}/${file._id}`)
+                  navigate(`/project/${id}/js/${file.name}/${file._id}`)
                 }>
                 {file.name}
               </p>

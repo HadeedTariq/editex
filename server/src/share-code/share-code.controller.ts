@@ -25,4 +25,19 @@ export class ShareCodeController {
       projectId,
     );
   }
+
+  @UseGuards(AuthGuard)
+  @Get('getMyNotifications')
+  getMyNotifications(@Req() req: Request) {
+    return this.shareCodeService.getMyNotifications(req);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('readNotification')
+  readNotification(
+    @Body() { notificationId }: { notificationId: string },
+    @Req() req: Request,
+  ) {
+    return this.shareCodeService.readNotification(notificationId, req);
+  }
 }

@@ -17,6 +17,7 @@ import ProjectPage from "./routes/app/pages/ProjectPage";
 import CodeEditor from "./routes/app/components/CodeEditor";
 import DefaultEditor from "./routes/app/pages/DefaultEditor";
 import PublicProjects from "./routes/app/pages/PublicProjects";
+import Notififcations from "./routes/app/pages/Notififcations";
 
 function App() {
   const { theme } = useTheme();
@@ -90,6 +91,10 @@ function App() {
           element: <PublicProjects />,
         },
         {
+          path: "/notifications",
+          element: <Notififcations />,
+        },
+        {
           path: "/project/:id",
           element: <ProjectPage />,
           children: [
@@ -98,7 +103,7 @@ function App() {
               element: <DefaultEditor />,
             },
             {
-              path: "html/:filename/:fileId",
+              path: "js/:filename/:fileId",
               element: <CodeEditor />,
             },
           ],

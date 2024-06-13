@@ -14,15 +14,17 @@ const SideBar = () => {
       <SheetContent side={"left"} className="w-[250px] px-0">
         <div className="flex flex-col gap-3 mt-8">
           <Link
-            to={""}
-            className="dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md">
+            to={"/notifications"}
+            className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
+              pathname === "/notifications" && "dark:bg-slate-900 bg-slate-400"
+            }`}>
             Notifications
           </Link>
           <Link
             to={"/project/publicProjects"}
             className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
               pathname === "/project/publicProjects" &&
-              "dark:bg-slate-700 bg-slate-400"
+              "dark:bg-slate-900 bg-slate-400"
             }`}>
             Public Projects
           </Link>

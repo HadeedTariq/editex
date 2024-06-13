@@ -65,7 +65,7 @@ const Projects = () => {
   if (isLoading) return <ProjectSkeleton />;
   return (
     <>
-      <div className="flex flex-wrap items-center gap-2 px-4">
+      <div className="flex flex-wrap justify-center items-center gap-2 px-4">
         {myProjects?.map((project) => (
           <Card key={project._id} className="w-[300px] p-2 shadow-md">
             <CardContent className="p-0 flex flex-col items-start gap-2">

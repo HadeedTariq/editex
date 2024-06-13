@@ -209,7 +209,7 @@ const FolderFileSturucture = () => {
                     className={`flex items-center gap-2 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-300 transition duration-300 ${
                       filename === exp.name && "bg-gray-300 dark:bg-gray-700"
                     }`}
-                    onClick={() => navigate(`html/${exp.name}/${exp._id}`)}>
+                    onClick={() => navigate(`js/${exp.name}/${exp._id}`)}>
                     <FileJson color="green" />
                     {exp.name}
                   </p>

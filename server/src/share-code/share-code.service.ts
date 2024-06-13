@@ -65,7 +65,7 @@ export class ShareCodeService {
       Array.from({ length: allowUserIds.length }, async (_, i) => {
         const newNotification = new Notification({
           reciever: allowUserIds[i],
-          sender: user.id ,
+          sender: user.id,
           message: 'You recieved access to code repository',
         });
         await newNotification.save();
@@ -74,6 +74,38 @@ export class ShareCodeService {
       return { message: 'Contributors updated Successfully' };
     } else {
       throw new CustomException('Someting went wrong');
+    }
+  }
+
+  async getMyNotifications(req: Request) {
+    const { user } = req.body;
+
+    const myNotifications = await Notification.find({
+      reciever: user.id,
+    }).populate({
+      path: 'sender',
+      select: 'username avatar',
+    });
+
+    return myNotifications;
+  }
+
+  async readNotification(notificationId: string, req: Request) {
+    const { user } = req.body;
+    const updateNotification = await Notification.findOneAndUpdate(
+      {
+        _id: notificationId,
+        reciever: user.id,
+      },
+      {
+        isWatch: true,
+      },
+    );
+
+    if (updateNotification) {
+      return { message: 'Notification readed successfully' };
+    } else {
+      throw new CustomException('Something went wrong');
     }
   }
 }
