@@ -71,7 +71,7 @@ const Notififcations = () => {
     <div className="flex flex-col gap-2">
       {notifications?.map((notification) => (
         <Card className="overflow-hidden" key={notification._id}>
-          <CardHeader className="flex flex-row max-[470px]:flex-col items-start bg-muted/50">
+          <CardHeader className="flex flex-row max-[590px]:flex-col items-start bg-muted/50">
             <div className="grid gap-0.5">
               <CardTitle className=" gap-2 text-lg text-start">
                 {notification.message} from{" "}
