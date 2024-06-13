@@ -6,7 +6,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { BookCheck, BookOpenCheck, Copy } from "lucide-react";
+import { BookCheck, BookOpenCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/card";
 import { format } from "date-fns";
 import { toast } from "@/components/ui/use-toast";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useFullApp } from "@/hooks/useFullApp";
 
 interface NotificationsDataType {
   sender: {
@@ -28,10 +30,14 @@ interface NotificationsDataType {
   isWatch: boolean;
   _id: string;
   createdAt: string;
+  projectId: string;
 }
 
 const Notififcations = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { user } = useFullApp();
+  if (!user) return <Navigate to={"/"} />;
   const { data: notifications, isLoading } = useQuery({
     queryKey: ["getMyNotifications"],
     queryFn: async () => {
@@ -106,7 +112,13 @@ const Notififcations = () => {
                   <span>Read Notification</span>
                 </Button>
               )}
-              <Button size={"sm"} variant={"edit"} className="h-8 gap-1">
+              <Button
+                size={"sm"}
+                variant={"edit"}
+                className="h-8 gap-1"
+                onClick={() => {
+                  navigate(`/privateProject/${notification.projectId}`);
+                }}>
                 Visit Repository
               </Button>
             </div>

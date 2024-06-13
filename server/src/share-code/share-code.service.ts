@@ -67,6 +67,7 @@ export class ShareCodeService {
           reciever: allowUserIds[i],
           sender: user.id,
           message: 'You recieved access to code repository',
+          projectId: projectId,
         });
         await newNotification.save();
       });
@@ -80,12 +81,33 @@ export class ShareCodeService {
   async getMyNotifications(req: Request) {
     const { user } = req.body;
 
-    const myNotifications = await Notification.find({
-      reciever: user.id,
-    }).populate({
-      path: 'sender',
-      select: 'username avatar',
-    });
+    const myNotifications = await Notification.aggregate([
+      {
+        $match: {
+          reciever: new mongoose.Types.ObjectId(user.id as string),
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          foreignField: '_id',
+          localField: 'reciever',
+          as: 'sender',
+          pipeline: [
+            {
+              $project: {
+                _id: 1,
+                username: 1,
+                avatar: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: '$sender',
+      },
+    ]);
 
     return myNotifications;
   }

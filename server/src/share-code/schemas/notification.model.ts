@@ -21,6 +21,10 @@ const notificationSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  projectId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Project',
+  },
 });
 
 export const Notification = model('Notification', notificationSchema);

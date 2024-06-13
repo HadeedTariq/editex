@@ -69,6 +69,10 @@ const ShareCode = ({ projectId }: ShareCodeType) => {
     },
   });
 
+  React.useEffect(() => {
+    setValue([]);
+  }, [projectId]);
+
   if (isLoading) return <Loading />;
   return (
     <>

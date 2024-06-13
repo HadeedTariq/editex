@@ -99,8 +99,23 @@ export class ProjectService {
       },
     ]);
 
-    console.log(getProjects);
-
     return getProjects;
+  }
+
+  async checkUserInContributors(req: Request, projectId: string) {
+    const { user } = req.body;
+
+    const isUserExistInContributors = await Project.findOne({
+      _id: projectId,
+      contributor: {
+        $in: user.id,
+      },
+    });
+
+    if (isUserExistInContributors) {
+      return { message: 'Success' };
+    } else {
+      throw new CustomException('User not exist in contributors');
+    }
   }
 }

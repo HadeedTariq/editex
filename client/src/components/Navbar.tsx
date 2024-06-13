@@ -47,7 +47,7 @@ const NavBar = () => {
                 )}
                 <div className="flex items-center gap-2">
                   <ThemeHandler />
-                  <SideBar />
+                  {user && <SideBar />}
                 </div>
               </div>
             </div>

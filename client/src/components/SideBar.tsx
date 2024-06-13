@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 
 const SideBar = () => {
   const { pathname } = useLocation();
-  console.log(pathname);
 
   return (
     <Sheet>
@@ -16,14 +15,16 @@ const SideBar = () => {
           <Link
             to={"/notifications"}
             className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
-              pathname === "/notifications" && "dark:bg-slate-900 bg-slate-400"
+              String(pathname) === "/notifications" &&
+              "dark:bg-slate-900 bg-slate-400"
             }`}>
             Notifications
           </Link>
+
           <Link
             to={"/project/publicProjects"}
             className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
-              pathname === "/project/publicProjects" &&
+              String(pathname) === "/project/publicProjects" &&
               "dark:bg-slate-900 bg-slate-400"
             }`}>
             Public Projects

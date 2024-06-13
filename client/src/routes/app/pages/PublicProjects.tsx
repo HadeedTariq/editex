@@ -5,9 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setProjects } from "../reducer/appReducer";
+import { useFullApp } from "@/hooks/useFullApp";
 
 interface PublicProjectsType {
   _id: string;
@@ -25,6 +26,8 @@ interface PublicProjectsType {
 const PublicProjects = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { user } = useFullApp();
+  if (!user) return <Navigate to={"/"} />;
   const { isLoading, data: publicProjects } = useQuery({
     queryKey: [`getPublicProjets`],
     queryFn: async () => {

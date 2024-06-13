@@ -31,6 +31,15 @@ export class ProjectController {
   }
 
   @UseGuards(AuthGuard)
+  @Post('checkUserInContributors')
+  checkUserInContributors(
+    @Req() req: Request,
+    @Body() { projectId }: { projectId: string },
+  ) {
+    return this.projectService.checkUserInContributors(req, projectId);
+  }
+
+  @UseGuards(AuthGuard)
   @Get('/')
   getMyProjects(@Req() req: Request) {
     return this.projectService.getMyProjects(req);

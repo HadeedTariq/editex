@@ -26,4 +26,5 @@ interface ProjectsType {
     isFolder: boolean;
     code: string;
   };
+  creator: string;
 }

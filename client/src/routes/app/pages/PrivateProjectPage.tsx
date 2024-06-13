@@ -1,30 +1,25 @@
 import { Navigate, useParams } from "react-router-dom";
 import { useAppRouter } from "../hooks/useAppRouter";
-import { Editor } from "../components/Editor";
 import { useDispatch } from "react-redux";
 import {
   setCurrentProjectFP,
   setCurrentProjectOpenFilesEmpty,
   setProjectCode,
 } from "../reducer/appReducer";
-import { useQuery } from "@tanstack/react-query";
-import { itemApi } from "@/lib/axios";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { itemApi, projectApi } from "@/lib/axios";
 import Loading from "@/components/ui/loading";
 import { useFullApp } from "@/hooks/useFullApp";
+import { PrivateEditor } from "../components/PrivateEditor";
 
-const ProjectPage = () => {
+const PrivateProjectPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { projects } = useAppRouter();
   const { user } = useFullApp();
   if (!id || id.length !== 24) return <Navigate to={"/"} />;
-  const project = projects.find((proj) => proj._id === id);
-  if (!project || (project.public === false && project.creator !== user?.id))
-    return <Navigate to={"/"} />;
-
-  const { isLoading } = useQuery({
-    queryKey: [`getProjectFileFolders${id}`],
-    queryFn: async () => {
+  const { isPending, mutate } = useMutation({
+    mutationKey: [`getProjectFileFolders${id}`],
+    mutationFn: async () => {
       const { data } = await itemApi.get(`/${id}`);
 
       const filesCode = data.map((file: any) => {
@@ -35,8 +30,8 @@ const ProjectPage = () => {
 
       dispatch(
         setCurrentProjectFP({
-          projectName: project.name,
-          projectId: project._id,
+          projectName: "dfsdf",
+          projectId: id,
           items: data,
         })
       );
@@ -49,13 +44,25 @@ const ProjectPage = () => {
       );
       return data;
     },
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
   });
+  const { isLoading: isUserCheckingLoading, isError } = useQuery({
+    queryKey: ["checkUserInContributors"],
+    queryFn: async () => {
+      const { data } = await projectApi.post("checkUserInContributors", {
+        projectId: id,
+      });
+      mutate();
+      return data;
+    },
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  });
+  if (isUserCheckingLoading) return <Loading />;
+  if (isError) return <Navigate to={"/"} />;
 
-  if (isLoading) return <Loading />;
+  if (isPending) return <Loading />;
 
-  return <Editor />;
+  return <PrivateEditor />;
 };
 
-export default ProjectPage;
+export default PrivateProjectPage;
