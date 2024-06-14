@@ -12,3 +12,17 @@ export class CreateProjectDto {
   @IsString()
   password: string;
 }
+
+export class MergeRequestDto {
+  @IsString()
+  @IsNotEmpty()
+  fileId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  projectId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  code: string;
+}

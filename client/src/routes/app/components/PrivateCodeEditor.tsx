@@ -12,7 +12,7 @@ import { useAppRouter } from "../hooks/useAppRouter";
 import { Button } from "@/components/ui/button";
 import { GitMerge, X } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import { itemApi } from "@/lib/axios";
+import { projectApi } from "@/lib/axios";
 import { toast } from "@/components/ui/use-toast";
 import PrivateCodeOutput from "./PrivateCodeOutput";
 
@@ -40,19 +40,20 @@ const PrivateCodeEditor = () => {
     );
   };
 
-  // ! Save file code
-  const { mutate: saveCode, isPending } = useMutation({
-    mutationKey: [`saveFileCode${fileId}`],
+  // ! Merging request
+  const { mutate: mergeRequest, isPending } = useMutation({
+    mutationKey: [`mergeRequest`],
     mutationFn: async () => {
-      const { data } = await itemApi.post("saveCode", {
+      const { data } = await projectApi.post("mergeRequest", {
         code: FileCode?.code,
         fileId,
+        projectId: id,
       });
       return data;
     },
     onSuccess: (data: any) => {
       toast({
-        title: data.message || "Code saved successfully",
+        title: data.message || "Merge Request Send",
       });
     },
   });
@@ -69,7 +70,7 @@ const PrivateCodeEditor = () => {
           ${filename === file.name && "bg-gray-200 dark:bg-gray-700"} gap-6`}>
               <p
                 onClick={() =>
-                  navigate(`/project/${id}/js/${file.name}/${file._id}`)
+                  navigate(`/privateProject/${id}/js/${file.name}/${file._id}`)
                 }>
                 {file.name}
               </p>
@@ -86,7 +87,7 @@ const PrivateCodeEditor = () => {
         </div>
         <Button
           variant={"edit"}
-          onClick={() => saveCode()}
+          onClick={() => mergeRequest()}
           className="mx-2"
           title="Merge-Request"
           disabled={isPending}>

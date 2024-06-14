@@ -10,6 +10,7 @@ Editex is a online code editor for javascript. Where you can created different j
 - ###### Complex File Handling
 - ###### Real Time Code Editor
 - ###### Notification Functionality
+- ###### Code Merging Requets Functionality
 - ###### Much More....
 
 # Github

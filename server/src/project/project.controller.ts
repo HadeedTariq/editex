@@ -13,7 +13,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
-import { CreateProjectDto } from './dto/create-project.dto';
+import { CreateProjectDto, MergeRequestDto } from './dto/create-project.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 
@@ -28,6 +28,15 @@ export class ProjectController {
     @Req() req: Request,
   ) {
     return this.projectService.create(createProjectDto, req);
+  }
+
+  @UseGuards(AuthGuard)
+  @Post('mergeRequest')
+  mergeRequest(
+    @Body(ValidationPipe) mergeRequestDto: MergeRequestDto,
+    @Req() req: Request,
+  ) {
+    return this.projectService.mergeRequest(mergeRequestDto, req);
   }
 
   @UseGuards(AuthGuard)

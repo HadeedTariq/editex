@@ -21,6 +21,7 @@ export const projectSchema = new Schema<ProjectDocument>(
     },
     creator: {
       type: Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
     contributor: {

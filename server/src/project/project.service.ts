@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
+import { CreateProjectDto, MergeRequestDto } from './dto/create-project.dto';
+import * as sanitize from 'mongo-sanitize';
 import { Request } from 'express';
 import { Project } from './schemas/project.model';
 import { CustomException } from 'src/custom.exception';
+import { MergingRequest } from './schemas/mergingRequest.model';
 
 @Injectable()
 export class ProjectService {
@@ -116,6 +117,35 @@ export class ProjectService {
       return { message: 'Success' };
     } else {
       throw new CustomException('User not exist in contributors');
+    }
+  }
+
+  async mergeRequest(mergeRequest: MergeRequestDto, req: Request) {
+    const { user } = req.body;
+
+    const isUserALreadySendMergeRequest = await MergingRequest.findOne({
+      projectId: mergeRequest.projectId,
+      fileId: mergeRequest.fileId,
+      user: user.id,
+      isChanged: true,
+    });
+
+    if (isUserALreadySendMergeRequest) {
+      return { message: 'You already send merge request for this file' };
+    }
+
+    const createMergeRequest = await MergingRequest.create({
+      projectId: mergeRequest.projectId,
+      code: sanitize(mergeRequest.code),
+      fileId: mergeRequest.fileId,
+      isChanged: true,
+      user: user.id,
+    });
+
+    if (createMergeRequest) {
+      return { message: 'Merge Request Send' };
+    } else {
+      throw new CustomException('Something went wrong');
     }
   }
 }
