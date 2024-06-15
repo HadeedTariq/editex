@@ -29,6 +29,14 @@ const SideBar = () => {
             }`}>
             Public Projects
           </Link>
+          <Link
+            to={"/projectNotifications"}
+            className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
+              String(pathname) === "/projectNotifications" &&
+              "dark:bg-slate-900 bg-slate-400"
+            }`}>
+            Project Notification
+          </Link>
         </div>
       </SheetContent>
     </Sheet>

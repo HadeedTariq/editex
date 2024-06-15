@@ -20,6 +20,7 @@ import PublicProjects from "./routes/app/pages/PublicProjects";
 import Notififcations from "./routes/app/pages/Notififcations";
 import PrivateProjectPage from "./routes/app/pages/PrivateProjectPage";
 import PrivateCodeEditor from "./routes/app/components/PrivateCodeEditor";
+import ProjectNotifications from "./routes/app/pages/ProjectNotifications";
 
 function App() {
   const { theme } = useTheme();
@@ -95,6 +96,10 @@ function App() {
         {
           path: "/notifications",
           element: <Notififcations />,
+        },
+        {
+          path: "/projectNotifications",
+          element: <ProjectNotifications />,
         },
         {
           path: "/project/:id",

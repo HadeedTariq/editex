@@ -53,6 +53,11 @@ export class ProjectController {
   getMyProjects(@Req() req: Request) {
     return this.projectService.getMyProjects(req);
   }
+  @UseGuards(AuthGuard)
+  @Get('projectNotifications')
+  getMyProjectsNotifications(@Req() req: Request) {
+    return this.projectService.getMyProjectsNotifications(req);
+  }
 
   @UseGuards(AuthGuard)
   @Delete('delete')

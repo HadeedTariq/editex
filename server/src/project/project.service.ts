@@ -5,6 +5,8 @@ import { Request } from 'express';
 import { Project } from './schemas/project.model';
 import { CustomException } from 'src/custom.exception';
 import { MergingRequest } from './schemas/mergingRequest.model';
+import { ProjectNotification } from './schemas/projectNotification.model';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class ProjectService {
@@ -143,9 +145,86 @@ export class ProjectService {
     });
 
     if (createMergeRequest) {
+      await ProjectNotification.create({
+        projectId: mergeRequest.projectId,
+        fileId: mergeRequest.fileId,
+        sender: user.id,
+        message: 'Send a merge request',
+      });
       return { message: 'Merge Request Send' };
     } else {
       throw new CustomException('Something went wrong');
     }
+  }
+
+  async getMyProjectsNotifications(req: Request) {
+    const { user } = req.body;
+
+    const privateProjects = await Project.aggregate([
+      {
+        $match: {
+          creator: new mongoose.Types.ObjectId(user.id as string),
+          public: false,
+        },
+      },
+      {
+        $lookup: {
+          from: 'projectnotifications',
+          foreignField: 'projectId',
+          localField: '_id',
+          as: 'projectNotifications',
+          pipeline: [
+            {
+              $lookup: {
+                from: 'items',
+                localField: 'fileId',
+                foreignField: '_id',
+                as: 'fileDetails',
+                pipeline: [
+                  {
+                    $project: {
+                      name: 1,
+                      _id: 0,
+                    },
+                  },
+                ],
+              },
+            },
+            { $unwind: '$fileDetails' },
+            {
+              $lookup: {
+                from: 'users',
+                localField: 'sender',
+                foreignField: '_id',
+                as: 'sender',
+                pipeline: [
+                  {
+                    $project: {
+                      username: 1,
+                      avatar: 1,
+                    },
+                  },
+                ],
+              },
+            },
+            {
+              $unwind: '$sender',
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          projectNotifications: 1,
+          name: 1,
+        },
+      },
+    ]);
+
+    const projectNotifications = privateProjects.filter(
+      (project) => project.projectNotifications.length > 0,
+    );
+
+    return projectNotifications;
   }
 }
