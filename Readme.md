@@ -1,6 +1,6 @@
 # Editex
 
-Editex is a online code editor for javascript. Where you can created different js projects and also share with others.
+Editex is a online code editor for javascript. Where you can create different js projects and also share with others.
 
 ## Features
 
@@ -10,7 +10,7 @@ Editex is a online code editor for javascript. Where you can created different j
 - ###### Complex File Handling
 - ###### Real Time Code Editor
 - ###### Notification Functionality
-- ###### Code Merging Requets Functionality
+- ###### Code Merging Requests Functionality
 - ###### Much More....
 
 # Github
