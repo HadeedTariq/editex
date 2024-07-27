@@ -27,7 +27,7 @@ const ProjectHandlerToggleBar = () => {
             isProjectPublic ? "start-6 text-green-600" : ""
           }`}>
           {isProjectPublic && <Check />}
-          {!isProjectPublic && <X />}
+          {!isProjectPublic && <X color="red" />}
         </span>
       </label>
     </div>

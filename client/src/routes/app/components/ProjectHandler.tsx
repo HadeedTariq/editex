@@ -22,7 +22,7 @@ import {
 import { projectApi } from "@/lib/axios";
 import { Button } from "@/components/ui/button";
 import Projects from "../pages/Projects";
-import { Terminal, X } from "lucide-react";
+import { X } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
