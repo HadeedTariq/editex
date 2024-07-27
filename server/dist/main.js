@@ -14,7 +14,11 @@ async function bootstrap() {
     const clientUrl = configureService.get('CLIENT_URL');
     app.use(cookieParser());
     app.enableCors({
-        origin: clientUrl,
+        origin: [
+            'http://localhost:5173',
+            clientUrl,
+            'https://editex-frontend.vercel.app',
+        ],
         credentials: true,
         exposedHeaders: ['Set-Cookie'],
     });
