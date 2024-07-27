@@ -1,5 +1,4 @@
 import { Navigate, useParams } from "react-router-dom";
-import { useAppRouter } from "../hooks/useAppRouter";
 import { useDispatch } from "react-redux";
 import {
   setCurrentProjectFP,
@@ -9,13 +8,11 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { itemApi, projectApi } from "@/lib/axios";
 import Loading from "@/components/ui/loading";
-import { useFullApp } from "@/hooks/useFullApp";
 import { PrivateEditor } from "../components/PrivateEditor";
 
 const PrivateProjectPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { user } = useFullApp();
   if (!id || id.length !== 24) return <Navigate to={"/"} />;
   const { isPending, mutate } = useMutation({
     mutationKey: [`getProjectFileFolders${id}`],

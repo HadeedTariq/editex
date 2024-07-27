@@ -6,8 +6,7 @@ import {
 } from "@/components/ui/accordion";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useAppRouter } from "../hooks/useAppRouter";
-import { FileJson, FilePlus, Folder, FolderPlus } from "lucide-react";
-import { useState } from "react";
+import { FileJson, Folder } from "lucide-react";
 
 const PrivateFolderFileSturucture = () => {
   const { id, filename } = useParams();
