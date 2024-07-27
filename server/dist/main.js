@@ -21,6 +21,7 @@ async function bootstrap() {
         ],
         credentials: true,
         exposedHeaders: ['Set-Cookie'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH'],
     });
     app.useGlobalFilters(new exceptionFilter_1.CustomExceptionFilter());
     await (0, connectToDb_1.connectToDb)(dbUri);

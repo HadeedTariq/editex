@@ -23,6 +23,7 @@ async function bootstrap() {
     ],
     credentials: true,
     exposedHeaders: ['Set-Cookie'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH'],
   });
   app.useGlobalFilters(new CustomExceptionFilter());
 
