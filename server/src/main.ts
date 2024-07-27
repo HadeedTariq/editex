@@ -25,7 +25,7 @@ async function bootstrap() {
   app.use((req, res, next) => {
     res.header(
       'Access-Control-Allow-Origin',
-      'http://your-frontend-domain.com',
+      'https://editex-frontend.vercel.app/',
     );
     res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
     res.header(
