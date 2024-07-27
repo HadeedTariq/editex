@@ -11,20 +11,19 @@ async function bootstrap() {
     const configureService = app.get(config_1.ConfigService);
     const port = configureService.get('PORT');
     const dbUri = configureService.get('DB_URI');
-    const clientUrl = configureService.get('CLIENT_URL');
     app.use(cookieParser());
     app.enableCors({
-        origin: ['http://localhost:5173', clientUrl],
+        origin: ['http://localhost:5173', 'https://editex-frontend.vercel.app'],
         credentials: true,
-        exposedHeaders: ['Set-Cookie'],
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH'],
-    });
-    app.use((req, res, next) => {
-        res.header('Access-Control-Allow-Origin', 'https://editex-frontend.vercel.app');
-        res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
-        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-        res.header('Access-Control-Allow-Credentials', 'true');
-        next();
+        allowedHeaders: [
+            'Origin',
+            'X-Requested-With',
+            'Content-Type',
+            'Accept',
+            'Authorization',
+        ],
+        exposedHeaders: ['Set-Cookie'],
     });
     app.useGlobalFilters(new exceptionFilter_1.CustomExceptionFilter());
     await (0, connectToDb_1.connectToDb)(dbUri);
