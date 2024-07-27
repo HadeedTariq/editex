@@ -16,15 +16,26 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin: [
-      'http://localhost:5173',
-      clientUrl,
-      'https://editex-frontend.vercel.app',
-    ],
+    origin: ['http://localhost:5173', clientUrl],
     credentials: true,
     exposedHeaders: ['Set-Cookie'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH'],
   });
+
+  app.use((req, res, next) => {
+    res.header(
+      'Access-Control-Allow-Origin',
+      'http://your-frontend-domain.com',
+    );
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    );
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+  });
+
   app.useGlobalFilters(new CustomExceptionFilter());
 
   await connectToDb(dbUri);
