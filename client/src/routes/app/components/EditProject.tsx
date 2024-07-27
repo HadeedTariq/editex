@@ -20,7 +20,6 @@ import {
 } from "@tanstack/react-query";
 import { useFullApp } from "@/hooks/useFullApp";
 import { projectApi } from "@/lib/axios";
-import { Navigate } from "react-router-dom";
 
 interface EditProjectType {
   projectId: string;
