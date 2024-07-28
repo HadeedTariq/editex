@@ -11,20 +11,13 @@ async function bootstrap() {
   const configureService = app.get(ConfigService);
   const port = configureService.get<number>('PORT');
   const dbUri = configureService.get<string>('DB_URI');
+  const clientURL = configureService.get<string>('CLIENT_URL');
 
   app.use(cookieParser());
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'https://editex-frontend.vercel.app'],
+    origin: ['http://localhost:5173', clientURL],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'PATCH'],
-    allowedHeaders: [
-      'Origin',
-      'X-Requested-With',
-      'Content-Type',
-      'Accept',
-      'Authorization',
-    ],
     exposedHeaders: ['Set-Cookie'],
   });
 
