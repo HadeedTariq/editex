@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: Noto Sans Cuneiform
+- Font Author: Copyright 2022 The Noto Project Authors (https://github.com/notofonts/cuneiform)
+- Font Source: https://fonts.gstatic.com/s/notosanscuneiform/v17/bMrrmTWK7YY-MF22aHGGd7H8PhJtvBDWgb9JlRQueeQ.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL))

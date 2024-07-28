@@ -66,7 +66,9 @@ const CodeEditor = () => {
               key={file.name}
               variant={"link"}
               className={`
-          ${filename === file.name && "bg-gray-200 dark:bg-gray-700"} gap-6`}>
+          ${
+            filename === file.name && "bg-gray-200 dark:bg-gray-700"
+          } gap-6 my-1`}>
               <p
                 onClick={() =>
                   navigate(`/project/${id}/js/${file.name}/${file._id}`)
@@ -74,11 +76,11 @@ const CodeEditor = () => {
                 {file.name}
               </p>
               <X
-                className="hover:text-green-400 text-green-500 "
+                className="hover:text-green-400 text-green-500"
                 size={18}
                 onClick={() => {
                   dispatch(removeFile(file));
-                  navigate(-1);
+                  navigate(`/project/${id}`);
                 }}
               />
             </Button>
@@ -94,7 +96,7 @@ const CodeEditor = () => {
         </Button>
       </div>
       <div className="flex max-[700px]:flex-col">
-        <div className="w-[60%] max-[700px]:w-[100%] h-[90vh] max-[700px]:h-[50vh]">
+        <div className="w-[60%] max-[700px]:w-[100%] h-[90vh] max-[700px]:h-[60vh]">
           <Editor
             defaultLanguage="javascript"
             value={FileCode?.code}
@@ -106,6 +108,7 @@ const CodeEditor = () => {
                 enabled: false,
               },
               contextmenu: false,
+              lineHeight: 26,
             }}
           />
         </div>

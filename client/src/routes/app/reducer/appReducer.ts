@@ -75,7 +75,7 @@ const appReducer = createSlice({
       if (isFileAlreadyExit) {
         return;
       }
-      if (state.currentProjectOpenFiles.length === 4) {
+      if (state.currentProjectOpenFiles.length === 1) {
         state.currentProjectOpenFiles.shift();
       }
       state.projectCode?.filesCode.push({
