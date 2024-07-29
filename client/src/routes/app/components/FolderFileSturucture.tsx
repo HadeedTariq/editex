@@ -21,6 +21,7 @@ import { toast } from "@/components/ui/use-toast";
 import { itemApi } from "@/lib/axios";
 
 const FolderFileSturucture = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const { id, filename } = useParams();
@@ -28,6 +29,11 @@ const FolderFileSturucture = () => {
   const [showInput, setShowInput] = useState({
     visible: false,
     isFolder: false,
+  });
+  const [showFolderFile, setShowFolderFile] = useState<any>({
+    visible: false,
+    isFolder: false,
+    folderId: "",
   });
   const [file, setFile] = useState("");
   const [folder, setFolder] = useState("");
@@ -148,7 +154,33 @@ const FolderFileSturucture = () => {
     }
   };
 
-  const navigate = useNavigate();
+  const { mutate: fileCreationInFolder, isPending: isFileCreatingInFolder } =
+    useMutation({
+      mutationKey: [`createFile`],
+      mutationFn: async () => {
+        const { data } = await itemApi.post(`/createFile`, {
+          name: file,
+          isFolder: false,
+          projectId: id,
+        });
+        return data;
+      },
+      onSuccess() {
+        setShowInput({ ...showInput, visible: false });
+        setFile("");
+        queryClient.invalidateQueries([
+          `getProjectFileFolders${id}`,
+          0,
+        ] as InvalidateQueryFilters);
+      },
+      onError(err: ServerError) {
+        toast({
+          title: err.response.data.message,
+          variant: "destructive",
+        });
+      },
+    });
+  const createFileInFolder = () => {};
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="item-1">
@@ -220,28 +252,57 @@ const FolderFileSturucture = () => {
             {currentProjectFP.items?.map((exp) => (
               <div className="flex flex-col " key={exp._id}>
                 {exp.isFolder ? (
-                  <p
-                    className={`flex items-center gap-2 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-300 transition duration-300 
+                  <div className="flex flex-col">
+                    <p
+                      className={`flex items-center gap-1 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-300 transition duration-300 
                       relative
                     }`}
-                  >
-                    <Folder color="yellow" />
-                    {exp.name}
-                    <AccordionTrigger
-                      data-state="open"
-                      id={"n"}
-                      className="[&[data-state=open]>svg]:rotate-0"
                     >
-                      <FilePlus
-                        cursor={"pointer"}
-                        size={18}
-                        className="absolute right-0"
-                        onClick={() =>
-                          setShowInput({ isFolder: false, visible: true })
-                        }
-                      />
-                    </AccordionTrigger>
-                  </p>
+                      <Folder color="yellow" />
+                      {exp.name}
+                      <AccordionTrigger
+                        data-state="open"
+                        id={"n"}
+                        className="[&[data-state=open]>svg]:rotate-0"
+                      >
+                        <FilePlus
+                          cursor={"pointer"}
+                          size={18}
+                          className="absolute right-0"
+                          onClick={() =>
+                            setShowFolderFile({
+                              isFolder: false,
+                              visible: true,
+                              folderId: exp._id,
+                            })
+                          }
+                        />
+                      </AccordionTrigger>
+                    </p>
+                    <AccordionContent className="mx-1 ml-2">
+                      {showFolderFile.visible &&
+                        showFolderFile.folderId === exp._id && (
+                          <div className="flex items-center gap-2">
+                            <FileJson color="green" />
+                            <Input
+                              value={file}
+                              className="border-none outline-none h-3"
+                              autoFocus
+                              onBlur={() => {
+                                setShowFolderFile({
+                                  ...showInput,
+                                  visible: false,
+                                });
+                                setFile("");
+                              }}
+                              onChange={(e) => setFile(e.target.value)}
+                              disabled={isFileCreatingInFolder}
+                              onKeyDown={createFileInFolder}
+                            />
+                          </div>
+                        )}
+                    </AccordionContent>
+                  </div>
                 ) : (
                   <p
                     className={`flex items-center gap-2 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-300 transition duration-300 ${
