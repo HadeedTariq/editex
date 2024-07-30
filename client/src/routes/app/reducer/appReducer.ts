@@ -115,7 +115,7 @@ const appReducer = createSlice({
         (fileCode) => fileCode.fileId === payload.fileId
       );
       if (projectFile) {
-        projectFile.code==="Enter"||e.key === "Enter" = payload.code;
+        projectFile.code = payload.code;
         const filterFiles = state.projectCode?.filesCode.filter(
           (fileCode) => fileCode.fileId !== payload.fileId
         );
