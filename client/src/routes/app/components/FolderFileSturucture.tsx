@@ -220,7 +220,7 @@ const FolderFileSturucture = () => {
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="item-1">
-        <div className="flex items-center gap-3 relative w-full p-2">
+        <div className="flex items-center gap-3 relative w-full p-2 h-12">
           <p className="capitalize text-[16px]">
             {currentProjectFP.projectName}
           </p>
@@ -244,17 +244,17 @@ const FolderFileSturucture = () => {
               onClick={() => setShowInput({ isFolder: true, visible: true })}
             />
           </AccordionTrigger>
-          <AccordionTrigger className="absolute right-0 top-[12px] text-2xl" />{" "}
+          <AccordionTrigger className="absolute right-0 top-[5px] text-2xl" />{" "}
         </div>
         <AccordionContent>
           {showInput.visible && (
             <>
               {showInput.isFolder ? (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mt-3 pr-2">
                   <Folder color="yellow" />
                   <Input
                     value={folder}
-                    className="border-none outline-none h-2"
+                    className="border-none outline-none h-3"
                     autoFocus
                     onBlur={() => {
                       setShowInput({ ...showInput, visible: false });
@@ -266,11 +266,11 @@ const FolderFileSturucture = () => {
                   />
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mt-3 pr-2">
                   <FileJson color="green" />
                   <Input
                     value={file}
-                    className="border-none outline-none"
+                    className="border-none outline-none h-3"
                     autoFocus
                     onBlur={() => {
                       setShowInput({ ...showInput, visible: false });
@@ -288,14 +288,10 @@ const FolderFileSturucture = () => {
             {currentProjectFP.items?.map((exp) => (
               <div className="flex flex-col" key={exp._id}>
                 {exp.isFolder ? (
-                  <Accordion
-                    type="single"
-                    collapsible
-                    className="hover:bg-none"
-                  >
-                    <AccordionItem value="item-1">
+                  <Accordion type="single" collapsible>
+                    <AccordionItem value="item-1" className="border-b-0">
                       <p
-                        className={`flex items-center gap-1 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-300 transition duration-300 
+                        className={`flex items-center gap-1 cursor-pointer h-10 dark:hover:bg-gray-700 hover:bg-gray-300 transition duration-300 
                     relative
                   }`}
                       >
