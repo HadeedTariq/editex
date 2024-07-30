@@ -33,7 +33,8 @@ let FolderController = class FolderController {
     getProjectFilesAndFolders(id) {
         return this.folderService.getProjectFilesAndFolders(id);
     }
-    update(id, name) {
+    update(id, req) {
+        const { name } = req.body;
         return this.folderService.addFileToFolder(id, name);
     }
 };
@@ -73,9 +74,9 @@ __decorate([
 __decorate([
     (0, common_1.Patch)('/updateFolder/:id'),
     __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], FolderController.prototype, "update", null);
 exports.FolderController = FolderController = __decorate([

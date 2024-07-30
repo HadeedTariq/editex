@@ -19,6 +19,12 @@ import {
 } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { itemApi } from "@/lib/axios";
+import FolderFiles from "./FolderFiles";
+type FolderFile = {
+  visible: boolean;
+  isFolder: boolean;
+  folderId: string;
+};
 
 const FolderFileSturucture = () => {
   const navigate = useNavigate();
@@ -30,7 +36,7 @@ const FolderFileSturucture = () => {
     visible: false,
     isFolder: false,
   });
-  const [showFolderFile, setShowFolderFile] = useState<any>({
+  const [showFolderFile, setShowFolderFile] = useState<FolderFile>({
     visible: false,
     isFolder: false,
     folderId: "",
@@ -156,22 +162,26 @@ const FolderFileSturucture = () => {
 
   const { mutate: fileCreationInFolder, isPending: isFileCreatingInFolder } =
     useMutation({
-      mutationKey: [`createFile`],
+      mutationKey: [`createFileInFolder`],
       mutationFn: async () => {
-        const { data } = await itemApi.post(`/createFile`, {
-          name: file,
-          isFolder: false,
-          projectId: id,
-        });
+        const { data } = await itemApi.patch(
+          `/updateFolder/${showFolderFile.folderId}`,
+          {
+            name: file,
+          }
+        );
         return data;
       },
-      onSuccess() {
-        setShowInput({ ...showInput, visible: false });
+      onSuccess(data) {
+        setShowFolderFile({ ...showFolderFile, visible: false, folderId: "" });
         setFile("");
         queryClient.invalidateQueries([
           `getProjectFileFolders${id}`,
           0,
         ] as InvalidateQueryFilters);
+        toast({
+          title: data.message,
+        });
       },
       onError(err: ServerError) {
         toast({
@@ -180,7 +190,33 @@ const FolderFileSturucture = () => {
         });
       },
     });
-  const createFileInFolder = () => {};
+  const createFileInFolder = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === "Enter") {
+      const realFile = file.split(".")[1];
+      if (!realFile || realFile !== "js") {
+        toast({
+          title: "File Extrension must include js",
+          variant: "destructive",
+        });
+        return;
+      }
+      const projectFolder = currentProjectFP.items.find(
+        (fold) => fold._id === showFolderFile.folderId
+      );
+
+      const isFileAlreadyExistInFolder = projectFolder?.items.find(
+        (folderFile) => folderFile.name === file
+      );
+      if (isFileAlreadyExistInFolder) {
+        toast({
+          title: "File already exist in folder",
+          variant: "destructive",
+        });
+        return;
+      }
+      fileCreationInFolder();
+    }
+  };
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="item-1">
@@ -250,59 +286,70 @@ const FolderFileSturucture = () => {
           )}
           <div className="flex flex-col gap-2 px-2">
             {currentProjectFP.items?.map((exp) => (
-              <div className="flex flex-col " key={exp._id}>
+              <div className="flex flex-col" key={exp._id}>
                 {exp.isFolder ? (
-                  <div className="flex flex-col">
-                    <p
-                      className={`flex items-center gap-1 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-300 transition duration-300 
-                      relative
-                    }`}
-                    >
-                      <Folder color="yellow" />
-                      {exp.name}
-                      <AccordionTrigger
-                        data-state="open"
-                        id={"n"}
-                        className="[&[data-state=open]>svg]:rotate-0"
+                  <Accordion
+                    type="single"
+                    collapsible
+                    className="hover:bg-none"
+                  >
+                    <AccordionItem value="item-1">
+                      <p
+                        className={`flex items-center gap-1 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-300 transition duration-300 
+                    relative
+                  }`}
                       >
-                        <FilePlus
-                          cursor={"pointer"}
-                          size={18}
-                          className="absolute right-0"
-                          onClick={() =>
-                            setShowFolderFile({
-                              isFolder: false,
-                              visible: true,
-                              folderId: exp._id,
-                            })
-                          }
-                        />
-                      </AccordionTrigger>
-                    </p>
-                    <AccordionContent className="mx-1 ml-2">
-                      {showFolderFile.visible &&
-                        showFolderFile.folderId === exp._id && (
-                          <div className="flex items-center gap-2">
-                            <FileJson color="green" />
-                            <Input
-                              value={file}
-                              className="border-none outline-none h-3"
-                              autoFocus
-                              onBlur={() => {
-                                setShowFolderFile({
-                                  ...showInput,
-                                  visible: false,
-                                });
-                                setFile("");
-                              }}
-                              onChange={(e) => setFile(e.target.value)}
-                              disabled={isFileCreatingInFolder}
-                              onKeyDown={createFileInFolder}
-                            />
-                          </div>
-                        )}
-                    </AccordionContent>
-                  </div>
+                        <Folder color="yellow" />
+                        {exp.name}
+                        <AccordionTrigger
+                          data-state="open"
+                          id={"n"}
+                          className="[&[data-state=open]>svg]:rotate-0 "
+                        >
+                          <FilePlus
+                            cursor={"pointer"}
+                            size={18}
+                            className="absolute right-0"
+                            onClick={() =>
+                              setShowFolderFile({
+                                isFolder: false,
+                                visible: true,
+                                folderId: exp._id,
+                              })
+                            }
+                          />
+                          <AccordionTrigger className="top-[12px] text-2xl" />{" "}
+                        </AccordionTrigger>
+                      </p>
+                      <AccordionContent className="mx-1 ml-2">
+                        {showFolderFile.visible &&
+                          showFolderFile.folderId === exp._id && (
+                            <div className="flex items-center gap-2">
+                              <FileJson color="green" />
+                              <Input
+                                value={file}
+                                className="border-none outline-none h-3"
+                                autoFocus
+                                onBlur={() => {
+                                  setShowFolderFile({
+                                    ...showInput,
+                                    visible: false,
+                                    folderId: "",
+                                  });
+                                  setFile("");
+                                }}
+                                onChange={(e) => setFile(e.target.value)}
+                                disabled={isFileCreatingInFolder}
+                                onKeyDown={createFileInFolder}
+                              />
+                            </div>
+                          )}
+                        <div className="flex flex-col gap-2 mt-0">
+                          <FolderFiles folderFiles={exp.items} />
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
                 ) : (
                   <p
                     className={`flex items-center gap-2 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-300 transition duration-300 ${

@@ -50,7 +50,7 @@ let FolderService = class FolderService {
             },
         });
         if (createFileInFolder) {
-            return { message: 'File created successfully' };
+            return { message: `File in ${createFileInFolder.name} created successfully` };
         }
         else {
             throw new custom_exception_1.CustomException('Something went wrong');

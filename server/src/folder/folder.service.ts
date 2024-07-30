@@ -53,7 +53,7 @@ export class FolderService {
       },
     });
     if (createFileInFolder) {
-      return { message: 'File created successfully' };
+      return { message: `File in ${createFileInFolder.name} created successfully` };
     } else {
       throw new CustomException('Something went wrong');
     }

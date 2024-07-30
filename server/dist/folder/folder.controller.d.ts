@@ -65,7 +65,7 @@ export declare class FolderController {
     } & {
         _id: import("mongoose").Types.ObjectId;
     })[]>;
-    update(id: string, name: string): Promise<{
+    update(id: string, req: Request): Promise<{
         message: string;
     }>;
 }

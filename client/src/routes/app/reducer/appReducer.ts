@@ -8,6 +8,7 @@ export interface Items {
   items: {
     name: string;
     isFolder: boolean;
+    _id?:string
   }[];
 }
 

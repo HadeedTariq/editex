@@ -46,7 +46,9 @@ export class FolderController {
   }
 
   @Patch('/updateFolder/:id')
-  update(@Param('id') id: string, @Body() name: string) {
+  update(@Param('id') id: string, @Req() req:Request) {
+    const {name}=req.body
+    
     return this.folderService.addFileToFolder(id, name);
   }
 }
