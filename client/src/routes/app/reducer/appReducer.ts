@@ -8,7 +8,7 @@ export interface Items {
   items: {
     name: string;
     isFolder: boolean;
-    _id?:string
+    _id?: string;
   }[];
 }
 
@@ -101,7 +101,11 @@ const appReducer = createSlice({
       state,
       { payload }: { payload: { projectId: string; filesCode: [] } }
     ) => {
-      state.projectCode = payload;
+      const filesCode = state.projectCode?.filesCode || [];
+      state.projectCode = {
+        projectId: payload.projectId,
+        filesCode: filesCode.concat(payload.filesCode),
+      };
     },
     updateProjectCode: (
       state,

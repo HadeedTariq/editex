@@ -30,6 +30,23 @@ const ProjectPage = () => {
       const filesCode = data.map((file: any) => {
         const code = file.code ? file.code : "";
         const fileId = file._id;
+        let folderFiles = file.items?.filter(
+          (folderFile: any) => folderFile.code && folderFile.code !== ""
+        );
+        folderFiles = folderFiles?.map((folderFile: any) => {
+          const fileId = folderFile._id;
+          const code = folderFile.code;
+          return { fileId, code };
+        });
+        if (folderFiles.length > 0) {
+          dispatch(
+            setProjectCode({
+              projectId: id,
+              filesCode: folderFiles || [],
+            })
+          );
+        }
+
         return { code, fileId };
       });
 

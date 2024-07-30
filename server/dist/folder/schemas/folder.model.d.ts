@@ -26,65 +26,71 @@
 import { Schema } from 'mongoose';
 export declare const Item: import("mongoose").Model<{
     name: string;
+    isFolder: boolean;
     items: import("mongoose").Types.DocumentArray<{
+        code?: string;
         name?: string;
         isFolder?: boolean;
     }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
     code?: string;
+    projectId?: import("mongoose").Types.ObjectId;
     creator?: import("mongoose").Types.ObjectId;
 }, {}, {}, {}, import("mongoose").Document<unknown, {}, {
     name: string;
+    isFolder: boolean;
     items: import("mongoose").Types.DocumentArray<{
+        code?: string;
         name?: string;
         isFolder?: boolean;
     }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
     code?: string;
+    projectId?: import("mongoose").Types.ObjectId;
     creator?: import("mongoose").Types.ObjectId;
 }> & {
     name: string;
+    isFolder: boolean;
     items: import("mongoose").Types.DocumentArray<{
+        code?: string;
         name?: string;
         isFolder?: boolean;
     }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
     code?: string;
+    projectId?: import("mongoose").Types.ObjectId;
     creator?: import("mongoose").Types.ObjectId;
 } & {
     _id: import("mongoose").Types.ObjectId;
 }, Schema<any, import("mongoose").Model<any, any, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, {
     name: string;
+    isFolder: boolean;
     items: import("mongoose").Types.DocumentArray<{
+        code?: string;
         name?: string;
         isFolder?: boolean;
     }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
     code?: string;
+    projectId?: import("mongoose").Types.ObjectId;
     creator?: import("mongoose").Types.ObjectId;
 }, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<{
     name: string;
+    isFolder: boolean;
     items: import("mongoose").Types.DocumentArray<{
+        code?: string;
         name?: string;
         isFolder?: boolean;
     }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
     code?: string;
+    projectId?: import("mongoose").Types.ObjectId;
     creator?: import("mongoose").Types.ObjectId;
 }>> & import("mongoose").FlatRecord<{
     name: string;
+    isFolder: boolean;
     items: import("mongoose").Types.DocumentArray<{
+        code?: string;
         name?: string;
         isFolder?: boolean;
     }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
     code?: string;
+    projectId?: import("mongoose").Types.ObjectId;
     creator?: import("mongoose").Types.ObjectId;
 }> & {
     _id: import("mongoose").Types.ObjectId;

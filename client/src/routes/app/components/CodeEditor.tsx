@@ -22,6 +22,8 @@ const CodeEditor = () => {
 
   const navigate = useNavigate();
   const { filename, fileId, id } = useParams();
+  console.log(filename, fileId);
+
   const FileCode = projectCode?.filesCode.find(
     (fileCode) => fileCode.fileId === fileId
   );
@@ -55,6 +57,12 @@ const CodeEditor = () => {
         title: data.message || "Code saved successfully",
       });
     },
+    onError: () => {
+      toast({
+        title: "Something wrong happen on the server side",
+        variant: "destructive",
+      });
+    },
   });
 
   return (
@@ -68,11 +76,13 @@ const CodeEditor = () => {
               className={`
           ${
             filename === file.name && "bg-gray-200 dark:bg-gray-700"
-          } gap-6 my-1`}>
+          } gap-6 my-1`}
+            >
               <p
                 onClick={() =>
                   navigate(`/project/${id}/js/${file.name}/${file._id}`)
-                }>
+                }
+              >
                 {file.name}
               </p>
               <X
@@ -91,7 +101,8 @@ const CodeEditor = () => {
           onClick={() => saveCode()}
           className="mx-2"
           title="Save"
-          disabled={isPending}>
+          disabled={isPending}
+        >
           <Save />
         </Button>
       </div>

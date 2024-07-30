@@ -64,11 +64,19 @@ let FolderService = class FolderService {
         }, {
             code: realCode,
         });
-        if (savedCode) {
-            return { message: 'Code saved successfully' };
+        if (!savedCode) {
+            const saveFolderFileCode = await folder_model_1.Item.updateOne({ "items._id": fileId }, {
+                $set: { "items.$.code": realCode }
+            });
+            if (saveFolderFileCode) {
+                return { message: "Code saved successfully" };
+            }
+            else {
+                throw new custom_exception_1.CustomException("Something went wrong");
+            }
         }
         else {
-            throw new custom_exception_1.CustomException('Something went wrong');
+            return { message: "Code saved successfully" };
         }
     }
 };

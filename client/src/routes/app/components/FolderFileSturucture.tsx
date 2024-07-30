@@ -30,7 +30,7 @@ const FolderFileSturucture = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  const { id, filename } = useParams();
+  const { id, fileId } = useParams();
   const { currentProjectFP } = useAppRouter();
   const [showInput, setShowInput] = useState({
     visible: false,
@@ -341,7 +341,10 @@ const FolderFileSturucture = () => {
                             </div>
                           )}
                         <div className="flex flex-col gap-2 mt-0">
-                          <FolderFiles folderFiles={exp.items} />
+                          <FolderFiles
+                            folderFiles={exp.items}
+                            folderName={exp.name}
+                          />
                         </div>
                       </AccordionContent>
                     </AccordionItem>
@@ -349,7 +352,7 @@ const FolderFileSturucture = () => {
                 ) : (
                   <p
                     className={`flex items-center gap-2 cursor-pointer dark:hover:bg-gray-700 hover:bg-gray-300 transition duration-300 ${
-                      filename === exp.name && "bg-gray-300 dark:bg-gray-700"
+                      fileId === exp._id && "bg-gray-300 dark:bg-gray-700"
                     }`}
                     onClick={() => navigate(`js/${exp.name}/${exp._id}`)}
                   >

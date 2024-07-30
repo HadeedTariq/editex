@@ -21,6 +21,7 @@ const itemSchema = new Schema({
     {
       name: String,
       isFolder: Boolean,
+      code:String
     },
   ],
   code: String,

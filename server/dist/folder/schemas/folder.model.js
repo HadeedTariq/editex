@@ -23,6 +23,7 @@ const itemSchema = new mongoose_1.Schema({
         {
             name: String,
             isFolder: Boolean,
+            code: String
         },
     ],
     code: String,
