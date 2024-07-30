@@ -95,7 +95,7 @@ const FolderFileSturucture = () => {
   });
 
   const createFile = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.code === "Enter") {
+    if (e.code === "Enter" || e.key === "Enter") {
       const realFile = file.split(".")[1];
       if (!realFile || realFile !== "js") {
         toast({
@@ -147,7 +147,7 @@ const FolderFileSturucture = () => {
       });
       return;
     }
-    if (e.code === "Enter") {
+    if (e.code === "Enter" || e.key === "Enter") {
       dispatch(
         setItemsCP({
           _id: uuid(),
@@ -191,7 +191,7 @@ const FolderFileSturucture = () => {
       },
     });
   const createFileInFolder = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.code === "Enter") {
+    if (e.code === "Enter" || e.key === "Enter") {
       const realFile = file.split(".")[1];
       if (!realFile || realFile !== "js") {
         toast({
