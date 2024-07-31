@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ProjectModule } from './project/project.module';
 import { FolderModule } from './folder/folder.module';
 import { ShareCodeModule } from './share-code/share-code.module';
+import { BlogModule } from './blog/blog.module';
+import { BlogModule } from './blog/blog.module';
 
 @Module({
   imports: [
@@ -16,6 +18,7 @@ import { ShareCodeModule } from './share-code/share-code.module';
     ProjectModule,
     FolderModule,
     ShareCodeModule,
+    BlogModule,
   ],
   controllers: [AppController],
   providers: [AppService],
