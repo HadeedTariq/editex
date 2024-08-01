@@ -21,6 +21,8 @@ import Notififcations from "./routes/app/pages/Notififcations";
 import PrivateProjectPage from "./routes/app/pages/PrivateProjectPage";
 import PrivateCodeEditor from "./routes/app/components/PrivateCodeEditor";
 import ProjectNotifications from "./routes/app/pages/ProjectNotifications";
+import NotFound from "./components/NotFound";
+import CreateBlog from "./routes/app/pages/CreateBlog";
 
 function App() {
   const { theme } = useTheme();
@@ -86,6 +88,10 @@ function App() {
           ],
         },
         {
+          path: "/createBlog",
+          element: <CreateBlog />,
+        },
+        {
           path: "/project",
           element: <ProjectHandler />,
         },
@@ -130,6 +136,10 @@ function App() {
           ],
         },
       ],
+    },
+    {
+      path: "*",
+      element: <NotFound />,
     },
   ]);
 

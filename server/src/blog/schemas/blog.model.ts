@@ -13,10 +13,6 @@ const blogSchema = new Schema({
     type: String,
     required: true,
   },
-  contentTable: {
-    type: [String],
-    required: true,
-  },
   category: {
     type: String,
     enum: ['dsa', 'cp', 'dp', 'general'],

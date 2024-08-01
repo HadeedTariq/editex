@@ -15,7 +15,7 @@ export class CreateBlogDto {
 
   @IsString()
   @Min(10)
-  @Max(100)
+  @Max(300)
   description: string;
 
   @IsString()

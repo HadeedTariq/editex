@@ -35,23 +35,23 @@ export declare class FolderService {
     }>;
     getProjectFilesAndFolders(projectId: string): Promise<(mongoose.Document<unknown, {}, {
         name: string;
-        isFolder: boolean;
         items: mongoose.Types.DocumentArray<{
             name?: string;
             code?: string;
             isFolder?: boolean;
         }>;
+        isFolder: boolean;
         projectId?: mongoose.Types.ObjectId;
         code?: string;
         creator?: mongoose.Types.ObjectId;
     }> & {
         name: string;
-        isFolder: boolean;
         items: mongoose.Types.DocumentArray<{
             name?: string;
             code?: string;
             isFolder?: boolean;
         }>;
+        isFolder: boolean;
         projectId?: mongoose.Types.ObjectId;
         code?: string;
         creator?: mongoose.Types.ObjectId;

@@ -24,73 +24,49 @@
 /// <reference types="mongoose/types/inferschematype" />
 /// <reference types="mongoose/types/inferrawdoctype" />
 import { Schema } from 'mongoose';
-export declare const Item: import("mongoose").Model<{
-    name: string;
-    items: import("mongoose").Types.DocumentArray<{
-        name?: string;
-        code?: string;
-        isFolder?: boolean;
-    }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
-    code?: string;
+export declare const Blog: import("mongoose").Model<{
+    title: string;
+    description: string;
+    image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 }, {}, {}, {}, import("mongoose").Document<unknown, {}, {
-    name: string;
-    items: import("mongoose").Types.DocumentArray<{
-        name?: string;
-        code?: string;
-        isFolder?: boolean;
-    }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
-    code?: string;
+    title: string;
+    description: string;
+    image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 }> & {
-    name: string;
-    items: import("mongoose").Types.DocumentArray<{
-        name?: string;
-        code?: string;
-        isFolder?: boolean;
-    }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
-    code?: string;
+    title: string;
+    description: string;
+    image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 } & {
     _id: import("mongoose").Types.ObjectId;
 }, Schema<any, import("mongoose").Model<any, any, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, {
-    name: string;
-    items: import("mongoose").Types.DocumentArray<{
-        name?: string;
-        code?: string;
-        isFolder?: boolean;
-    }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
-    code?: string;
+    title: string;
+    description: string;
+    image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 }, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<{
-    name: string;
-    items: import("mongoose").Types.DocumentArray<{
-        name?: string;
-        code?: string;
-        isFolder?: boolean;
-    }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
-    code?: string;
+    title: string;
+    description: string;
+    image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 }>> & import("mongoose").FlatRecord<{
-    name: string;
-    items: import("mongoose").Types.DocumentArray<{
-        name?: string;
-        code?: string;
-        isFolder?: boolean;
-    }>;
-    isFolder: boolean;
-    projectId?: import("mongoose").Types.ObjectId;
-    code?: string;
+    title: string;
+    description: string;
+    image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 }> & {
     _id: import("mongoose").Types.ObjectId;

@@ -7,7 +7,6 @@ import { ProjectModule } from './project/project.module';
 import { FolderModule } from './folder/folder.module';
 import { ShareCodeModule } from './share-code/share-code.module';
 import { BlogModule } from './blog/blog.module';
-import { BlogModule } from './blog/blog.module';
 
 @Module({
   imports: [

@@ -15,6 +15,7 @@ const config_1 = require("@nestjs/config");
 const project_module_1 = require("./project/project.module");
 const folder_module_1 = require("./folder/folder.module");
 const share_code_module_1 = require("./share-code/share-code.module");
+const blog_module_1 = require("./blog/blog.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -28,6 +29,7 @@ exports.AppModule = AppModule = __decorate([
             project_module_1.ProjectModule,
             folder_module_1.FolderModule,
             share_code_module_1.ShareCodeModule,
+            blog_module_1.BlogModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
