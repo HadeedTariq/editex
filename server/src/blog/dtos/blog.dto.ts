@@ -1,4 +1,4 @@
-import { IsEnum, IsString, Max, Min } from 'class-validator';
+import { IsEnum, IsString, IsUrl, MinLength, MaxLength } from 'class-validator';
 
 enum BlogCategory {
   dsa = 'dsa',
@@ -9,20 +9,22 @@ enum BlogCategory {
 
 export class CreateBlogDto {
   @IsString()
-  @Min(10)
-  @Max(100)
+  @MinLength(10)
+  @MaxLength(100)
   title: string;
 
   @IsString()
-  @Min(10)
-  @Max(300)
+  @MinLength(10)
+  @MaxLength(500)
   description: string;
 
   @IsString()
-  @Min(10)
-  @Max(100)
   content: string;
 
   @IsEnum(BlogCategory)
   category: BlogCategory;
+
+  @IsUrl()
+  @IsString()
+  image: string;
 }

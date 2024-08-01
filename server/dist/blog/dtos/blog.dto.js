@@ -23,24 +23,27 @@ class CreateBlogDto {
 exports.CreateBlogDto = CreateBlogDto;
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.Min)(10),
-    (0, class_validator_1.Max)(100),
+    (0, class_validator_1.MinLength)(10),
+    (0, class_validator_1.MaxLength)(100),
     __metadata("design:type", String)
 ], CreateBlogDto.prototype, "title", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.Min)(10),
-    (0, class_validator_1.Max)(300),
+    (0, class_validator_1.MinLength)(10),
+    (0, class_validator_1.MaxLength)(500),
     __metadata("design:type", String)
 ], CreateBlogDto.prototype, "description", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.Min)(10),
-    (0, class_validator_1.Max)(100),
     __metadata("design:type", String)
 ], CreateBlogDto.prototype, "content", void 0);
 __decorate([
     (0, class_validator_1.IsEnum)(BlogCategory),
     __metadata("design:type", String)
 ], CreateBlogDto.prototype, "category", void 0);
+__decorate([
+    (0, class_validator_1.IsUrl)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateBlogDto.prototype, "image", void 0);
 //# sourceMappingURL=blog.dto.js.map

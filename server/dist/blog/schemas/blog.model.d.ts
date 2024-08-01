@@ -25,48 +25,48 @@
 /// <reference types="mongoose/types/inferrawdoctype" />
 import { Schema } from 'mongoose';
 export declare const Blog: import("mongoose").Model<{
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 }, {}, {}, {}, import("mongoose").Document<unknown, {}, {
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 }> & {
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 } & {
     _id: import("mongoose").Types.ObjectId;
 }, Schema<any, import("mongoose").Model<any, any, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, {
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 }, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<{
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 }>> & import("mongoose").FlatRecord<{
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 }> & {
     _id: import("mongoose").Types.ObjectId;

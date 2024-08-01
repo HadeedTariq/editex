@@ -9,5 +9,6 @@ export declare class CreateBlogDto {
     description: string;
     content: string;
     category: BlogCategory;
+    image: string;
 }
 export {};
