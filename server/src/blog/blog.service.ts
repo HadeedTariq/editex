@@ -55,8 +55,6 @@ export class BlogService {
         $unwind: '$creator',
       },
     ]);
-    console.log(blogs);
-
     return blogs;
   }
 }

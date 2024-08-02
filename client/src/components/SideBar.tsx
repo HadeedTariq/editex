@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const SideBar = () => {
   const { pathname } = useLocation();
+  console.log(pathname);
 
   return (
     <Sheet>
@@ -14,9 +15,10 @@ const SideBar = () => {
         <div className="flex flex-col gap-3 mt-8">
           <Link
             to={"/notifications"}
-            className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
-              String(pathname) === "/notifications" &&
-              "dark:bg-slate-900 bg-slate-400"
+            className={`p-2 rounded-md ${
+              String(pathname) === "/notifications"
+                ? "dark:bg-slate-900 bg-slate-400"
+                : "dark:bg-zinc-800 bg-slate-300"
             }`}
           >
             Notifications
@@ -24,26 +26,30 @@ const SideBar = () => {
 
           <Link
             to={"/project/publicProjects"}
-            className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
-              String(pathname) === "/project/publicProjects" &&
-              "dark:bg-slate-900 bg-slate-400"
+            className={`p-2 rounded-md ${
+              pathname === "/project/publicProjects"
+                ? "dark:bg-slate-900 bg-slate-400"
+                : "dark:bg-zinc-800 bg-slate-300"
             }`}
           >
             Public Projects
           </Link>
           <Link
             to={"/projectNotifications"}
-            className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
-              String(pathname) === "/projectNotifications" &&
-              "dark:bg-slate-900 bg-slate-400"
+            className={`p-2 rounded-md ${
+              String(pathname) === "/projectNotifications"
+                ? "dark:bg-slate-900 bg-slate-400"
+                : "dark:bg-zinc-800 bg-slate-300"
             }`}
           >
             Project Notification
           </Link>
           <Link
             to={"/blogs"}
-            className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
-              String(pathname) === "/blogs" && "dark:bg-slate-900 bg-slate-400"
+            className={`p-2 rounded-md ${
+              String(pathname) === "/blogs"
+                ? "dark:bg-slate-900 bg-slate-400"
+                : "dark:bg-zinc-800 bg-slate-300"
             }`}
           >
             Blogs

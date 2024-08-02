@@ -28,31 +28,31 @@ export declare const Blog: import("mongoose").Model<{
     createdAt: NativeDate;
     updatedAt: NativeDate;
 } & {
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 }, {}, {}, {}, import("mongoose").Document<unknown, {}, {
     createdAt: NativeDate;
     updatedAt: NativeDate;
 } & {
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 }> & {
     createdAt: NativeDate;
     updatedAt: NativeDate;
 } & {
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 } & {
     _id: import("mongoose").Types.ObjectId;
@@ -62,31 +62,31 @@ export declare const Blog: import("mongoose").Model<{
     createdAt: NativeDate;
     updatedAt: NativeDate;
 } & {
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 }, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<{
     createdAt: NativeDate;
     updatedAt: NativeDate;
 } & {
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 }>> & import("mongoose").FlatRecord<{
     createdAt: NativeDate;
     updatedAt: NativeDate;
 } & {
-    title: string;
     description: string;
-    image: string;
-    category: "dsa" | "cp" | "dp" | "general";
+    title: string;
     content: string;
+    category: "dsa" | "general" | "cp" | "dp";
+    image: string;
     creator?: import("mongoose").Types.ObjectId;
 }> & {
     _id: import("mongoose").Types.ObjectId;
