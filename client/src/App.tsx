@@ -23,6 +23,8 @@ import PrivateCodeEditor from "./routes/app/components/PrivateCodeEditor";
 import ProjectNotifications from "./routes/app/pages/ProjectNotifications";
 import NotFound from "./components/NotFound";
 import CreateBlog from "./routes/app/pages/CreateBlog";
+import PublicBlogs from "./routes/app/pages/PublicBlogs";
+import BlogPage from "./routes/app/pages/BlogPage";
 
 function App() {
   const { theme } = useTheme();
@@ -106,6 +108,19 @@ function App() {
         {
           path: "/projectNotifications",
           element: <ProjectNotifications />,
+        },
+        {
+          path: "/blogs",
+          children: [
+            {
+              index: true,
+              element: <PublicBlogs />,
+            },
+            {
+              path: ":id",
+              element: <BlogPage />,
+            },
+          ],
         },
         {
           path: "/project/:id",

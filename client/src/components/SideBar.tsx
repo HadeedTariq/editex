@@ -17,7 +17,8 @@ const SideBar = () => {
             className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
               String(pathname) === "/notifications" &&
               "dark:bg-slate-900 bg-slate-400"
-            }`}>
+            }`}
+          >
             Notifications
           </Link>
 
@@ -26,7 +27,8 @@ const SideBar = () => {
             className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
               String(pathname) === "/project/publicProjects" &&
               "dark:bg-slate-900 bg-slate-400"
-            }`}>
+            }`}
+          >
             Public Projects
           </Link>
           <Link
@@ -34,8 +36,17 @@ const SideBar = () => {
             className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
               String(pathname) === "/projectNotifications" &&
               "dark:bg-slate-900 bg-slate-400"
-            }`}>
+            }`}
+          >
             Project Notification
+          </Link>
+          <Link
+            to={"/blogs"}
+            className={`dark:bg-zinc-800 bg-zinc-200  p-2 rounded-md ${
+              String(pathname) === "/blogs" && "dark:bg-slate-900 bg-slate-400"
+            }`}
+          >
+            Blogs
           </Link>
         </div>
       </SheetContent>

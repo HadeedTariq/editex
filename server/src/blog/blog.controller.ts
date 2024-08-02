@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Post,
   Req,
   UseGuards,
@@ -24,4 +25,9 @@ export class BlogController {
 
   @Delete('delete')
   deleteBlog() {}
+
+  @Get('')
+  getBlogs(@Req() req: Request) {
+    return this.blogService.getBlogs(req);
+  }
 }

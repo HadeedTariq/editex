@@ -25,48 +25,68 @@
 /// <reference types="mongoose/types/inferrawdoctype" />
 import { Schema } from 'mongoose';
 export declare const Blog: import("mongoose").Model<{
-    description: string;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
     title: string;
-    content: string;
-    category: "dsa" | "general" | "cp" | "dp";
+    description: string;
     image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 }, {}, {}, {}, import("mongoose").Document<unknown, {}, {
-    description: string;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
     title: string;
-    content: string;
-    category: "dsa" | "general" | "cp" | "dp";
+    description: string;
     image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 }> & {
-    description: string;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
     title: string;
-    content: string;
-    category: "dsa" | "general" | "cp" | "dp";
+    description: string;
     image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 } & {
     _id: import("mongoose").Types.ObjectId;
-}, Schema<any, import("mongoose").Model<any, any, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, {
-    description: string;
+}, Schema<any, import("mongoose").Model<any, any, any, any, any, any>, {}, {}, {}, {}, {
+    timestamps: true;
+}, {
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
     title: string;
-    content: string;
-    category: "dsa" | "general" | "cp" | "dp";
+    description: string;
     image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 }, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<{
-    description: string;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
     title: string;
-    content: string;
-    category: "dsa" | "general" | "cp" | "dp";
+    description: string;
     image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 }>> & import("mongoose").FlatRecord<{
-    description: string;
+    createdAt: NativeDate;
+    updatedAt: NativeDate;
+} & {
     title: string;
-    content: string;
-    category: "dsa" | "general" | "cp" | "dp";
+    description: string;
     image: string;
+    category: "dsa" | "cp" | "dp" | "general";
+    content: string;
     creator?: import("mongoose").Types.ObjectId;
 }> & {
     _id: import("mongoose").Types.ObjectId;

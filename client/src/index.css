@@ -10,7 +10,13 @@
   height: 100%;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-
+code{
+  background-color: black;
+  text-align: start;
+}
+.code-highlight{
+  background-color: black;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;

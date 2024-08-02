@@ -25,6 +25,9 @@ let BlogController = class BlogController {
         return this.blogService.createBlog(blog, req);
     }
     deleteBlog() { }
+    getBlogs(req) {
+        return this.blogService.getBlogs(req);
+    }
 };
 exports.BlogController = BlogController;
 __decorate([
@@ -41,6 +44,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], BlogController.prototype, "deleteBlog", null);
+__decorate([
+    (0, common_1.Get)(''),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], BlogController.prototype, "getBlogs", null);
 exports.BlogController = BlogController = __decorate([
     (0, common_1.Controller)('blog'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),

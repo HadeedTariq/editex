@@ -5,6 +5,7 @@ import { Request } from 'express';
 import * as sanitize from 'mongo-sanitize';
 import { Blog } from './schemas/blog.model';
 import { CustomException } from 'src/custom.exception';
+import mongoose from 'mongoose';
 
 @Injectable()
 export class BlogService {
@@ -24,5 +25,38 @@ export class BlogService {
     } else {
       throw new CustomException('Something went wrong');
     }
+  }
+  async getBlogs(req: Request) {
+    const user: any = req.body.user;
+
+    const blogs = await Blog.aggregate([
+      // {
+      //   $match: {
+      //     creator: { $ne: new mongoose.Types.ObjectId(user.id as string) },
+      //   },
+      // },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'creator',
+          foreignField: '_id',
+          as: 'creator',
+          pipeline: [
+            {
+              $project: {
+                passion: 1,
+                username: 1,
+              },
+            },
+          ],
+        },
+      },
+      {
+        $unwind: '$creator',
+      },
+    ]);
+    console.log(blogs);
+
+    return blogs;
   }
 }

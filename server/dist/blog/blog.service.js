@@ -27,6 +27,32 @@ let BlogService = class BlogService {
             throw new custom_exception_1.CustomException('Something went wrong');
         }
     }
+    async getBlogs(req) {
+        const user = req.body.user;
+        const blogs = await blog_model_1.Blog.aggregate([
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'creator',
+                    foreignField: '_id',
+                    as: 'creator',
+                    pipeline: [
+                        {
+                            $project: {
+                                passion: 1,
+                                username: 1,
+                            },
+                        },
+                    ],
+                },
+            },
+            {
+                $unwind: '$creator',
+            },
+        ]);
+        console.log(blogs);
+        return blogs;
+    }
 };
 exports.BlogService = BlogService;
 exports.BlogService = BlogService = __decorate([

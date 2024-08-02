@@ -28,6 +28,6 @@ const blogSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',
     },
-});
+}, { timestamps: true });
 exports.Blog = (0, mongoose_1.model)('Blog', blogSchema);
 //# sourceMappingURL=blog.model.js.map

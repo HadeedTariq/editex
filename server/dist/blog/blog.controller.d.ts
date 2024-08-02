@@ -8,4 +8,5 @@ export declare class BlogController {
         message: string;
     }>;
     deleteBlog(): void;
+    getBlogs(req: Request): Promise<any[]>;
 }
