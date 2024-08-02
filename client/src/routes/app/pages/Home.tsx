@@ -6,14 +6,14 @@ import { useNavigate } from "react-router-dom";
 const Home = () => {
   const navigate = useNavigate();
   const { user } = useFullApp();
-  const redirectToMainApp = () => {
+  const redirection = (url: string) => {
     if (!user) {
       toast({
         title: "Authentication required",
       });
       return;
     }
-    navigate("/project");
+    navigate(url);
   };
   return (
     <section className="bg-gray-50 dark:bg-gray-800 w-full h-screen">
@@ -33,7 +33,13 @@ const Home = () => {
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Button onClick={redirectToMainApp}>Get Started</Button>
+            <Button onClick={() => redirection("/project")}>Get Started</Button>
+            <Button
+              onClick={() => redirection("/createBlog")}
+              variant={"project"}
+            >
+              Create Blog
+            </Button>
           </div>
         </div>
       </div>

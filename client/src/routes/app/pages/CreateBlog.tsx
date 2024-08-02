@@ -45,6 +45,7 @@ import { blogApi } from "@/lib/axios";
 import { useFullApp } from "@/hooks/useFullApp";
 import { toast } from "@/components/ui/use-toast";
 import { Navigate } from "react-router-dom";
+import Loading from "@/components/ui/loading";
 
 function BlogCreationForm() {
   const form = useForm<BlogSchema>({
@@ -94,7 +95,7 @@ function BlogCreationForm() {
         }/image/upload`,
         data
       );
-      form.setValue("image", resp.data.url);
+      form.setValue("image", resp.data.secure_url);
     } catch (err) {
       form.setValue("image", "");
       toast({
@@ -110,6 +111,7 @@ function BlogCreationForm() {
     });
     return <Navigate to={"/"} />;
   }
+
   return (
     <>
       <Form {...form}>
@@ -182,7 +184,7 @@ function BlogCreationForm() {
               </FormItem>
             )}
           />
-          {!image ? (
+          {!image && (
             <FormField
               control={form.control}
               name="image"
@@ -251,12 +253,14 @@ function BlogCreationForm() {
                 </FormItem>
               )}
             />
-          ) : (
+          )}
+          {image?.includes("https") && (
             <img
               src={image}
               className="border-2 border-dotted border-current size-[300px] object-cover"
             />
           )}
+          {image === "loading" && <Loading />}
           <div className="flex flex-col gap-4">
             <FormLabel>Blog content</FormLabel>
             <MDEditor
