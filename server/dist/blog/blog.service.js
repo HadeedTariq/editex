@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const sanitize = require("mongo-sanitize");
 const blog_model_1 = require("./schemas/blog.model");
 const custom_exception_1 = require("../custom.exception");
+const mongoose_1 = require("mongoose");
 let BlogService = class BlogService {
     async createBlog(blog, req) {
         const user = req.body.user;
@@ -30,6 +31,11 @@ let BlogService = class BlogService {
     async getBlogs(req) {
         const user = req.body.user;
         const blogs = await blog_model_1.Blog.aggregate([
+            {
+                $match: {
+                    creator: { $ne: new mongoose_1.default.Types.ObjectId(user.id) },
+                },
+            },
             {
                 $lookup: {
                     from: 'users',

@@ -1,9 +1,12 @@
 import { useLocation } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
 import { useFullApp } from "@/hooks/useFullApp";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TableOfContent from "../components/TableOfContent";
 import { TableOfContentSheet } from "../components/TableOfContentSheet";
+import { useReactToPrint } from "react-to-print";
+import { Button } from "@/components/ui/button";
+import { Html2Pdf } from "js-html2pdf";
 
 export type PageHeadings = {
   textContent: string | null;
@@ -15,6 +18,22 @@ const BlogPage = () => {
   const { state: blog }: { state: BlogsType } = useLocation();
   const { theme } = useFullApp();
   const [pageHeadings, setPageHeadings] = useState<PageHeadings[]>([]);
+  const componentRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    print: async (printIframe) => {
+      const document = printIframe.contentDocument;
+      if (document) {
+        const html = document.getElementsByClassName("App")[0];
+        const options = {
+          margin: 0,
+          filename: blog.title,
+        };
+        const exporter = new Html2Pdf(html, options);
+        await exporter.getPdf(options);
+      }
+    },
+  });
 
   useEffect(() => {
     const headings = Array.from(
@@ -34,7 +53,11 @@ const BlogPage = () => {
         <div className="min-[1058px]:hidden">
           <TableOfContentSheet headings={pageHeadings} />
         </div>
-        <div className="w-[97%] ml-12 max-[1058px]:w-[96%] max-[1058px]:ml-0">
+
+        <div
+          className="w-[97%] ml-12 max-[1058px]:w-[96%] max-[1058px]:ml-0"
+          ref={componentRef}
+        >
           <div className="ml-2">
             <div className="rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-normal">
               <div className="p-2">
@@ -71,6 +94,13 @@ const BlogPage = () => {
           />
         </div>
       </div>
+      <Button
+        variant={"project"}
+        onClick={handlePrint}
+        className="mx-auto my-2 text-center "
+      >
+        Print Blog
+      </Button>
     </>
   );
 };

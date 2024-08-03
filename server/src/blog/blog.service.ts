@@ -30,11 +30,11 @@ export class BlogService {
     const user: any = req.body.user;
 
     const blogs = await Blog.aggregate([
-      // {
-      //   $match: {
-      //     creator: { $ne: new mongoose.Types.ObjectId(user.id as string) },
-      //   },
-      // },
+      {
+        $match: {
+          creator: { $ne: new mongoose.Types.ObjectId(user.id as string) },
+        },
+      },
       {
         $lookup: {
           from: 'users',
