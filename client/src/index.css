@@ -10,13 +10,7 @@
   height: 100%;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-code{
-  background-color: black;
-  text-align: start;
-}
-.code-highlight{
-  background-color: black;
-}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -71,4 +65,43 @@ code{
   body {
     @apply bg-background text-foreground;
   }
+}
+.wmde-markdown {
+  text-align: start;
+}
+.wmde-markdown pre code,
+.wmde-markdown pre tt {
+  text-align: start;
+  background-color: rgb(15, 14, 14);
+  width: 80vw;
+  margin-right: 8px;
+}
+
+@media screen and (max-width: 1058px) {
+  .wmde-markdown pre code,
+  .wmde-markdown pre tt {
+    width: 90vw;
+  }
+}
+
+.wmde-markdown .code-highlight .code-line .punctuation {
+  color: white;
+}
+.wmde-markdown .code-highlight .code-line .class-name {
+  color: rgb(145, 69, 238);
+}
+.wmde-markdown .code-highlight .code-line .property-access {
+  color: rgb(69, 125, 238);
+}
+.wmde-markdown .code-highlight .code-line .function {
+  color: rgb(238, 69, 227);
+}
+.wmde-markdown .code-highlight .code-line .function {
+  color: rgb(238, 238, 69);
+}
+.wmde-markdown .code-highlight .code-line .operator {
+  color: rgb(238, 94, 69);
+}
+.wmde-markdown .code-highlight .code-line {
+  color: rgb(7, 189, 209);
 }
