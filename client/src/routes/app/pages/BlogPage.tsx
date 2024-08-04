@@ -6,7 +6,6 @@ import TableOfContent from "../components/TableOfContent";
 import { TableOfContentSheet } from "../components/TableOfContentSheet";
 import { useReactToPrint } from "react-to-print";
 import { Button } from "@/components/ui/button";
-// import { Html2Pdf } from "js-html2pdf";
 
 export type PageHeadings = {
   textContent: string | null;
@@ -21,18 +20,6 @@ const BlogPage = () => {
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    // print: async (printIframe) => {
-    //   const document = printIframe.contentDocument;
-    //   if (document) {
-    //     const html = document.getElementsByClassName("App")[0];
-    //     const options = {
-    //       margin: 0,
-    //       filename: blog.title,
-    //     };
-    //     const exporter = new Html2Pdf(html, options);
-    //     await exporter.getPdf(options);
-    //   }
-    // },
   });
 
   useEffect(() => {
