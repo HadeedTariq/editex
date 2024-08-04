@@ -6,6 +6,7 @@ import TableOfContent from "../components/TableOfContent";
 import { TableOfContentSheet } from "../components/TableOfContentSheet";
 import { useReactToPrint } from "react-to-print";
 import { Button } from "@/components/ui/button";
+import ReadingBar from "../components/ReadingBar";
 
 export type PageHeadings = {
   textContent: string | null;
@@ -35,6 +36,9 @@ const BlogPage = () => {
 
   return (
     <>
+      <div className="w-full h-[4px] relative">
+        <ReadingBar />
+      </div>
       <div className="flex mt-0 max-[500px]:flex-col">
         <TableOfContent headings={pageHeadings} />
         <div className="min-[1058px]:hidden">
