@@ -11,9 +11,6 @@ export default function ReadingBar() {
   };
   useEffect(() => {
     window.addEventListener("scroll", scrollHeight);
-    console.log("cll");
-    console.log(width);
-
     return () => window.removeEventListener("scroll", scrollHeight);
   }, [width]);
 
