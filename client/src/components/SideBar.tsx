@@ -4,7 +4,6 @@ import { Link, useLocation } from "react-router-dom";
 
 const SideBar = () => {
   const { pathname } = useLocation();
-  console.log(pathname);
 
   return (
     <Sheet>

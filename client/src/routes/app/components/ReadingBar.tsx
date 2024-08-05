@@ -16,7 +16,9 @@ export default function ReadingBar() {
 
   return (
     <p
-      className={`fixed bg-violet-600 transition duration-500 rounded-b-[2px] h-[6px]  z-50 top-0`}
+      className={
+        "fixed bg-violet-600 transition duration-500 rounded-b-[2px] h-[6px] z-50 top-0"
+      }
       style={{ width: `${width}%` }}
     ></p>
   );

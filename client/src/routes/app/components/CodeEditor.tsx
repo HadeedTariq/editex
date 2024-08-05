@@ -22,7 +22,6 @@ const CodeEditor = () => {
 
   const navigate = useNavigate();
   const { filename, fileId, id } = useParams();
-  console.log(filename, fileId);
 
   const FileCode = projectCode?.filesCode.find(
     (fileCode) => fileCode.fileId === fileId

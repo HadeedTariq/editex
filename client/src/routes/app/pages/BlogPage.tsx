@@ -34,6 +34,8 @@ const BlogPage = () => {
     setPageHeadings(headings);
   }, [blog]);
 
+  console.log("I am rendered");
+
   return (
     <>
       <div className="w-full h-[4px] relative">

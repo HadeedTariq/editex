@@ -55,12 +55,13 @@ export default function RegisterUser() {
   const onSubmit = (user: RegisterSchema) => {
     registerUser(user);
   };
-  console.log(form.getValues());
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className=" grid grid-cols-2 gap-4 px-6 py-5 max-[500px]:grid-cols-1">
+        className=" grid grid-cols-2 gap-4 px-6 py-5 max-[500px]:grid-cols-1"
+      >
         <FormField
           control={form.control}
           name="username"
@@ -116,7 +117,8 @@ export default function RegisterUser() {
         <Button
           disabled={isPending || form.formState.disabled}
           type="submit"
-          className="text-white">
+          className="text-white"
+        >
           Register
         </Button>
       </form>

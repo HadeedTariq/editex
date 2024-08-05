@@ -42,7 +42,6 @@ const Notififcations = () => {
     queryKey: ["getMyNotifications"],
     queryFn: async () => {
       const { data } = await shareCodeApi.get("/getMyNotifications");
-      console.log(data);
       return data as NotificationsDataType[];
     },
   });
@@ -95,7 +94,8 @@ const Notififcations = () => {
                   size="sm"
                   variant="outline"
                   className="h-8 gap-1"
-                  disabled>
+                  disabled
+                >
                   <BookOpenCheck className="h-3.5 w-3.5" />
                   <span>Notification Readed</span>
                 </Button>
@@ -107,7 +107,8 @@ const Notififcations = () => {
                   disabled={isPending}
                   onClick={() => {
                     readNotification(notification._id);
-                  }}>
+                  }}
+                >
                   <BookCheck className="h-3.5 w-3.5" />
                   <span>Read Notification</span>
                 </Button>
@@ -118,7 +119,8 @@ const Notififcations = () => {
                 className="h-8 gap-1"
                 onClick={() => {
                   navigate(`/privateProject/${notification.projectId}`);
-                }}>
+                }}
+              >
                 Visit Repository
               </Button>
             </div>
