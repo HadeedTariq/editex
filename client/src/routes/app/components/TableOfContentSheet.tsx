@@ -45,8 +45,6 @@ export function TableOfContentSheet({ headings }: TableOfContentProps) {
                   });
                   // Optionally close the sheet after navigating
                   setIsOpen(false);
-                  // Update the URL without navigating
-                  history.replaceState(null, null, `#${heading.id}`);
                 }}
               >
                 {heading.textContent}
