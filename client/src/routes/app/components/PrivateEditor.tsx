@@ -6,7 +6,7 @@ import {
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
-import PrivateFolderFileSturucture from "./PrivateFolderFileSturucture";
+import FolderFileSturucture from "./FolderFileSturucture";
 
 export function PrivateEditor() {
   useEffect(() => {
@@ -19,9 +19,10 @@ export function PrivateEditor() {
   return (
     <ResizablePanelGroup
       direction="horizontal"
-      className="min-h-[91.7vh] min-w-full rounded-lg border">
+      className="min-h-[91.7vh] min-w-full rounded-lg border"
+    >
       <ResizablePanel defaultSize={20} className="border-r-4">
-        <PrivateFolderFileSturucture />
+        <FolderFileSturucture />
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={80}>
