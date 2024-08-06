@@ -18,6 +18,8 @@ const BlogPage = () => {
   const { state: blog }: { state: BlogsType } = useLocation();
   const { theme } = useFullApp();
   const [pageHeadings, setPageHeadings] = useState<PageHeadings[]>([]);
+  const [headingId, setHeadingId] = useState("");
+
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
@@ -33,8 +35,13 @@ const BlogPage = () => {
     }));
     setPageHeadings(headings);
   }, [blog]);
-
-  console.log("I am rendered");
+  useEffect(() => {
+    if (headingId) {
+      document.querySelector(`#${headingId}`)?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }
+  }, [headingId]);
 
   return (
     <>
@@ -44,7 +51,11 @@ const BlogPage = () => {
       <div className="flex mt-0 max-[500px]:flex-col">
         <TableOfContent headings={pageHeadings} />
         <div className="min-[1058px]:hidden">
-          <TableOfContentSheet headings={pageHeadings} />
+          <TableOfContentSheet
+            headings={pageHeadings}
+            headingId={headingId}
+            setHeadingId={setHeadingId}
+          />
         </div>
 
         <div

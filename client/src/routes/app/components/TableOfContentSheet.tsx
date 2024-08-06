@@ -13,9 +13,14 @@ import { useState } from "react";
 
 type TableOfContentProps = {
   headings: PageHeadings[];
+  headingId: string;
+  setHeadingId: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export function TableOfContentSheet({ headings }: TableOfContentProps) {
+export function TableOfContentSheet({
+  headings,
+  setHeadingId,
+}: TableOfContentProps) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -37,14 +42,12 @@ export function TableOfContentSheet({ headings }: TableOfContentProps) {
             >
               <a
                 className="block dark:hover:bg-violet-800 hover:bg-gray-200 px-2 py-1 rounded"
-                href={`#${heading.id}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  document.querySelector(`#${heading.id}`)?.scrollIntoView({
-                    behavior: "smooth",
-                  });
-                  // Optionally close the sheet after navigating
                   setIsOpen(false);
+                  setTimeout(() => {
+                    setHeadingId(heading.id);
+                  }, 100);
                 }}
               >
                 {heading.textContent}
