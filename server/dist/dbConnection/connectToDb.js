@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.connectToDb = void 0;
+exports.connectToDb = connectToDb;
 const mongoose_1 = require("mongoose");
 async function connectToDb(uri) {
     try {
@@ -12,5 +12,4 @@ async function connectToDb(uri) {
         process.exit(0);
     }
 }
-exports.connectToDb = connectToDb;
 //# sourceMappingURL=connectToDb.js.map
