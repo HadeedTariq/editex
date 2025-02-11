@@ -1,59 +1,61 @@
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, Link } from "react-router-dom";
 import { Menu } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 const SideBar = () => {
   const { pathname } = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const navItems = [
+    { path: "/notifications", label: "Notifications" },
+    { path: "/project/publicProjects", label: "Public Projects" },
+    { path: "/projectNotifications", label: "Project Notifications" },
+    { path: "/blogs", label: "Blogs" },
+  ];
 
   return (
-    <Sheet>
-      <SheetTrigger className="mx-0">
-        <Menu />
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon">
+          <Menu />
+        </Button>
       </SheetTrigger>
-      <SheetContent side={"left"} className="w-[250px] px-0">
-        <div className="flex flex-col gap-3 mt-8">
-          <Link
-            to={"/notifications"}
-            className={`p-2 rounded-md ${
-              String(pathname) === "/notifications"
-                ? "dark:bg-slate-900 bg-slate-400"
-                : "dark:bg-zinc-800 bg-slate-300"
-            }`}
-          >
-            Notifications
-          </Link>
-
-          <Link
-            to={"/project/publicProjects"}
-            className={`p-2 rounded-md ${
-              pathname === "/project/publicProjects"
-                ? "dark:bg-slate-900 bg-slate-400"
-                : "dark:bg-zinc-800 bg-slate-300"
-            }`}
-          >
-            Public Projects
-          </Link>
-          <Link
-            to={"/projectNotifications"}
-            className={`p-2 rounded-md ${
-              String(pathname) === "/projectNotifications"
-                ? "dark:bg-slate-900 bg-slate-400"
-                : "dark:bg-zinc-800 bg-slate-300"
-            }`}
-          >
-            Project Notification
-          </Link>
-          <Link
-            to={"/blogs"}
-            className={`p-2 rounded-md ${
-              String(pathname) === "/blogs"
-                ? "dark:bg-slate-900 bg-slate-400"
-                : "dark:bg-zinc-800 bg-slate-300"
-            }`}
-          >
-            Blogs
-          </Link>
-        </div>
+      <SheetContent side="left" className="p-0 w-[250px]" ref={sidebarRef}>
+        <nav className="flex flex-col gap-2 p-4 mt-6">
+          {navItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setIsOpen(false)}
+              className={`p-2 rounded-md transition-colors ${
+                pathname === item.path
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-muted"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
       </SheetContent>
     </Sheet>
   );

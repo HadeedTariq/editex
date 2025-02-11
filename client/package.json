@@ -31,6 +31,7 @@
     "cmdk": "^1.0.0",
     "codemirror": "^5.65.16",
     "date-fns": "^3.6.0",
+    "framer-motion": "^12.4.2",
     "lucide-react": "^0.379.0",
     "react": "^18.2.0",
     "react-codemirror2": "^8.0.0",

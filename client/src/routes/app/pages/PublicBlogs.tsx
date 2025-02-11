@@ -3,10 +3,24 @@ import { useFullApp } from "@/hooks/useFullApp";
 import { blogApi } from "@/lib/axios";
 import { useQuery } from "@tanstack/react-query";
 import { Link, Navigate } from "react-router-dom";
+import { useState } from "react";
+import { motion } from "framer-motion";
+
+import { ArrowRight } from "lucide-react";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const PublicBlogs = () => {
   const { user } = useFullApp();
-
+  const [isHovered, setIsHovered] = useState(false);
   const { isLoading, data: blogs } = useQuery({
     queryKey: ["blogs"],
     queryFn: async () => {
@@ -20,49 +34,46 @@ const PublicBlogs = () => {
   return (
     <ul className="grid grid-cols-1 xl:grid-cols-3 gap-y-10 gap-x-6 items-start p-8">
       {blogs?.map((blog) => (
-        <li
-          className="relative flex flex-col sm:flex-row xl:flex-col items-start"
-          key={blog._id}
+        <motion.div
+          whileHover={{ scale: 1.03 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
-          <div className="order-1 sm:ml-6 xl:ml-0 ">
-            <h3 className="mb-1 dark:text-slate-200 font-semibold text-start">
-              <span className="mb-1 block text-sm leading-6 text-indigo-500">
-                {blog.title}
-              </span>
-              {blog.description.slice(0, 90)}...
-            </h3>
-            <div className="prose prose-slate prose-sm dark:text-slate-200 ">
-              <p className="text-start">{blog.content.slice(0, 100)}...</p>
+          <Card
+            className="overflow-hidden"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <div className="relative">
+              <img
+                src={blog.image || "/placeholder.svg"}
+                alt={blog.title}
+                className="w-full h-48 object-cover transition-transform duration-300 ease-in-out"
+                style={{ transform: isHovered ? "scale(1.1)" : "scale(1)" }}
+              />
+              <Badge className="absolute top-2 right-2" variant="secondary">
+                {blog.category}
+              </Badge>
             </div>
-            <Link
-              state={blog}
-              className="group inline-flex  items-center h-9 rounded-full text-sm font-semibold whitespace-nowrap px-3 focus:outline-none focus:ring-2 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 focus:ring-slate-500 mt-3 "
-              to={`${blog._id}`}
-            >
-              Learn more
-              <svg
-                className="overflow-visible ml-3 text-slate-300 group-hover:text-slate-400"
-                width="3"
-                height="6"
-                viewBox="0 0 3 6"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            <CardHeader>
+              <CardTitle className="line-clamp-1">{blog.title}</CardTitle>
+              <CardDescription className="line-clamp-2">
+                {blog.description}
+              </CardDescription>
+            </CardHeader>
+            <CardFooter>
+              <Button
+                asChild
+                variant="ghost"
+                className="w-full justify-between group"
               >
-                <path d="M0 0L3 3L0 6"></path>
-              </svg>
-            </Link>
-          </div>
-          <img
-            src={blog.image}
-            alt=""
-            className="mb-6 shadow-md rounded-lg  bg-slate-50 w-full sm:w-[17rem] sm:mb-0 xl:mb-6 xl:w-full"
-            width="1216"
-            height="640"
-          />
-        </li>
+                <Link to={`${blog._id}`} state={blog}>
+                  Learn more
+                  <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </Button>
+            </CardFooter>
+          </Card>
+        </motion.div>
       ))}
     </ul>
   );

@@ -74,6 +74,9 @@ const Notififcations = () => {
   if (isLoading) return <Loading />;
   return (
     <div className="flex flex-col gap-2">
+      {notifications && notifications.length === 0 && (
+        <p className="text-white text-center">No Notifications</p>
+      )}
       {notifications?.map((notification) => (
         <Card className="overflow-hidden" key={notification._id}>
           <CardHeader className="flex flex-row max-[590px]:flex-col items-start bg-muted/50">

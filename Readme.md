@@ -2,6 +2,21 @@
 
 Editex is an online code editor designed for JavaScript. With Editex, you can create, edit, and share JavaScript projects effortlessly, all in a collaborative environment. The platform features project management, real-time collaboration, file handling, and more.
 
+## How It Works
+
+Editex allows users to create, manage, and share JavaScript projects and code through a seamless platform. Users can register, log in, and authenticate using the JWT token system for secure access. Once logged in, users can create and organize folders and files for their projects, save code changes, and manage project details.
+
+Collaboration is facilitated by allowing users to merge code, assign contributors, and stay informed through notifications. The platform supports both private and public projects, enabling users to manage visibility and access.
+
+## Technology Stack
+
+- **Frontend:** React, Tailwind CSS
+- **Backend:** NestJS
+- **Database:** MongoDb
+- **Hosting:** Vercel
+
+---
+
 ## Features
 
 ### Authentication Features
@@ -82,19 +97,6 @@ Editex is an online code editor designed for JavaScript. With Editex, you can cr
   Marks a specific notification as read.
 
 ---
-
-## How It Works
-
-Editex allows users to create, manage, and share JavaScript projects and code through a seamless platform. Users can register, log in, and authenticate using the JWT token system for secure access. Once logged in, users can create and organize folders and files for their projects, save code changes, and manage project details.
-
-Collaboration is facilitated by allowing users to merge code, assign contributors, and stay informed through notifications. The platform supports both private and public projects, enabling users to manage visibility and access.
-
-## Technology Stack
-
-- **Frontend:** React, Tailwind CSS
-- **Backend:** NestJS
-- **Database:** MongoDb
-- **Hosting:** Vercel
 
 ## Getting Started
 

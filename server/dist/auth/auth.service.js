@@ -59,12 +59,17 @@ let AuthService = class AuthService {
             .json({ message: 'User logged out successfully' });
     }
     async getUser(req) {
-        const { accessToken } = req.cookies;
-        if (!accessToken) {
-            throw new custom_exception_1.CustomException('Access Token required');
+        try {
+            const { accessToken } = req.cookies;
+            if (!accessToken) {
+                throw new custom_exception_1.CustomException('Access Token required');
+            }
+            const user = await this.jwtService.verifyAsync(accessToken);
+            return user;
         }
-        const user = await this.jwtService.verifyAsync(accessToken);
-        return user;
+        catch (error) {
+            throw new custom_exception_1.CustomException('Session Expired');
+        }
     }
 };
 exports.AuthService = AuthService;

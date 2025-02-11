@@ -37,6 +37,9 @@ const ProjectNotifications = () => {
   });
   return (
     <>
+      {projectNotificationData && projectNotificationData.length === 0 && (
+        <p className="text-white text-center">No Project Notifications</p>
+      )}
       {projectNotificationData?.map((project) => (
         <Card className="overflow-hidden" key={project._id}>
           <CardHeader className="flex flex-row max-[590px]:flex-col items-start bg-muted/50">
@@ -51,7 +54,8 @@ const ProjectNotifications = () => {
             {project.projectNotifications.map((projectNotification) => (
               <div
                 key={projectNotification._id}
-                className="flex items-center justify-between my-4">
+                className="flex items-center justify-between my-4"
+              >
                 <p className="capitalize text-start gap-3">
                   <span className="text-red-400 font-bold mr-3">
                     {projectNotification.sender.username}

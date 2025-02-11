@@ -58,11 +58,16 @@ export class AuthService {
   }
 
   async getUser(req: Request) {
-    const { accessToken } = req.cookies;
-    if (!accessToken) {
-      throw new CustomException('Access Token required');
+    try {
+      const { accessToken } = req.cookies;
+      if (!accessToken) {
+        throw new CustomException('Access Token required');
+      }
+
+      const user = await this.jwtService.verifyAsync(accessToken);
+      return user;
+    } catch (error) {
+      throw new CustomException('Session Expired');
     }
-    const user = await this.jwtService.verifyAsync(accessToken);
-    return user;
   }
 }
