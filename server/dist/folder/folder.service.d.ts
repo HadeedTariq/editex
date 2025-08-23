@@ -10,41 +10,41 @@ export declare class FolderService {
     }>;
     getProjectFilesAndFolders(projectId: string): Promise<(mongoose.Document<unknown, {}, {
         name: string;
+        isFolder: boolean;
         items: mongoose.Types.DocumentArray<{
-            name?: string;
             code?: string;
+            name?: string;
             isFolder?: boolean;
         }, mongoose.Types.Subdocument<mongoose.Types.ObjectId, any, {
-            name?: string;
             code?: string;
+            name?: string;
             isFolder?: boolean;
         }> & {
-            name?: string;
             code?: string;
+            name?: string;
             isFolder?: boolean;
         }>;
-        isFolder: boolean;
-        projectId?: mongoose.Types.ObjectId;
         code?: string;
+        projectId?: mongoose.Types.ObjectId;
         creator?: mongoose.Types.ObjectId;
     }> & {
         name: string;
+        isFolder: boolean;
         items: mongoose.Types.DocumentArray<{
-            name?: string;
             code?: string;
+            name?: string;
             isFolder?: boolean;
         }, mongoose.Types.Subdocument<mongoose.Types.ObjectId, any, {
-            name?: string;
             code?: string;
+            name?: string;
             isFolder?: boolean;
         }> & {
-            name?: string;
             code?: string;
+            name?: string;
             isFolder?: boolean;
         }>;
-        isFolder: boolean;
-        projectId?: mongoose.Types.ObjectId;
         code?: string;
+        projectId?: mongoose.Types.ObjectId;
         creator?: mongoose.Types.ObjectId;
     } & {
         _id: mongoose.Types.ObjectId;

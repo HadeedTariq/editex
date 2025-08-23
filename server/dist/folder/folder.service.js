@@ -50,7 +50,9 @@ let FolderService = class FolderService {
             },
         });
         if (createFileInFolder) {
-            return { message: `File in ${createFileInFolder.name} created successfully` };
+            return {
+                message: `File in ${createFileInFolder.name} created successfully`,
+            };
         }
         else {
             throw new custom_exception_1.CustomException('Something went wrong');
@@ -65,18 +67,18 @@ let FolderService = class FolderService {
             code: realCode,
         });
         if (!savedCode) {
-            const saveFolderFileCode = await folder_model_1.Item.updateOne({ "items._id": fileId }, {
-                $set: { "items.$.code": realCode }
+            const saveFolderFileCode = await folder_model_1.Item.updateOne({ 'items._id': fileId }, {
+                $set: { 'items.$.code': realCode },
             });
             if (saveFolderFileCode) {
-                return { message: "Code saved successfully" };
+                return { message: 'Code saved successfully' };
             }
             else {
-                throw new custom_exception_1.CustomException("Something went wrong");
+                throw new custom_exception_1.CustomException('Something went wrong');
             }
         }
         else {
-            return { message: "Code saved successfully" };
+            return { message: 'Code saved successfully' };
         }
     }
 };

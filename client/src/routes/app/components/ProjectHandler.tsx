@@ -28,6 +28,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const ProjectHandler = () => {
   const [isAlert, setIsALert] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const queryClient = useQueryClient();
   const { user } = useFullApp();
   const { isProjectPublic } = useAppRouter();
@@ -72,6 +73,7 @@ const ProjectHandler = () => {
         "getMyProjects",
         0,
       ] as InvalidateQueryFilters);
+      setIsDialogOpen(false);
     },
     onError(err: ServerError) {
       toast({
@@ -93,7 +95,10 @@ const ProjectHandler = () => {
           </AlertDescription>
         </Alert>
       )}
-      <AlertDialog>
+      <AlertDialog
+        open={isDialogOpen}
+        onOpenChange={(open) => setIsDialogOpen(open)}
+      >
         <AlertDialogTrigger className="w-fit p-4">
           <div className="dark:bg-gray-600 bg-gray-200 hover:bg-zinc-300  rounded-md dark:hover:bg-gray-700 transition duration-300 gap-2 flex items-center justify-center w-[200px] h-[200px]">
             <SquarePlus size={30} className="text-rose-500" />
@@ -109,6 +114,11 @@ const ProjectHandler = () => {
               placeholder="New Project..."
               ref={nameRef}
               className="col-span-3"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  createProject();
+                }
+              }}
             />
             <ProjectHandlerToggleBar />
             {!isProjectPublic && (

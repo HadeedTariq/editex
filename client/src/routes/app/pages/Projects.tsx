@@ -53,16 +53,24 @@ const Projects = () => {
     },
   });
 
-  const { data: myProjects, isLoading } = useQuery({
+  const {
+    data: myProjects,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["getMyProjects"],
     queryFn: async () => {
       const { data } = await projectApi.get("/");
+
       dispatch(setProjects(data));
       return data as ProjectsType[];
     },
   });
 
   if (isLoading) return <ProjectSkeleton />;
+
+  if (isError) return <h1>Failed to load the projects</h1>;
+
   return (
     <>
       <div className="flex flex-wrap justify-center items-center gap-2 px-4 py-2">
@@ -83,14 +91,16 @@ const Projects = () => {
               <Button
                 className="w-full"
                 variant={"project"}
-                onClick={() => navigate(`${project._id}`)}>
+                onClick={() => navigate(`${project._id}`)}
+              >
                 See Full
               </Button>
               <Button
                 disabled={isPending}
                 className="w-full"
                 variant={"destructive"}
-                onClick={() => deleteProject(project._id)}>
+                onClick={() => deleteProject(project._id)}
+              >
                 Delete Project
               </Button>
               <EditProject projectId={project._id} />

@@ -39,7 +39,6 @@ export class FolderService {
     const projectFileAndFolders = await Item.find({
       projectId,
     }).select('name isFolder items _id code');
-
     return projectFileAndFolders;
   }
 
@@ -53,7 +52,9 @@ export class FolderService {
       },
     });
     if (createFileInFolder) {
-      return { message: `File in ${createFileInFolder.name} created successfully` };
+      return {
+        message: `File in ${createFileInFolder.name} created successfully`,
+      };
     } else {
       throw new CustomException('Something went wrong');
     }
@@ -62,7 +63,6 @@ export class FolderService {
   async saveCode(code: string, fileId: string) {
     const realCode = sanitize(code);
 
-    
     const savedCode = await Item.findOneAndUpdate(
       {
         _id: fileId,
@@ -72,17 +72,20 @@ export class FolderService {
         code: realCode,
       },
     );
-    if(!savedCode){
-      const saveFolderFileCode=await Item.updateOne({"items._id":fileId},{
-        $set:{"items.$.code":realCode}
-      })
-      if(saveFolderFileCode){
-        return {message:"Code saved successfully"}
-      }else{
-        throw new CustomException("Something went wrong")
+    if (!savedCode) {
+      const saveFolderFileCode = await Item.updateOne(
+        { 'items._id': fileId },
+        {
+          $set: { 'items.$.code': realCode },
+        },
+      );
+      if (saveFolderFileCode) {
+        return { message: 'Code saved successfully' };
+      } else {
+        throw new CustomException('Something went wrong');
       }
-    } else{
-      return {message:"Code saved successfully"}
+    } else {
+      return { message: 'Code saved successfully' };
     }
   }
 }

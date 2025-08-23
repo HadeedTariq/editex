@@ -18,7 +18,7 @@ export class ProjectService {
     const { user } = req.body;
 
     const isProjectAlreadyExist = await Project.findOne({
-      name,
+      name: name.toLowerCase(),
       creator: user.id,
     });
 

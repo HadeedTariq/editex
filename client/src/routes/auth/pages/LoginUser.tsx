@@ -12,13 +12,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AuthSchema, authValidator } from "../validators/auth.validator";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { authApi } from "@/lib/axios";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function LoginUser() {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const form = useForm<AuthSchema>({
     resolver: zodResolver(authValidator),
@@ -38,7 +39,9 @@ export default function LoginUser() {
         title: "User logged in successfully",
       });
       form.reset();
-      window.location.reload();
+      queryClient.invalidateQueries({
+        queryKey: ["authenticateUser"],
+      });
       navigate("/");
     },
     onError: (err: ServerError) => {
@@ -56,7 +59,8 @@ export default function LoginUser() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className=" grid grid-cols-2 gap-4 px-6 py-5 max-[500px]:grid-cols-1">
+        className=" grid grid-cols-2 gap-4 px-6 py-5 max-[500px]:grid-cols-1"
+      >
         <FormField
           control={form.control}
           name="email"
@@ -86,7 +90,8 @@ export default function LoginUser() {
         <Button
           disabled={isPending || form.formState.disabled}
           type="submit"
-          className="text-white">
+          className="text-white"
+        >
           Login
         </Button>
       </form>

@@ -6,11 +6,10 @@ import Home from "./routes/app/pages/Home";
 import NavBar from "./components/Navbar";
 import { useEffect } from "react";
 import { useTheme } from "./hooks/useTheme";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { authApi } from "./lib/axios";
 import { setUser } from "./reducers/fullAppReducer";
-import { useFullApp } from "./hooks/useFullApp";
 import AuthProtector from "./routes/auth/components/AuthProtector";
 import ProjectHandler from "./routes/app/components/ProjectHandler";
 import ProjectPage from "./routes/app/pages/ProjectPage";
@@ -24,23 +23,22 @@ import NotFound from "./components/NotFound";
 import CreateBlog from "./routes/app/pages/CreateBlog";
 import PublicBlogs from "./routes/app/pages/PublicBlogs";
 import BlogPage from "./routes/app/pages/BlogPage";
+import Loading from "./components/ui/loading";
 
 function App() {
   const { theme } = useTheme();
-  const { user } = useFullApp();
   const dispatch = useDispatch();
-  const { mutate: authUser } = useMutation({
-    mutationKey: ["authenticateUser"],
-    mutationFn: async () => {
+  const { isLoading } = useQuery({
+    queryKey: ["authenticateUser"],
+    queryFn: async () => {
       const { data } = await authApi.get("/");
       dispatch(setUser(data));
+      return data;
     },
+    retry: 1,
   });
 
   useEffect(() => {
-    if (!user) {
-      authUser();
-    }
     const root = window.document.documentElement;
 
     root.classList.remove("light", "dark");
@@ -57,6 +55,8 @@ function App() {
 
     root.classList.add(theme);
   }, [theme]);
+
+  if (isLoading) return <Loading />;
 
   const router = createBrowserRouter([
     {

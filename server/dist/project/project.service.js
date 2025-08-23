@@ -22,7 +22,7 @@ let ProjectService = class ProjectService {
         }
         const { user } = req.body;
         const isProjectAlreadyExist = await project_model_1.Project.findOne({
-            name,
+            name: name.toLowerCase(),
             creator: user.id,
         });
         if (isProjectAlreadyExist) {
