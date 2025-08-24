@@ -93,7 +93,7 @@ function App() {
           element: <CreateBlog />,
         },
         {
-          path: "/project",
+          path: "/projects",
           element: <ProjectHandler />,
         },
         {

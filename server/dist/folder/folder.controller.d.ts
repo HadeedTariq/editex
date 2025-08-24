@@ -16,50 +16,5 @@ export declare class FolderController {
     }): Promise<{
         message: string;
     }>;
-    getProjectFilesAndFolders(id: string): Promise<(import("mongoose").Document<unknown, {}, {
-        name: string;
-        isFolder: boolean;
-        items: import("mongoose").Types.DocumentArray<{
-            code?: string;
-            name?: string;
-            isFolder?: boolean;
-        }, import("mongoose").Types.Subdocument<import("mongoose").Types.ObjectId, any, {
-            code?: string;
-            name?: string;
-            isFolder?: boolean;
-        }> & {
-            code?: string;
-            name?: string;
-            isFolder?: boolean;
-        }>;
-        code?: string;
-        projectId?: import("mongoose").Types.ObjectId;
-        creator?: import("mongoose").Types.ObjectId;
-    }> & {
-        name: string;
-        isFolder: boolean;
-        items: import("mongoose").Types.DocumentArray<{
-            code?: string;
-            name?: string;
-            isFolder?: boolean;
-        }, import("mongoose").Types.Subdocument<import("mongoose").Types.ObjectId, any, {
-            code?: string;
-            name?: string;
-            isFolder?: boolean;
-        }> & {
-            code?: string;
-            name?: string;
-            isFolder?: boolean;
-        }>;
-        code?: string;
-        projectId?: import("mongoose").Types.ObjectId;
-        creator?: import("mongoose").Types.ObjectId;
-    } & {
-        _id: import("mongoose").Types.ObjectId;
-    } & {
-        __v: number;
-    })[]>;
-    update(id: string, req: Request): Promise<{
-        message: string;
-    }>;
+    getProjectFilesAndFolders(id: string): Promise<any[]>;
 }

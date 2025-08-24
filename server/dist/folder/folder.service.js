@@ -11,64 +11,89 @@ const common_1 = require("@nestjs/common");
 const folder_model_1 = require("./schemas/folder.model");
 const custom_exception_1 = require("../custom.exception");
 const sanitize = require("mongo-sanitize");
+const project_model_1 = require("../project/schemas/project.model");
 let FolderService = class FolderService {
     async createFolder(createFolderDto, req) {
         const { user } = req.body;
-        const { name, projectId } = createFolderDto;
-        await folder_model_1.Item.create({
-            isFolder: true,
+        const { name, projectId, parentId } = createFolderDto;
+        const project = await project_model_1.Project.findOne({
+            _id: projectId,
+        });
+        if (!project) {
+            throw new custom_exception_1.CustomException('Project not found');
+        }
+        if (project.creator !== user.id && !project.contributor.includes(user.id)) {
+            throw new custom_exception_1.CustomException('You are not authorize to perform this action');
+        }
+        await folder_model_1.ProjectItem.create({
+            type: 'folder',
             name,
-            creator: user.id,
             projectId,
+            parentId: parentId ? parentId : null,
+            creatorId: user.id,
         });
         return { message: 'Folder created successfully' };
     }
     async createFile(createFileDto, req) {
         const { user } = req.body;
-        const { name, projectId } = createFileDto;
-        await folder_model_1.Item.create({
-            isFolder: false,
+        const { name, projectId, parentId } = createFileDto;
+        const project = await project_model_1.Project.findOne({
+            _id: projectId,
+        });
+        if (!project) {
+            throw new custom_exception_1.CustomException('Project not found');
+        }
+        if (project.creator !== user.id && !project.contributor.includes(user.id)) {
+            throw new custom_exception_1.CustomException('You are not authorize to perform this action');
+        }
+        await folder_model_1.ProjectItem.create({
+            type: 'file',
             name,
-            creator: user.id,
             projectId,
+            parentId: parentId ? parentId : null,
+            creatorId: user.id,
         });
         return { message: 'File created successfully' };
     }
     async getProjectFilesAndFolders(projectId) {
-        const projectFileAndFolders = await folder_model_1.Item.find({
-            projectId,
-        }).select('name isFolder items _id code');
-        return projectFileAndFolders;
-    }
-    async addFileToFolder(folderId, fileName) {
-        const createFileInFolder = await folder_model_1.Item.findByIdAndUpdate(folderId, {
-            $push: {
-                items: {
-                    name: fileName,
-                    isFolder: false,
-                },
-            },
+        const projectItems = await folder_model_1.ProjectItem.find({ projectId }).select(`
+        _id
+        name
+        type
+        parentId
+        projectId
+        creatorId
+        code
+      `);
+        const itemMap = new Map();
+        projectItems.forEach((item) => {
+            itemMap.set(item._id.toString(), { ...item.toObject(), children: [] });
         });
-        if (createFileInFolder) {
-            return {
-                message: `File in ${createFileInFolder.name} created successfully`,
-            };
-        }
-        else {
-            throw new custom_exception_1.CustomException('Something went wrong');
-        }
+        const hierarchy = [];
+        projectItems.forEach((item) => {
+            if (item.parentId) {
+                const parent = itemMap.get(item.parentId.toString());
+                if (parent) {
+                    parent.children.push(itemMap.get(item._id.toString()));
+                }
+            }
+            else {
+                hierarchy.push(itemMap.get(item._id.toString()));
+            }
+        });
+        return hierarchy;
     }
     async saveCode(code, fileId) {
         const realCode = sanitize(code);
-        const savedCode = await folder_model_1.Item.findOneAndUpdate({
+        const savedCode = await folder_model_1.ProjectItem.findOneAndUpdate({
             _id: fileId,
             isFolder: false,
         }, {
             code: realCode,
         });
         if (!savedCode) {
-            const saveFolderFileCode = await folder_model_1.Item.updateOne({ 'items._id': fileId }, {
-                $set: { 'items.$.code': realCode },
+            const saveFolderFileCode = await folder_model_1.ProjectItem.updateOne({ 'projecProjectItems._id': fileId }, {
+                $set: { 'projecProjectItems.$.code': realCode },
             });
             if (saveFolderFileCode) {
                 return { message: 'Code saved successfully' };

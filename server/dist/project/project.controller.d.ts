@@ -24,7 +24,11 @@ export declare class ProjectController {
     deleteMyProject(req: Request, id: string): Promise<{
         message: string;
     }>;
-    getAllPublicProjects(): Promise<any[]>;
+    getAllPublicProjects(): Promise<(import("mongoose").Document<unknown, {}, import("./schemas/project.model").ProjectDocument> & import("./schemas/project.model").ProjectDocument & Required<{
+        _id: unknown;
+    }> & {
+        __v: number;
+    })[]>;
     getProjectById(id: string, req: Request): Promise<import("mongoose").Document<unknown, {}, import("./schemas/project.model").ProjectDocument> & import("./schemas/project.model").ProjectDocument & Required<{
         _id: unknown;
     }> & {

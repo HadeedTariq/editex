@@ -11,9 +11,9 @@ const projectNotificationSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    fileId: {
+    itemId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Item',
+        ref: 'ProjectItem',
     },
     sender: {
         type: mongoose_1.Schema.Types.ObjectId,

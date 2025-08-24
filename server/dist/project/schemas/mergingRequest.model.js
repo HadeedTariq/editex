@@ -11,9 +11,9 @@ const mergingRequestSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'Project',
     },
-    fileId: {
+    itemId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Item',
+        ref: 'ProjectItem',
     },
     code: {
         type: String,

@@ -1,32 +1,25 @@
 import { Schema, model } from 'mongoose';
 
-const itemSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  isFolder: {
-    type: Boolean,
-    required: true,
-  },
-  projectId: {
-    type: Schema.Types.ObjectId,
-    ref: 'Project',
-  },
-  creator: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-  },
-  items: [
-    {
-      name: String,
-      isFolder: Boolean,
-      code:String
+const projectItemSchema = new Schema(
+  {
+    name: { type: String, required: true },
+    type: { type: String, enum: ['file', 'folder'], required: true },
+    parentId: {
+      type: Schema.Types.ObjectId,
+      ref: 'ProjectItem',
+      default: null,
     },
-  ],
-  code: String,
-});
+    projectId: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
+    creatorId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    code: { type: String },
+  },
+  { timestamps: true },
+);
 
-itemSchema.index({ name: 1, projectId: 1 }, { unique: true });
+// Prevent duplicate names within the same folder
+projectItemSchema.index(
+  { name: 1, parentId: 1, projectId: 1 },
+  { unique: true },
+);
 
-export const Item = model('Item', itemSchema);
+export const ProjectItem = model('ProjectItem', projectItemSchema);

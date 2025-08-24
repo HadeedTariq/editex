@@ -9,9 +9,9 @@ const projectNotificationSchema = new Schema({
     type: String,
     required: true,
   },
-  fileId: {
+  itemId: {
     type: Schema.Types.ObjectId,
-    ref: 'Item',
+    ref: 'ProjectItem',
   },
   sender: {
     type: Schema.Types.ObjectId,

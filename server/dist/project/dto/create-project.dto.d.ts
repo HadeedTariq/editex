@@ -4,7 +4,7 @@ export declare class CreateProjectDto {
     password: string;
 }
 export declare class MergeRequestDto {
-    fileId: string;
+    itemId: string;
     projectId: string;
     code: string;
 }

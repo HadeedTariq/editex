@@ -9,9 +9,9 @@ const mergingRequestSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Project',
   },
-  fileId: {
+  itemId: {
     type: Schema.Types.ObjectId,
-    ref: 'Item',
+    ref: 'ProjectItem',
   },
   code: {
     type: String,

@@ -16,7 +16,7 @@ export class CreateProjectDto {
 export class MergeRequestDto {
   @IsString()
   @IsNotEmpty()
-  fileId: string;
+  itemId: string;
 
   @IsString()
   @IsNotEmpty()

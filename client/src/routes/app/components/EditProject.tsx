@@ -21,11 +21,11 @@ import {
 import { useFullApp } from "@/hooks/useFullApp";
 import { projectApi } from "@/lib/axios";
 
-interface EditProjectType {
+interface EditProjectItemTree {
   projectId: string;
 }
 
-const EditProject = ({ projectId }: EditProjectType) => {
+const EditProject = ({ projectId }: EditProjectItemTree) => {
   const { projects } = useAppRouter();
   const { user } = useFullApp();
   const queryClient = useQueryClient();
@@ -94,7 +94,8 @@ const EditProject = ({ projectId }: EditProjectType) => {
               htmlFor="AcceptConditions"
               className={`relative h-6 w-12 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent]  ${
                 publicProject ? "bg-green-500" : ""
-              }`}>
+              }`}
+            >
               <input
                 type="checkbox"
                 id="AcceptConditions"
@@ -105,7 +106,8 @@ const EditProject = ({ projectId }: EditProjectType) => {
               <span
                 className={`absolute inset-y-0 start-0 z-10 m-1 inline-flex size-5 items-center justify-center rounded-full bg-white text-gray-400 transition-all ${
                   publicProject ? "start-6 text-green-600" : ""
-                }`}>
+                }`}
+              >
                 {publicProject && <Check />}
                 {!publicProject && <X />}
               </span>

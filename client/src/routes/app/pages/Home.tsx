@@ -33,7 +33,9 @@ const Home = () => {
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Button onClick={() => redirection("/project")}>Get Started</Button>
+            <Button onClick={() => redirection("/projects")}>
+              Get Started
+            </Button>
             <Button
               onClick={() => redirection("/createBlog")}
               variant={"project"}

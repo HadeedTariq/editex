@@ -86,21 +86,24 @@ export class ProjectService {
   }
 
   async getAllPublicProjects() {
-    const getProjects = await Project.aggregate([
-      {
-        $match: {
-          public: true,
-        },
-      },
-      {
-        $lookup: {
-          from: 'items',
-          foreignField: 'projectId',
-          localField: '_id',
-          as: 'projectCode',
-        },
-      },
-    ]);
+    const getProjects = await Project.find({ public: true })
+      .select(
+        `
+      _id
+      name
+      creator
+      createdAt
+      public
+    `,
+      )
+      .populate(
+        'creator',
+        `
+        username
+        avatar
+        passion
+      `,
+      );
 
     return getProjects;
   }
@@ -127,7 +130,7 @@ export class ProjectService {
 
     const isUserALreadySendMergeRequest = await MergingRequest.findOne({
       projectId: mergeRequest.projectId,
-      fileId: mergeRequest.fileId,
+      itemId: mergeRequest.itemId,
       user: user.id,
       isChanged: true,
     });
@@ -139,7 +142,7 @@ export class ProjectService {
     const createMergeRequest = await MergingRequest.create({
       projectId: mergeRequest.projectId,
       code: sanitize(mergeRequest.code),
-      fileId: mergeRequest.fileId,
+      itemId: mergeRequest.itemId,
       isChanged: true,
       user: user.id,
     });
@@ -147,7 +150,7 @@ export class ProjectService {
     if (createMergeRequest) {
       await ProjectNotification.create({
         projectId: mergeRequest.projectId,
-        fileId: mergeRequest.fileId,
+        itemId: mergeRequest.itemId,
         sender: user.id,
         message: 'Send a merge request',
       });
@@ -176,8 +179,8 @@ export class ProjectService {
           pipeline: [
             {
               $lookup: {
-                from: 'items',
-                localField: 'fileId',
+                from: 'projectitems',
+                localField: 'itemId',
                 foreignField: '_id',
                 as: 'fileDetails',
                 pipeline: [

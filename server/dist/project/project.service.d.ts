@@ -21,7 +21,11 @@ export declare class ProjectService {
     editProject(id: string, req: Request): Promise<{
         message: string;
     }>;
-    getAllPublicProjects(): Promise<any[]>;
+    getAllPublicProjects(): Promise<(mongoose.Document<unknown, {}, import("./schemas/project.model").ProjectDocument> & import("./schemas/project.model").ProjectDocument & Required<{
+        _id: unknown;
+    }> & {
+        __v: number;
+    })[]>;
     checkUserInContributors(req: Request, projectId: string): Promise<{
         message: string;
     }>;

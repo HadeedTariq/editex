@@ -81,21 +81,19 @@ let ProjectService = class ProjectService {
         }
     }
     async getAllPublicProjects() {
-        const getProjects = await project_model_1.Project.aggregate([
-            {
-                $match: {
-                    public: true,
-                },
-            },
-            {
-                $lookup: {
-                    from: 'items',
-                    foreignField: 'projectId',
-                    localField: '_id',
-                    as: 'projectCode',
-                },
-            },
-        ]);
+        const getProjects = await project_model_1.Project.find({ public: true })
+            .select(`
+      _id
+      name
+      creator
+      createdAt
+      public
+    `)
+            .populate('creator', `
+        username
+        avatar
+        passion
+      `);
         return getProjects;
     }
     async checkUserInContributors(req, projectId) {
@@ -117,7 +115,7 @@ let ProjectService = class ProjectService {
         const { user } = req.body;
         const isUserALreadySendMergeRequest = await mergingRequest_model_1.MergingRequest.findOne({
             projectId: mergeRequest.projectId,
-            fileId: mergeRequest.fileId,
+            itemId: mergeRequest.itemId,
             user: user.id,
             isChanged: true,
         });
@@ -127,14 +125,14 @@ let ProjectService = class ProjectService {
         const createMergeRequest = await mergingRequest_model_1.MergingRequest.create({
             projectId: mergeRequest.projectId,
             code: sanitize(mergeRequest.code),
-            fileId: mergeRequest.fileId,
+            itemId: mergeRequest.itemId,
             isChanged: true,
             user: user.id,
         });
         if (createMergeRequest) {
             await projectNotification_model_1.ProjectNotification.create({
                 projectId: mergeRequest.projectId,
-                fileId: mergeRequest.fileId,
+                itemId: mergeRequest.itemId,
                 sender: user.id,
                 message: 'Send a merge request',
             });
@@ -162,8 +160,8 @@ let ProjectService = class ProjectService {
                     pipeline: [
                         {
                             $lookup: {
-                                from: 'items',
-                                localField: 'fileId',
+                                from: 'projectitems',
+                                localField: 'itemId',
                                 foreignField: '_id',
                                 as: 'fileDetails',
                                 pipeline: [

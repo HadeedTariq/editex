@@ -33,10 +33,6 @@ let FolderController = class FolderController {
     getProjectFilesAndFolders(id) {
         return this.folderService.getProjectFilesAndFolders(id);
     }
-    update(id, req) {
-        const { name } = req.body;
-        return this.folderService.addFileToFolder(id, name);
-    }
 };
 exports.FolderController = FolderController;
 __decorate([
@@ -71,14 +67,6 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], FolderController.prototype, "getProjectFilesAndFolders", null);
-__decorate([
-    (0, common_1.Patch)('/updateFolder/:id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
-    __metadata("design:returntype", void 0)
-], FolderController.prototype, "update", null);
 exports.FolderController = FolderController = __decorate([
     (0, common_1.Controller)('folder'),
     __metadata("design:paramtypes", [folder_service_1.FolderService])

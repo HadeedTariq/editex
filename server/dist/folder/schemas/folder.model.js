@@ -1,33 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Item = void 0;
+exports.ProjectItem = void 0;
 const mongoose_1 = require("mongoose");
-const itemSchema = new mongoose_1.Schema({
-    name: {
-        type: String,
-        required: true,
-    },
-    isFolder: {
-        type: Boolean,
-        required: true,
-    },
-    projectId: {
+const projectItemSchema = new mongoose_1.Schema({
+    name: { type: String, required: true },
+    type: { type: String, enum: ['file', 'folder'], required: true },
+    parentId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Project',
+        ref: 'ProjectItem',
+        default: null,
     },
-    creator: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'User',
-    },
-    items: [
-        {
-            name: String,
-            isFolder: Boolean,
-            code: String
-        },
-    ],
-    code: String,
-});
-itemSchema.index({ name: 1, projectId: 1 }, { unique: true });
-exports.Item = (0, mongoose_1.model)('Item', itemSchema);
+    projectId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Project', required: true },
+    creatorId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true },
+    code: { type: String },
+}, { timestamps: true });
+projectItemSchema.index({ name: 1, parentId: 1, projectId: 1 }, { unique: true });
+exports.ProjectItem = (0, mongoose_1.model)('ProjectItem', projectItemSchema);
 //# sourceMappingURL=folder.model.js.map

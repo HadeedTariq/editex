@@ -1,12 +1,27 @@
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsString, IsOptional } from 'class-validator';
 
 export class CreateFolderDto {
   @IsString()
   @IsNotEmpty()
   projectId: string;
 
-  @IsBoolean()
-  isFolder: boolean;
+  @IsString()
+  @IsOptional() // <-- better than forcing it to be empty
+  parentId?: string;
+
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+}
+
+export class CreateFileDto {
+  @IsString()
+  @IsNotEmpty()
+  projectId: string;
+
+  @IsString()
+  @IsOptional()
+  parentId?: string;
 
   @IsString()
   @IsNotEmpty()

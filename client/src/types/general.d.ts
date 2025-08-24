@@ -20,14 +20,23 @@ interface ProjectsType {
   public: boolean;
   contributor: [];
   password?: string;
-  projectCode?: {
-    _id: string;
-    name: string;
-    isFolder: boolean;
-    code: string;
-  };
   creator: string;
 }
+
+type PublicProjectsTypeCreator = {
+  _id: string;
+  username: string;
+  avatar?: string;
+  passion?: string;
+};
+
+type PublicProjectsType = {
+  _id: string;
+  name: string;
+  creator: PublicProjectsTypeCreator;
+  createdAt: string;
+  public: boolean;
+};
 
 interface BlogsType {
   category: string;

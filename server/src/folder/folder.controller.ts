@@ -44,11 +44,4 @@ export class FolderController {
   getProjectFilesAndFolders(@Param('id') id: string) {
     return this.folderService.getProjectFilesAndFolders(id);
   }
-
-  @Patch('/updateFolder/:id')
-  update(@Param('id') id: string, @Req() req:Request) {
-    const {name}=req.body
-    
-    return this.folderService.addFileToFolder(id, name);
-  }
 }
