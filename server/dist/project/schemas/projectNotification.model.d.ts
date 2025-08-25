@@ -1,18 +1,18 @@
 import { Schema } from 'mongoose';
 export declare const ProjectNotification: import("mongoose").Model<{
     message: string;
-    projectId?: import("mongoose").Types.ObjectId;
     itemId?: import("mongoose").Types.ObjectId;
+    projectId?: import("mongoose").Types.ObjectId;
     sender?: import("mongoose").Types.ObjectId;
 }, {}, {}, {}, import("mongoose").Document<unknown, {}, {
     message: string;
-    projectId?: import("mongoose").Types.ObjectId;
     itemId?: import("mongoose").Types.ObjectId;
+    projectId?: import("mongoose").Types.ObjectId;
     sender?: import("mongoose").Types.ObjectId;
 }> & {
     message: string;
-    projectId?: import("mongoose").Types.ObjectId;
     itemId?: import("mongoose").Types.ObjectId;
+    projectId?: import("mongoose").Types.ObjectId;
     sender?: import("mongoose").Types.ObjectId;
 } & {
     _id: import("mongoose").Types.ObjectId;
@@ -20,18 +20,18 @@ export declare const ProjectNotification: import("mongoose").Model<{
     __v: number;
 }, Schema<any, import("mongoose").Model<any, any, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, {
     message: string;
-    projectId?: import("mongoose").Types.ObjectId;
     itemId?: import("mongoose").Types.ObjectId;
+    projectId?: import("mongoose").Types.ObjectId;
     sender?: import("mongoose").Types.ObjectId;
 }, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<{
     message: string;
-    projectId?: import("mongoose").Types.ObjectId;
     itemId?: import("mongoose").Types.ObjectId;
+    projectId?: import("mongoose").Types.ObjectId;
     sender?: import("mongoose").Types.ObjectId;
 }>> & import("mongoose").FlatRecord<{
     message: string;
-    projectId?: import("mongoose").Types.ObjectId;
     itemId?: import("mongoose").Types.ObjectId;
+    projectId?: import("mongoose").Types.ObjectId;
     sender?: import("mongoose").Types.ObjectId;
 }> & {
     _id: import("mongoose").Types.ObjectId;

@@ -97,7 +97,7 @@ function App() {
           element: <ProjectHandler />,
         },
         {
-          path: "/project/publicProjects",
+          path: "/publicProjects",
           element: <PublicProjects />,
         },
         {
@@ -122,7 +122,7 @@ function App() {
           ],
         },
         {
-          path: "/project/:id",
+          path: "/projects/:id",
           element: <ProjectPage />,
           children: [
             {

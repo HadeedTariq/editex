@@ -51,3 +51,16 @@ interface BlogsType {
     _id: string;
   };
 }
+
+type ProjectItemType = "file" | "folder";
+
+interface ProjectItemTree {
+  _id: string;
+  name: string;
+  type: ProjectItemType;
+  parentId?: string | null;
+  projectId: string;
+  creatorId: string;
+  code?: string | null;
+  children: ProjectItemTree[];
+}

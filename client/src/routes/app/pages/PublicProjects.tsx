@@ -7,7 +7,7 @@ const PublicProjects = () => {
   if (!user) return <Navigate to={"/"} />;
 
   return (
-    <div className="flex justify-center flex-wrap items-center gap-2 px-4">
+    <div className="flex justify-center flex-wrap items-center gap-2 px-4 mt-4">
       <PublicProjectsRenderer />
     </div>
   );

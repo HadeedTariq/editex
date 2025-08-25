@@ -1,23 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface Items {
-  _id: string;
-  name: string;
-  isFolder: boolean;
-  code?: string;
-  items: {
-    name: string;
-    isFolder: boolean;
-    _id?: string;
-  }[];
-}
-
-export interface ProjectFilesFoldersType {
-  projectName: string;
-  projectId: string;
-  items: Items[];
-}
-
 export interface CurrentProjectOpenFiles {
   _id: string;
   name: string;
@@ -30,9 +12,15 @@ export interface ProjectCode {
     fileId: string;
   }[];
 }
+export interface ProjectFilesFoldersType {
+  projectName: string;
+  projectId: string;
+  items: ProjectItemTree[];
+}
 export interface AppRouteState {
   isProjectPublic: boolean;
   projects: ProjectsType[];
+  publicProjects: PublicProjectsType[];
   currentProjectFP: ProjectFilesFoldersType | null;
   currentProjectOpenFiles: CurrentProjectOpenFiles[];
   projectCode: ProjectCode | null;
@@ -41,6 +29,7 @@ export interface AppRouteState {
 const initialState: AppRouteState = {
   isProjectPublic: true,
   projects: [],
+  publicProjects: [],
   currentProjectFP: null,
   currentProjectOpenFiles: [],
   projectCode: null,
@@ -56,13 +45,19 @@ const appReducer = createSlice({
     setProjects: (state, { payload }: { payload: ProjectsType[] }) => {
       state.projects = payload;
     },
+    setPublicProjects: (
+      state,
+      { payload }: { payload: PublicProjectsType[] }
+    ) => {
+      state.publicProjects = payload;
+    },
     setCurrentProjectFP: (
       state,
       { payload }: { payload: ProjectFilesFoldersType }
     ) => {
       state.currentProjectFP = payload;
     },
-    setItemsCP: (state, { payload }: { payload: Items }) => {
+    setItemsCP: (state, { payload }: { payload: ProjectItemTree }) => {
       state.currentProjectFP?.items.push(payload);
     },
     setCurrentProjectOpenFiles: (
@@ -140,4 +135,5 @@ export const {
   removeFile,
   setProjectCode,
   updateProjectCode,
+  setPublicProjects,
 } = appReducer.actions;

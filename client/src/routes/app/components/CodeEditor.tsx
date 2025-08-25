@@ -12,7 +12,7 @@ import { useAppRouter } from "../hooks/useAppRouter";
 import { Button } from "@/components/ui/button";
 import { Save, X } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
-import { itemApi } from "@/lib/axios";
+import { projectItemApi } from "@/lib/axios";
 import { toast } from "@/components/ui/use-toast";
 import CodeOutput from "./CodeOutput";
 
@@ -45,7 +45,7 @@ const CodeEditor = () => {
   const { mutate: saveCode, isPending } = useMutation({
     mutationKey: [`saveFileCode${fileId}`],
     mutationFn: async () => {
-      const { data } = await itemApi.post("saveCode", {
+      const { data } = await projectItemApi.post("saveCode", {
         code: FileCode?.code,
         fileId,
       });

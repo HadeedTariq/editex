@@ -6,7 +6,7 @@ import {
   setProjectCode,
 } from "../reducer/appReducer";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { itemApi, projectApi } from "@/lib/axios";
+import { projectItemApi, projectApi } from "@/lib/axios";
 import Loading from "@/components/ui/loading";
 import { PrivateEditor } from "../components/PrivateEditor";
 import { useAppRouter } from "../hooks/useAppRouter";
@@ -24,7 +24,7 @@ const PrivateProjectPage = () => {
   const { isPending, mutate } = useMutation({
     mutationKey: [`getProjectFileFolders${id}`],
     mutationFn: async () => {
-      const { data } = await itemApi.get(`/${id}`);
+      const { data } = await projectItemApi.get(`/${id}`);
 
       const filesCode = data.map((file: any) => {
         const code = file.code ? file.code : "";

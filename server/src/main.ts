@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { connectToDb } from './dbConnection/connectToDb';
 import * as cookieParser from 'cookie-parser';
 import { CustomExceptionFilter } from './exceptionFilter';
+import { createDummyProject } from 'src/scripts/createDummyProject';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,5 +27,6 @@ async function bootstrap() {
   await connectToDb(dbUri);
 
   await app.listen(port);
+  // await createDummyProject();
 }
 bootstrap();

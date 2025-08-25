@@ -12,7 +12,7 @@ const projectApi = axios.create({
   withCredentials: true,
 });
 
-const itemApi = axios.create({
+const projectItemApi = axios.create({
   baseURL: `${url}/folder`,
   withCredentials: true,
 });
@@ -26,4 +26,4 @@ const blogApi = axios.create({
   withCredentials: true,
 });
 
-export { authApi, projectApi, itemApi, shareCodeApi, blogApi };
+export { authApi, projectApi, projectItemApi, shareCodeApi, blogApi };

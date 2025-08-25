@@ -14,42 +14,50 @@ import {
   setProjectCode,
 } from "../reducer/appReducer";
 import { useQuery } from "@tanstack/react-query";
-import { itemApi } from "@/lib/axios";
-import Loading from "@/components/ui/loading";
 
-export function Editor() {
+import Loading from "@/components/ui/loading";
+import { projectItemApi } from "@/lib/axios";
+
+type EditorProps = {
+  id: string;
+  project: ProjectsType | PublicProjectsType;
+};
+export function Editor({ id, project }: EditorProps) {
   const dispatch = useDispatch();
 
   const { isLoading } = useQuery({
     queryKey: [`getProjectFileFolders${id}`],
     queryFn: async () => {
-      const { data } = await itemApi.get(`/${id}`);
+      const { data }: { data: ProjectItemTree[] } = await projectItemApi.get(
+        `/${id}`
+      );
+      // ~ so now with in that I have to create an hierarchy for rendering the folder and the files
 
-      const filesCode = data.map((file: any) => {
-        const code = file.code ? file.code : "";
+      // const filesCode = data.map((file) => {
+      //   const code = file.code ? file.code : "";
 
-        const fileId = file._id;
-        if (file.items.length > 0) {
-          let folderFiles = file.items?.filter(
-            (folderFile: any) => folderFile.code && folderFile.code !== ""
-          );
-          folderFiles = folderFiles?.map((folderFile: any) => {
-            const fileId = folderFile._id;
-            const code = folderFile.code;
-            return { fileId, code };
-          });
-          if (folderFiles.length > 0) {
-            dispatch(
-              setProjectCode({
-                projectId: id,
-                filesCode: folderFiles || [],
-              })
-            );
-          }
-        }
+      //   const fileId = file._id;
+      //   if (file.items.length > 0) {
+      //     let folderFiles = file.items?.filter(
+      //       (folderFile: any) => folderFile.code && folderFile.code !== ""
+      //     );
+      //     folderFiles = folderFiles?.map((folderFile: any) => {
+      //       const fileId = folderFile._id;
+      //       const code = folderFile.code;
+      //       return { fileId, code };
+      //     });
+      //     if (folderFiles.length > 0) {
+      //       dispatch(
+      //         setProjectCode({
+      //           projectId: id,
+      //           filesCode: folderFiles || [],
+      //         })
+      //       );
+      //     }
+      //   }
 
-        return { code, fileId };
-      });
+      //   return { code, fileId };
+      // });
 
       dispatch(
         setCurrentProjectFP({
@@ -59,25 +67,27 @@ export function Editor() {
         })
       );
       dispatch(setCurrentProjectOpenFilesEmpty());
-      dispatch(
-        setProjectCode({
-          projectId: id,
-          filesCode: filesCode || [],
-        })
-      );
+      // dispatch(
+      //   setProjectCode({
+      //     projectId: id,
+      //     filesCode: filesCode || [],
+      //   })
+      // );
       return data;
     },
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   });
 
-  if (isLoading) return <Loading />;
   useEffect(() => {
     toast({
       title: "Save the code",
       description: "Please save the code So that you don't lose it",
     });
   }, []);
+
+  if (isLoading) return <Loading />;
+
   return (
     <ResizablePanelGroup
       direction="horizontal"
