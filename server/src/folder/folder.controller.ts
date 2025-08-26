@@ -10,7 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { FolderService } from './folder.service';
-import { CreateFolderDto } from './dto/create-folder.dto';
+import { CreateFileDto, CreateFolderDto } from './dto/create-folder.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 
@@ -30,7 +30,7 @@ export class FolderController {
   @UseGuards(AuthGuard)
   @Post('/createFile')
   createFile(
-    @Body(ValidationPipe) createFile: CreateFolderDto,
+    @Body(ValidationPipe) createFile: CreateFileDto,
     @Req() req: Request,
   ) {
     return this.folderService.createFile(createFile, req);

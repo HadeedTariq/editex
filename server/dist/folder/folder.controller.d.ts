@@ -1,5 +1,5 @@
 import { FolderService } from './folder.service';
-import { CreateFolderDto } from './dto/create-folder.dto';
+import { CreateFileDto, CreateFolderDto } from './dto/create-folder.dto';
 import { Request } from 'express';
 export declare class FolderController {
     private readonly folderService;
@@ -7,7 +7,7 @@ export declare class FolderController {
     createFolder(createFolderDto: CreateFolderDto, req: Request): Promise<{
         message: string;
     }>;
-    createFile(createFile: CreateFolderDto, req: Request): Promise<{
+    createFile(createFile: CreateFileDto, req: Request): Promise<{
         message: string;
     }>;
     saveCode({ code, fileId }: {

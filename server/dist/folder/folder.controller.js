@@ -50,7 +50,7 @@ __decorate([
     __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_folder_dto_1.CreateFolderDto, Object]),
+    __metadata("design:paramtypes", [create_folder_dto_1.CreateFileDto, Object]),
     __metadata("design:returntype", void 0)
 ], FolderController.prototype, "createFile", null);
 __decorate([
