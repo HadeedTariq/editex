@@ -5,6 +5,7 @@ import { ProjectItem } from './schemas/folder.model';
 import { CustomException } from 'src/custom.exception';
 import * as sanitize from 'mongo-sanitize';
 import { Project } from 'src/project/schemas/project.model';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class FolderService {
@@ -45,8 +46,13 @@ export class FolderService {
       throw new CustomException('Project not found');
     }
 
-    if (project.creator !== user.id && !project.contributor.includes(user.id)) {
-      throw new CustomException('You are not authorize to perform this action');
+    if (
+      project.creator.toString() !== user.id &&
+      !project.contributor.some((id) => id.equals(user.id))
+    ) {
+      throw new CustomException(
+        'You are not authorized to perform this action',
+      );
     }
 
     await ProjectItem.create({

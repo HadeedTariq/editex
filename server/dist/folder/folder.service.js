@@ -43,8 +43,9 @@ let FolderService = class FolderService {
         if (!project) {
             throw new custom_exception_1.CustomException('Project not found');
         }
-        if (project.creator !== user.id && !project.contributor.includes(user.id)) {
-            throw new custom_exception_1.CustomException('You are not authorize to perform this action');
+        if (project.creator.toString() !== user.id &&
+            !project.contributor.some((id) => id.equals(user.id))) {
+            throw new custom_exception_1.CustomException('You are not authorized to perform this action');
         }
         await folder_model_1.ProjectItem.create({
             type: 'file',

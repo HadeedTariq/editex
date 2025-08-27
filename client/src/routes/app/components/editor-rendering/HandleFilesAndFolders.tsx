@@ -52,19 +52,23 @@ const HandleFilesAndFolders = ({
   ) => {
     if (e.key === "Enter") {
       if (!newName.trim()) return;
-
+      let isProcessSucceed = false;
       if (showInput?.isFolder) {
-        createFolder(e, parentId || "");
+        const { success } = createFolder(e, parentId || "", newName);
+        isProcessSucceed = success;
       } else {
-        createFile(e, parentId || "");
+        const { success } = createFile(e, parentId || "", newName);
+        isProcessSucceed = success;
       }
 
-      setNewName("");
-      setShowInput({
-        isFolder: false,
-        visible: false,
-        parentId: "",
-      });
+      if (isProcessSucceed) {
+        setNewName("");
+        setShowInput({
+          isFolder: false,
+          visible: false,
+          parentId: "",
+        });
+      }
     }
 
     if (e.key === "Escape") {
@@ -83,8 +87,6 @@ const HandleFilesAndFolders = ({
     }
   };
 
-  // Recursive component for rendering tree items
-  // ~ so here for the recursiver render handling it utilizes the level based approach
   const TreeItem = ({
     item,
     level = 0,
@@ -94,7 +96,7 @@ const HandleFilesAndFolders = ({
   }) => {
     const hasChildren = item.children && item.children.length > 0;
     const isSelected = fileId === item._id;
-    // ~ ok so for the padding handling it utilizes the level based multiplication approach pretty nice I am not aware of that particular approach
+
     const paddingLeft = level * 16;
 
     if (item.type === "folder") {

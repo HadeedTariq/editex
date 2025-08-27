@@ -42,15 +42,23 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
     isFolder: false,
     folderId: "",
   });
-  const [file, setFile] = useState("");
-  const [folder, setFolder] = useState("");
 
   // --- Mutations ---
-  const { mutate: folderCreation, isPending: isFolderCreating } = useMutation({
+  const {
+    mutate: folderCreation,
+    isPending: isFolderCreating,
+    isError: isFolderCreationError,
+  } = useMutation({
     mutationKey: [`createFolder`],
-    mutationFn: async ({ parentId }: { parentId: string }) => {
+    mutationFn: async ({
+      parentId,
+      folderName,
+    }: {
+      parentId: string;
+      folderName: string;
+    }) => {
       const { data } = await projectItemApi.post(`/createFolder`, {
-        name: folder,
+        name: folderName,
         projectId,
         parentId,
       });
@@ -58,7 +66,6 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
     },
     onSuccess(data: any) {
       setShowInput({ ...showInput, visible: false, parentId: data.parentId });
-      setFolder("");
       queryClient.invalidateQueries([
         `getProjectFileFolders${projectId}`,
       ] as InvalidateQueryFilters);
@@ -68,11 +75,21 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
     },
   });
 
-  const { mutate: fileCreation, isPending: isFileCreating } = useMutation({
+  const {
+    mutate: fileCreation,
+    isPending: isFileCreating,
+    isError: isFileCreationError,
+  } = useMutation({
     mutationKey: [`createFile`],
-    mutationFn: async ({ parentId }: { parentId: string }) => {
+    mutationFn: async ({
+      parentId,
+      fileName,
+    }: {
+      parentId: string;
+      fileName: string;
+    }) => {
       const { data } = await projectItemApi.post(`/createFile`, {
-        name: file,
+        name: fileName,
         projectId,
         parentId,
       });
@@ -80,7 +97,6 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
     },
     onSuccess(data: any) {
       setShowInput({ ...showInput, visible: false, parentId: data.parentId });
-      setFile("");
       queryClient.invalidateQueries([
         `getProjectFileFolders${projectId}`,
       ] as InvalidateQueryFilters);
@@ -93,70 +109,81 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
   // --- Handlers ---
   const createFile = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    parentId: string
+    parentId: string,
+    fileName: string,
+    parentIndex: number
   ) => {
-    if (e.key !== "Enter") return;
+    if (e.key !== "Enter") return { success: false };
 
-    const realFile = file.split(".")[1];
+    const realFile = fileName.split(".")[1];
     if (!realFile || realFile !== "js") {
       toast({
         title: "File extension must include .js",
         variant: "destructive",
       });
-      return;
+      return { success: false };
     }
-
-    const files = currentProjectFP?.items.filter(
-      (project) => project.type === "file"
-    );
-    const fileAlreadyExist = files?.find((f) => f.name === file);
+    // ~ so this is only checking for the root so for checking in that particular hierarchuy it doesn't exist we have to check with in the parent id that with in the parent the file don't exist same for the folder
+    let files: ProjectItemTree[] | undefined;
+    if (!parentId) {
+      files = currentProjectFP?.items.filter((item) => item.type === "file");
+    } else if (parentId) {
+      // ~ so as the things are in different hierarchy how does I find with in the children so for that If I utilize the parent Index
+      files = currentProjectFP?.items[parentIndex].children.filter(
+        (item) => item.type === "file"
+      );
+    }
+    const fileAlreadyExist = files?.find((f) => f.name === fileName);
     if (fileAlreadyExist) {
       toast({ title: "File already exists", variant: "destructive" });
-      return;
+      return { success: false };
     }
-
-    dispatch(
-      setItemsCP({
-        _id: uuid(),
-        type: "file",
-        children: [],
-        name: file,
-        creatorId: user?.id || "",
-        projectId,
-      })
-    );
-    fileCreation({ parentId });
+    // ~ so this state related stuff also have to be fixed
+    // dispatch(
+    //   setItemsCP({
+    //     _id: uuid(),
+    //     type: "file",
+    //     children: [],
+    //     name: fileName,
+    //     creatorId: user?.id || "",
+    //     projectId,
+    //   })
+    // );
+    fileCreation({ parentId, fileName });
+    return { success: !isFileCreationError };
   };
 
   const createFolder = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    parentId: string
+    parentId: string,
+    folderName: string
   ) => {
-    if (e.key !== "Enter") return;
+    if (e.key !== "Enter") return { success: false };
 
     const projectFolders = currentProjectFP?.items.filter(
       (fold) => fold.type === "folder"
     );
     const isFolderAlreadyExist = projectFolders?.find(
-      (fold) => fold.name === folder
+      (fold) => fold.name === folderName
     );
 
     if (isFolderAlreadyExist) {
       toast({ title: "Folder already exists", variant: "destructive" });
-      return;
+      return { success: false };
     }
 
-    dispatch(
-      setItemsCP({
-        _id: uuid(),
-        type: "folder",
-        children: [],
-        name: folder,
-        creatorId: user?.id || "",
-        projectId,
-      })
-    );
-    folderCreation({ parentId });
+    // dispatch(
+    //   setItemsCP({
+    //     _id: uuid(),
+    //     type: "folder",
+    //     children: [],
+    //     name: folderName,
+    //     creatorId: user?.id || "",
+    //     projectId,
+    //   })
+    // );
+    folderCreation({ parentId, folderName });
+    return { success: !isFolderCreationError };
   };
 
   // --- Hook API ---
@@ -166,15 +193,9 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
     setShowInput,
     showFolderFile,
     setShowFolderFile,
-    file,
-    setFile,
-    folder,
-    setFolder,
-
     // handlers
     createFile,
     createFolder,
-
     // mutation status
     isFolderCreating,
     isFileCreating,
