@@ -15,6 +15,7 @@ import {
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useFileFolderHandler } from "../../hooks/mutations/fileFolderCreationHandler";
+import { NewFileInput } from "./NewFileInput";
 
 type ProjectFilesFoldersType = {
   projectId: string;
@@ -48,16 +49,17 @@ const HandleFilesAndFolders = ({
 
   const handleCreate = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    parentId: string | null
+    parentId: string | null,
+    name: string
   ) => {
     if (e.key === "Enter") {
-      if (!newName.trim()) return;
+      if (!name.trim()) return;
       let isProcessSucceed = false;
       if (showInput?.isFolder) {
-        const { success } = createFolder(e, parentId || "", newName);
+        const { success } = createFolder(e, parentId || "", name);
         isProcessSucceed = success;
       } else {
-        const { success } = createFile(e, parentId || "", newName);
+        const { success } = createFile(e, parentId || "", name);
         isProcessSucceed = success;
       }
 
@@ -158,16 +160,27 @@ const HandleFilesAndFolders = ({
                     ) : (
                       <FileJson className="h-4 w-4 text-green-500" />
                     )}
-                    <Input
+                    {/* <Input
                       value={newName}
                       onChange={(e) => setNewName(e.target.value)}
-                      onKeyDown={(e) => handleCreate(e, item._id)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleCreate(e, item._id);
+                        }
+                      }}
                       autoFocus
                       className="h-6 text-xs border-none bg-transparent focus:bg-white dark:focus:bg-gray-900 rounded px-1"
                       placeholder={
                         showInput.isFolder ? "Folder name" : "File name"
                       }
                       disabled={isFolderCreating || isFileCreating}
+                    /> */}
+                    <NewFileInput
+                      handleCreate={handleCreate}
+                      isFolderCreating={isFolderCreating}
+                      isFileCreating={isFileCreating}
+                      showInput={showInput}
+                      item={item}
                     />
                   </div>
                 )}
@@ -250,7 +263,7 @@ const HandleFilesAndFolders = ({
             <Input
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              onKeyDown={(e) => handleCreate(e, null)}
+              onKeyDown={(e) => handleCreate(e, null, newName)}
               autoFocus
               className="h-6 text-xs border-none bg-transparent focus:bg-white dark:focus:bg-gray-900 rounded px-1"
               placeholder={showInput.isFolder ? "Folder name" : "File name"}

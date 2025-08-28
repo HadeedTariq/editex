@@ -106,12 +106,36 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
     },
   });
 
+  const findFolderAndCheckFiles = (
+    items: ProjectItemTree[],
+    parentId: string | null,
+    fileName: string
+  ) => {
+    if (!parentId) {
+      return items.some(
+        (item) => item.type === "file" && item.name === fileName
+      );
+    }
+    for (const item of items) {
+      if (item.type === "folder" && item._id === parentId) {
+        return item.children?.some(
+          (child) => child.type === "file" && child.name === fileName
+        );
+      }
+      if (item.type === "folder" && item.children.length > 0) {
+        if (findFolderAndCheckFiles(item.children, parentId, fileName)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   // --- Handlers ---
   const createFile = (
     e: React.KeyboardEvent<HTMLInputElement>,
     parentId: string,
-    fileName: string,
-    parentIndex: number
+    fileName: string
   ) => {
     if (e.key !== "Enter") return { success: false };
 
@@ -123,17 +147,12 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
       });
       return { success: false };
     }
-    // ~ so this is only checking for the root so for checking in that particular hierarchuy it doesn't exist we have to check with in the parent id that with in the parent the file don't exist same for the folder
-    let files: ProjectItemTree[] | undefined;
-    if (!parentId) {
-      files = currentProjectFP?.items.filter((item) => item.type === "file");
-    } else if (parentId) {
-      // ~ so as the things are in different hierarchy how does I find with in the children so for that If I utilize the parent Index
-      files = currentProjectFP?.items[parentIndex].children.filter(
-        (item) => item.type === "file"
-      );
-    }
-    const fileAlreadyExist = files?.find((f) => f.name === fileName);
+    const fileAlreadyExist = findFolderAndCheckFiles(
+      currentProjectFP?.items || [],
+      parentId,
+      fileName
+    );
+
     if (fileAlreadyExist) {
       toast({ title: "File already exists", variant: "destructive" });
       return { success: false };
