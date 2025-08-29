@@ -36,12 +36,14 @@ export class FolderController {
     return this.folderService.createFile(createFile, req);
   }
 
+  @UseGuards(AuthGuard)
   @Post('saveCode')
   saveCode(@Body() { code, fileId }: { code: string; fileId: string }) {
     return this.folderService.saveCode(code, fileId);
   }
+  @UseGuards(AuthGuard)
   @Get(':id')
-  getProjectFilesAndFolders(@Param('id') id: string) {
-    return this.folderService.getProjectFilesAndFolders(id);
+  getProjectFilesAndFolders(@Param('id') id: string, @Req() req: Request) {
+    return this.folderService.getProjectFilesAndFolders(id, req);
   }
 }

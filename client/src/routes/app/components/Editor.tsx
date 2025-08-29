@@ -7,86 +7,14 @@ import FolderFileSturucture from "./FolderFileSturucture";
 import { Outlet } from "react-router-dom";
 import { useEffect } from "react";
 import { toast } from "@/components/ui/use-toast";
-import { useDispatch } from "react-redux";
-import {
-  setCurrentProjectFP,
-  setCurrentProjectOpenFilesEmpty,
-  setProjectCode,
-} from "../reducer/appReducer";
-import { useQuery } from "@tanstack/react-query";
 
-import Loading from "@/components/ui/loading";
-import { projectItemApi } from "@/lib/axios";
-
-type EditorProps = {
-  id: string;
-  project: ProjectsType | PublicProjectsType;
-};
-export function Editor({ id, project }: EditorProps) {
-  const dispatch = useDispatch();
-
-  const { isLoading } = useQuery({
-    queryKey: [`getProjectFileFolders${id}`],
-    queryFn: async () => {
-      const { data }: { data: ProjectItemTree[] } = await projectItemApi.get(
-        `/${id}`
-      );
-      // ~ so now with in that I have to create an hierarchy for rendering the folder and the files
-
-      // const filesCode = data.map((file) => {
-      //   const code = file.code ? file.code : "";
-
-      //   const fileId = file._id;
-      //   if (file.items.length > 0) {
-      //     let folderFiles = file.items?.filter(
-      //       (folderFile: any) => folderFile.code && folderFile.code !== ""
-      //     );
-      //     folderFiles = folderFiles?.map((folderFile: any) => {
-      //       const fileId = folderFile._id;
-      //       const code = folderFile.code;
-      //       return { fileId, code };
-      //     });
-      //     if (folderFiles.length > 0) {
-      //       dispatch(
-      //         setProjectCode({
-      //           projectId: id,
-      //           filesCode: folderFiles || [],
-      //         })
-      //       );
-      //     }
-      //   }
-
-      //   return { code, fileId };
-      // });
-
-      dispatch(
-        setCurrentProjectFP({
-          projectName: project.name,
-          projectId: project._id,
-          items: data,
-        })
-      );
-      dispatch(setCurrentProjectOpenFilesEmpty());
-      // dispatch(
-      //   setProjectCode({
-      //     projectId: id,
-      //     filesCode: filesCode || [],
-      //   })
-      // );
-      return data;
-    },
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
-
+export function Editor() {
   useEffect(() => {
     toast({
       title: "Save the code",
       description: "Please save the code So that you don't lose it",
     });
   }, []);
-
-  if (isLoading) return <Loading />;
 
   return (
     <ResizablePanelGroup

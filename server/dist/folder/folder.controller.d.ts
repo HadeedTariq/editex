@@ -16,5 +16,9 @@ export declare class FolderController {
     }): Promise<{
         message: string;
     }>;
-    getProjectFilesAndFolders(id: string): Promise<any[]>;
+    getProjectFilesAndFolders(id: string, req: Request): Promise<{
+        hierarchy: any[];
+        projectName: string;
+        projectId: unknown;
+    }>;
 }

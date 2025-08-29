@@ -20,10 +20,14 @@ export class FolderService {
       throw new CustomException('Project not found');
     }
 
-    if (project.creator !== user.id && !project.contributor.includes(user.id)) {
-      throw new CustomException('You are not authorize to perform this action');
+    if (
+      project.creator.toString() !== user.id &&
+      !project.contributor.some((id) => id.equals(user.id))
+    ) {
+      throw new CustomException(
+        'You are not authorized to perform this action',
+      );
     }
-
     await ProjectItem.create({
       type: 'folder',
       name,
@@ -66,7 +70,25 @@ export class FolderService {
     return { message: 'File created successfully' };
   }
 
-  async getProjectFilesAndFolders(projectId: string) {
+  async getProjectFilesAndFolders(projectId: string, req: Request) {
+    const user = req.body.user;
+    const project = await Project.findOne({
+      _id: projectId,
+    });
+
+    if (!project) {
+      throw new CustomException('Project not found');
+    }
+
+    if (
+      project.creator.toString() !== user.id &&
+      !project.contributor.some((id) => id.equals(user.id))
+    ) {
+      throw new CustomException(
+        'You are not authorized to access this project',
+      );
+    }
+
     const projectItems = await ProjectItem.find({ projectId }).select(`
         _id
         name
@@ -95,7 +117,7 @@ export class FolderService {
       }
     });
 
-    return hierarchy;
+    return { hierarchy, projectName: project.name, projectId: project._id };
   }
 
   async saveCode(code: string, fileId: string) {

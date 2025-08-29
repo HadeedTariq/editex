@@ -12,7 +12,7 @@ import {
   FolderPlus,
   ChevronRight,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useFileFolderHandler } from "../../hooks/mutations/fileFolderCreationHandler";
 import { NewFileInput } from "./NewFileInput";
@@ -37,6 +37,8 @@ const HandleFilesAndFolders = ({
   const navigate = useNavigate();
   const { id } = useParams();
   const [newName, setNewName] = useState("");
+  const [openItems, setOpenItems] = useState<string[]>([]);
+  const inputRef = useRef<HTMLDivElement>(null);
 
   const {
     showInput,
@@ -104,7 +106,14 @@ const HandleFilesAndFolders = ({
     if (item.type === "folder") {
       return (
         <div key={item._id} className="w-full">
-          <Accordion type="single" collapsible className="border-none">
+          <Accordion
+            type="multiple"
+            className="border-none"
+            value={openItems}
+            onValueChange={(values) => {
+              setOpenItems(values);
+            }}
+          >
             <AccordionItem value={item._id} className="border-none">
               <div className="flex items-center gap-2 h-9 hover:bg-gray-50 dark:hover:bg-gray-800 rounded group relative">
                 <div
@@ -160,21 +169,6 @@ const HandleFilesAndFolders = ({
                     ) : (
                       <FileJson className="h-4 w-4 text-green-500" />
                     )}
-                    {/* <Input
-                      value={newName}
-                      onChange={(e) => setNewName(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          handleCreate(e, item._id);
-                        }
-                      }}
-                      autoFocus
-                      className="h-6 text-xs border-none bg-transparent focus:bg-white dark:focus:bg-gray-900 rounded px-1"
-                      placeholder={
-                        showInput.isFolder ? "Folder name" : "File name"
-                      }
-                      disabled={isFolderCreating || isFileCreating}
-                    /> */}
                     <NewFileInput
                       handleCreate={handleCreate}
                       isFolderCreating={isFolderCreating}
@@ -223,8 +217,28 @@ const HandleFilesAndFolders = ({
     );
   };
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setShowInput({
+          isFolder: false,
+          visible: false,
+          parentId: "",
+        });
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="w-full">
+    <div className="w-full" ref={inputRef}>
       {/* so it is for handling the file folder creation with in the root  */}
       <div className="flex items-center justify-between p-3 border-b bg-gray-50 dark:bg-gray-900">
         <h3 className="font-semibold text-lg capitalize">

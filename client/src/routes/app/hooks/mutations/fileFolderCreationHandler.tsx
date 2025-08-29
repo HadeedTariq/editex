@@ -11,6 +11,10 @@ import { projectItemApi } from "@/lib/axios";
 import { useFullApp } from "@/hooks/useFullApp";
 import { setItemsCP } from "../../reducer/appReducer";
 import { useAppRouter } from "../useAppRouter";
+import {
+  findFolderAndCheckFiles,
+  findFolderAndCheckFolders,
+} from "@/lib/utils";
 
 type FolderFile = {
   visible: boolean;
@@ -36,11 +40,6 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
     visible: false,
     isFolder: false,
     parentId: null,
-  });
-  const [showFolderFile, setShowFolderFile] = useState<FolderFile>({
-    visible: false,
-    isFolder: false,
-    folderId: "",
   });
 
   // --- Mutations ---
@@ -106,31 +105,6 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
     },
   });
 
-  const findFolderAndCheckFiles = (
-    items: ProjectItemTree[],
-    parentId: string | null,
-    fileName: string
-  ) => {
-    if (!parentId) {
-      return items.some(
-        (item) => item.type === "file" && item.name === fileName
-      );
-    }
-    for (const item of items) {
-      if (item.type === "folder" && item._id === parentId) {
-        return item.children?.some(
-          (child) => child.type === "file" && child.name === fileName
-        );
-      }
-      if (item.type === "folder" && item.children.length > 0) {
-        if (findFolderAndCheckFiles(item.children, parentId, fileName)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
-
   // --- Handlers ---
   const createFile = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -179,11 +153,10 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
   ) => {
     if (e.key !== "Enter") return { success: false };
 
-    const projectFolders = currentProjectFP?.items.filter(
-      (fold) => fold.type === "folder"
-    );
-    const isFolderAlreadyExist = projectFolders?.find(
-      (fold) => fold.name === folderName
+    const isFolderAlreadyExist = findFolderAndCheckFolders(
+      currentProjectFP?.items || [],
+      parentId,
+      folderName
     );
 
     if (isFolderAlreadyExist) {
@@ -210,8 +183,6 @@ export const useFileFolderHandler = ({ projectId }: Props) => {
     // state
     showInput,
     setShowInput,
-    showFolderFile,
-    setShowFolderFile,
     // handlers
     createFile,
     createFolder,
