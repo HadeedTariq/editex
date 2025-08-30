@@ -28,6 +28,42 @@ export const findFolderAndCheckFiles = (
   return false;
 };
 
+export const findFolderAndCheckFileExistance = (
+  items: ProjectItemTree[],
+  parentId: string | null,
+  fileName: string
+): ProjectItemTree | null => {
+  if (!parentId) {
+    return (
+      items.find((item) => item.type === "file" && item.name === fileName) ||
+      null
+    );
+  }
+
+  for (const item of items) {
+    if (item.type === "folder") {
+      if (item._id === parentId) {
+        return (
+          item.children?.find(
+            (child) => child.type === "file" && child.name === fileName
+          ) || null
+        );
+      }
+
+      if (item.children && item.children.length > 0) {
+        const found = findFolderAndCheckFileExistance(
+          item.children,
+          parentId,
+          fileName
+        );
+        if (found) return found;
+      }
+    }
+  }
+
+  return null;
+};
+
 export const findFolderAndCheckFolders = (
   items: ProjectItemTree[],
   parentId: string | null,

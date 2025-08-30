@@ -17,7 +17,6 @@ import CodeEditor from "./routes/app/components/CodeEditor";
 import DefaultEditor from "./routes/app/pages/DefaultEditor";
 import PublicProjects from "./routes/app/pages/PublicProjects";
 import Notififcations from "./routes/app/pages/Notififcations";
-import PrivateProjectPage from "./routes/app/pages/PrivateProjectPage";
 import ProjectNotifications from "./routes/app/pages/ProjectNotifications";
 import NotFound from "./components/NotFound";
 import CreateBlog from "./routes/app/pages/CreateBlog";
@@ -130,21 +129,7 @@ function App() {
               element: <DefaultEditor />,
             },
             {
-              path: "js/:filename/:fileId",
-              element: <CodeEditor />,
-            },
-          ],
-        },
-        {
-          path: "/privateProject/:id",
-          element: <PrivateProjectPage />,
-          children: [
-            {
-              index: true,
-              element: <DefaultEditor />,
-            },
-            {
-              path: "js/:filename/:fileId",
+              path: "js/:fileName",
               element: <CodeEditor />,
             },
           ],

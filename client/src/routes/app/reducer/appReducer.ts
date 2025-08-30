@@ -1,16 +1,17 @@
+import { findFolderAndCheckFileExistance } from "@/lib/utils";
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface CurrentProjectOpenFiles {
+export interface currentProjectOpenFile {
   _id: string;
   name: string;
 }
 
-export interface ProjectCode {
+export interface CurrentProjectOpenFileCodes {
   projectId: string;
-  filesCode: {
-    code: string;
-    fileId: string;
-  }[];
+  fileId: string;
+  parentId?: string;
+  code: string;
+  fileName: string;
 }
 export interface ProjectFilesFoldersType {
   projectName: string;
@@ -22,8 +23,8 @@ export interface AppRouteState {
   projects: ProjectsType[];
   publicProjects: PublicProjectsType[];
   currentProjectFP: ProjectFilesFoldersType | null;
-  currentProjectOpenFiles: CurrentProjectOpenFiles[];
-  projectCode: ProjectCode | null;
+  currentProjectOpenFile: currentProjectOpenFile | null;
+  currentProjectOpenFileCode: CurrentProjectOpenFileCodes | null;
 }
 
 const initialState: AppRouteState = {
@@ -31,8 +32,8 @@ const initialState: AppRouteState = {
   projects: [],
   publicProjects: [],
   currentProjectFP: null,
-  currentProjectOpenFiles: [],
-  projectCode: null,
+  currentProjectOpenFile: null,
+  currentProjectOpenFileCode: null,
 };
 
 const appReducer = createSlice({
@@ -53,72 +54,65 @@ const appReducer = createSlice({
     },
     setCurrentProjectFP: (
       state,
-      { payload }: { payload: ProjectFilesFoldersType }
+      {
+        payload,
+      }: {
+        payload: {
+          currentProjectFp: ProjectFilesFoldersType;
+          parentId: string | null;
+          fileId?: string;
+          fileName?: string;
+        };
+      }
     ) => {
-      state.currentProjectFP = payload;
+      state.currentProjectFP = payload.currentProjectFp;
+      if (payload.fileName && payload.currentProjectFp) {
+        const fileData = findFolderAndCheckFileExistance(
+          payload.currentProjectFp.items,
+          payload.parentId,
+          payload.fileName
+        );
+        if (fileData) {
+          state.currentProjectOpenFile = {
+            _id: fileData._id,
+            name: fileData.name,
+          };
+          state.currentProjectOpenFileCode = {
+            projectId: payload.currentProjectFp.projectId,
+            code: fileData.code || "",
+            fileId: fileData._id,
+            fileName: fileData.name,
+            parentId: payload.parentId || undefined,
+          };
+        }
+      }
     },
     setItemsCP: (state, { payload }: { payload: ProjectItemTree }) => {
       state.currentProjectFP?.items.push(payload);
     },
-    setCurrentProjectOpenFiles: (
-      state,
-      { payload }: { payload: { _id: string; name: string } }
-    ) => {
-      const isFileAlreadyExit = state.currentProjectOpenFiles.find(
-        (file) => file._id === payload._id
-      );
 
-      if (isFileAlreadyExit) {
-        return;
-      }
-      if (state.currentProjectOpenFiles.length === 1) {
-        state.currentProjectOpenFiles.shift();
-      }
-      state.projectCode?.filesCode.push({
-        fileId: payload._id,
-        code: "",
-      });
-      state.currentProjectOpenFiles.push(payload);
+    setcurrentProjectOpenFileEmpty: (state) => {
+      state.currentProjectOpenFile = null;
     },
-    setCurrentProjectOpenFilesEmpty: (state) => {
-      state.currentProjectOpenFiles = [];
+    removeFile: (state) => {
+      state.currentProjectOpenFileCode = null;
+      state.currentProjectOpenFile = null;
     },
-    removeFile: (
+    setCurrentProjectOpenFileCode: (
       state,
-      { payload }: { payload: { _id: string; name: string } }
+      { payload }: { payload: CurrentProjectOpenFileCodes }
     ) => {
-      const currentFiles = state.currentProjectOpenFiles.filter(
-        (file) => file._id !== payload._id
-      );
-      state.currentProjectOpenFiles = currentFiles;
-    },
-    setProjectCode: (
-      state,
-      { payload }: { payload: { projectId: string; filesCode: [] } }
-    ) => {
-      const filesCode = state.projectCode?.filesCode || [];
-      state.projectCode = {
-        projectId: payload.projectId,
-        filesCode: filesCode.concat(payload.filesCode),
+      state.currentProjectOpenFileCode = payload;
+      state.currentProjectOpenFile = {
+        _id: payload.fileId,
+        name: payload.fileName,
       };
     },
     updateProjectCode: (
       state,
-      { payload }: { payload: { fileId: string; code: string } }
+      { payload }: { payload: CurrentProjectOpenFileCodes }
     ) => {
-      const projectFile = state.projectCode?.filesCode.find(
-        (fileCode) => fileCode.fileId === payload.fileId
-      );
-      if (projectFile) {
-        projectFile.code = payload.code;
-        const filterFiles = state.projectCode?.filesCode.filter(
-          (fileCode) => fileCode.fileId !== payload.fileId
-        );
-        filterFiles?.push(projectFile);
-        if (state.projectCode && filterFiles) {
-          state.projectCode.filesCode = filterFiles;
-        }
-      }
+      state.currentProjectOpenFileCode = payload;
     },
   },
 });
@@ -130,10 +124,9 @@ export const {
   setProjects,
   setCurrentProjectFP,
   setItemsCP,
-  setCurrentProjectOpenFiles,
-  setCurrentProjectOpenFilesEmpty,
+  setcurrentProjectOpenFileEmpty,
   removeFile,
-  setProjectCode,
+  setCurrentProjectOpenFileCode,
   updateProjectCode,
   setPublicProjects,
 } = appReducer.actions;

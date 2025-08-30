@@ -1,13 +1,8 @@
 import { Editor } from "@monaco-editor/react";
 
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {
-  removeFile,
-  setCurrentProjectOpenFiles,
-  updateProjectCode,
-} from "../reducer/appReducer";
+import { removeFile, updateProjectCode } from "../reducer/appReducer";
 import { useAppRouter } from "../hooks/useAppRouter";
 import { Button } from "@/components/ui/button";
 import { Save, X } from "lucide-react";
@@ -18,35 +13,31 @@ import CodeOutput from "./CodeOutput";
 
 const CodeEditor = () => {
   const dispatch = useDispatch();
-  const { currentProjectOpenFiles, projectCode } = useAppRouter();
+  const { currentProjectOpenFile, currentProjectOpenFileCode } = useAppRouter();
 
   const navigate = useNavigate();
-  const { filename, fileId, id } = useParams();
+  const { filename, id } = useParams();
+  const [searchParams] = useSearchParams();
+  const fileId = searchParams.get("fileId");
 
-  const FileCode = projectCode?.filesCode.find(
-    (fileCode) => fileCode.fileId === fileId
-  );
-
-  useEffect(() => {
-    if (filename && fileId) {
-      dispatch(setCurrentProjectOpenFiles({ _id: fileId, name: filename }));
-    }
-  }, [filename, fileId]);
   const handleEditorChange = (value: string) => {
     dispatch(
       updateProjectCode({
         code: value as string,
-        fileId: fileId || "",
+        fileId: currentProjectOpenFileCode?.fileId as string,
+        fileName: currentProjectOpenFileCode?.fileName as string,
+        projectId: currentProjectOpenFileCode?.projectId as string,
+        parentId: currentProjectOpenFileCode?.parentId || undefined,
       })
     );
   };
 
   // ! Save file code
   const { mutate: saveCode, isPending } = useMutation({
-    mutationKey: [`saveFileCode${fileId}`],
+    mutationKey: [`savecurrentProjectOpenFileCode${fileId}`],
     mutationFn: async () => {
       const { data } = await projectItemApi.post("saveCode", {
-        code: FileCode?.code,
+        code: currentProjectOpenFileCode?.code,
         fileId,
       });
       return data;
@@ -68,32 +59,27 @@ const CodeEditor = () => {
     <div className="h-[91vh] flex flex-col">
       <div className="flex justify-between items-center">
         <div className="h-[50px] w-full flex justify-start">
-          {currentProjectOpenFiles?.map((file) => (
+          {currentProjectOpenFile && (
             <Button
-              key={file.name}
+              key={currentProjectOpenFile.name}
               variant={"link"}
               className={`
           ${
-            filename === file.name && "bg-gray-200 dark:bg-gray-700"
+            filename === currentProjectOpenFile.name &&
+            "bg-gray-200 dark:bg-gray-700"
           } gap-6 my-1`}
             >
-              <p
-                onClick={() =>
-                  navigate(`/project/${id}/js/${file.name}/${file._id}`)
-                }
-              >
-                {file.name}
-              </p>
+              <p>{currentProjectOpenFile.name}</p>
               <X
                 className="hover:text-green-400 text-green-500"
                 size={18}
                 onClick={() => {
-                  dispatch(removeFile(file));
-                  navigate(`/project/${id}`);
+                  dispatch(removeFile());
+                  navigate(`/projects/${id}`);
                 }}
               />
             </Button>
-          ))}
+          )}
         </div>
         <Button
           variant={"edit"}
@@ -109,7 +95,7 @@ const CodeEditor = () => {
         <div className="w-[60%] max-[700px]:w-[100%] h-[90vh] max-[700px]:h-[60vh]">
           <Editor
             defaultLanguage="javascript"
-            value={FileCode?.code}
+            value={currentProjectOpenFileCode?.code}
             onChange={(val) => handleEditorChange(val as string)}
             theme="vs-dark"
             options={{
@@ -122,7 +108,7 @@ const CodeEditor = () => {
             }}
           />
         </div>
-        <CodeOutput sourceCode={FileCode?.code as string} />
+        <CodeOutput sourceCode={currentProjectOpenFileCode?.code as string} />
       </div>
     </div>
   );

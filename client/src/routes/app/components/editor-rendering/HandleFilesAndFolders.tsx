@@ -16,6 +16,8 @@ import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useFileFolderHandler } from "../../hooks/mutations/fileFolderCreationHandler";
 import { NewFileInput } from "./NewFileInput";
+import { useDispatch } from "react-redux";
+import { setCurrentProjectOpenFileCode } from "../../reducer/appReducer";
 
 type ProjectFilesFoldersType = {
   projectId: string;
@@ -34,6 +36,7 @@ const HandleFilesAndFolders = ({
   items,
   fileId,
 }: HandleFilesAndFoldersProps) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const [newName, setNewName] = useState("");
@@ -87,7 +90,21 @@ const HandleFilesAndFolders = ({
 
   const handleFileClick = (item: ProjectItemTree) => {
     if (item.type === "file") {
-      navigate(`/project/${id}/js/${item.name}/${item._id}`);
+      console.log(item);
+
+      console.log("called");
+      dispatch(
+        setCurrentProjectOpenFileCode({
+          projectId: currentProjectFP.projectId,
+          fileId: item._id,
+          code: item.code || "",
+          fileName: item.name,
+          parentId: item.parentId || undefined,
+        })
+      );
+      navigate(
+        `/projects/${id}/js/${item.name}?parentId=${item.parentId}&fileId=${item._id}`
+      );
     }
   };
 
