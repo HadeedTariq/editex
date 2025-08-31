@@ -17,7 +17,10 @@ import { Input } from "@/components/ui/input";
 import { useFileFolderHandler } from "../../hooks/mutations/fileFolderCreationHandler";
 import { NewFileInput } from "./NewFileInput";
 import { useDispatch } from "react-redux";
-import { setCurrentProjectOpenFileCode } from "../../reducer/appReducer";
+import {
+  CurrentProjectOpenFile,
+  setCurrentProjectOpenFileCode,
+} from "../../reducer/appReducer";
 
 type ProjectFilesFoldersType = {
   projectId: string;
@@ -28,6 +31,7 @@ type HandleFilesAndFoldersProps = {
   currentProjectFP: ProjectFilesFoldersType;
   items: ProjectItemTree[];
   fileId?: string;
+  currentProjectOpenFile: CurrentProjectOpenFile | null;
 };
 
 // Main component
@@ -35,6 +39,7 @@ const HandleFilesAndFolders = ({
   currentProjectFP,
   items,
   fileId,
+  currentProjectOpenFile,
 }: HandleFilesAndFoldersProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -90,8 +95,6 @@ const HandleFilesAndFolders = ({
 
   const handleFileClick = (item: ProjectItemTree) => {
     if (item.type === "file") {
-      console.log(item);
-
       console.log("called");
       dispatch(
         setCurrentProjectOpenFileCode({
@@ -116,7 +119,7 @@ const HandleFilesAndFolders = ({
     level?: number;
   }) => {
     const hasChildren = item.children && item.children.length > 0;
-    const isSelected = fileId === item._id;
+    const isSelected = currentProjectOpenFile?._id === item._id;
 
     const paddingLeft = level * 16;
 

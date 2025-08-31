@@ -1,7 +1,7 @@
 import { findFolderAndCheckFileExistance } from "@/lib/utils";
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface currentProjectOpenFile {
+export interface CurrentProjectOpenFile {
   _id: string;
   name: string;
 }
@@ -23,7 +23,7 @@ export interface AppRouteState {
   projects: ProjectsType[];
   publicProjects: PublicProjectsType[];
   currentProjectFP: ProjectFilesFoldersType | null;
-  currentProjectOpenFile: currentProjectOpenFile | null;
+  currentProjectOpenFile: CurrentProjectOpenFile | null;
   currentProjectOpenFileCode: CurrentProjectOpenFileCodes | null;
 }
 

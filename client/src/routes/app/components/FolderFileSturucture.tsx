@@ -5,7 +5,7 @@ import HandleFilesAndFolders from "./editor-rendering/HandleFilesAndFolders";
 const FolderFileSturucture = () => {
   const { id } = useParams();
 
-  const { currentProjectFP } = useAppRouter();
+  const { currentProjectFP, currentProjectOpenFile } = useAppRouter();
 
   if (!id || id.length !== 24) return <Navigate to={"/"} />;
   if (!currentProjectFP) return <Navigate to={"/"} />;
@@ -14,6 +14,7 @@ const FolderFileSturucture = () => {
     <HandleFilesAndFolders
       currentProjectFP={currentProjectFP}
       items={currentProjectFP.items}
+      currentProjectOpenFile={currentProjectOpenFile}
     />
   );
 };
