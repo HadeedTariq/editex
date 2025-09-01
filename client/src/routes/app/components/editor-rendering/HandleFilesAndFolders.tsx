@@ -38,7 +38,6 @@ type HandleFilesAndFoldersProps = {
 const HandleFilesAndFolders = ({
   currentProjectFP,
   items,
-  fileId,
   currentProjectOpenFile,
 }: HandleFilesAndFoldersProps) => {
   const dispatch = useDispatch();

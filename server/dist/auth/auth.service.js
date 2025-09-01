@@ -46,6 +46,7 @@ let AuthService = class AuthService {
             secure: true,
             httpOnly: false,
             sameSite: 'none',
+            maxAge: 69 * 60 * 10000,
         });
         res.status(200).json({ message: 'User logged in successfully' });
     }

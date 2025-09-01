@@ -30,10 +30,12 @@ export const findFolderAndCheckFiles = (
 
 export const findFolderAndCheckFileExistance = (
   items: ProjectItemTree[],
-  parentId: string | null,
-  fileName: string
+  fileName: string,
+  parentId?: string | null
 ): ProjectItemTree | null => {
-  if (!parentId) {
+  console.log(fileName, parentId, items);
+
+  if (!parentId || parentId === "null") {
     return (
       items.find((item) => item.type === "file" && item.name === fileName) ||
       null
@@ -53,8 +55,8 @@ export const findFolderAndCheckFileExistance = (
       if (item.children && item.children.length > 0) {
         const found = findFolderAndCheckFileExistance(
           item.children,
-          parentId,
-          fileName
+          fileName,
+          parentId
         );
         if (found) return found;
       }

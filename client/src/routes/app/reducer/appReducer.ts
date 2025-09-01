@@ -59,7 +59,7 @@ const appReducer = createSlice({
       }: {
         payload: {
           currentProjectFp: ProjectFilesFoldersType;
-          parentId: string | null;
+          parentId?: string | null;
           fileId?: string;
           fileName?: string;
         };
@@ -69,10 +69,14 @@ const appReducer = createSlice({
       if (payload.fileName && payload.currentProjectFp) {
         const fileData = findFolderAndCheckFileExistance(
           payload.currentProjectFp.items,
-          payload.parentId,
-          payload.fileName
+          payload.fileName,
+          payload.parentId
         );
+        console.log(fileData);
+
         if (fileData) {
+          console.log(fileData);
+
           state.currentProjectOpenFile = {
             _id: fileData._id,
             name: fileData.name,

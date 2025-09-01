@@ -5,11 +5,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { Navigate } from "react-router-dom";
 
-interface AuthProtectorProps {
+interface AuthCheckerProps {
   children: React.ReactNode;
 }
 
-const AuthProtector = ({ children }: AuthProtectorProps) => {
+const AuthChecker = ({ children }: AuthCheckerProps) => {
   const dispatch = useDispatch();
   const { data: user, isLoading } = useQuery({
     queryKey: ["authenticateUser"],
@@ -19,10 +19,12 @@ const AuthProtector = ({ children }: AuthProtectorProps) => {
       return data;
     },
     retry: 1,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
   });
   if (isLoading) return <Loading />;
-  if (!isLoading && user?.email) return <Navigate to={"/"} />;
+  if (!isLoading && !user?.email) return <Navigate to={"/auth/login"} />;
   return <>{children}</>;
 };
 
-export default AuthProtector;
+export default AuthChecker;

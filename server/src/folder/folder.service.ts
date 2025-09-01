@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFolderDto } from './dto/create-folder.dto';
+import { CreateFolderDto, SaveCodeDto } from './dto/create-folder.dto';
 import { Request } from 'express';
 import { ProjectItem } from './schemas/folder.model';
 import { CustomException } from 'src/custom.exception';
@@ -120,32 +120,76 @@ export class FolderService {
     return { hierarchy, projectName: project.name, projectId: project._id };
   }
 
-  async saveCode(code: string, fileId: string) {
-    const realCode = sanitize(code);
+  async saveCode({ code, fileId, projectId }: SaveCodeDto, req: Request) {
+    try {
+      const user = req.body.user;
+      const realCode = sanitize(code);
 
-    const savedCode = await ProjectItem.findOneAndUpdate(
-      {
-        _id: fileId,
-        isFolder: false,
-      },
-      {
-        code: realCode,
-      },
-    );
-    if (!savedCode) {
-      const saveFolderFileCode = await ProjectItem.updateOne(
-        { 'projecProjectItems._id': fileId },
-        {
-          $set: { 'projecProjectItems.$.code': realCode },
-        },
-      );
-      if (saveFolderFileCode) {
-        return { message: 'Code saved successfully' };
-      } else {
-        throw new CustomException('Something went wrong');
+      const project = await Project.findOne({ _id: projectId });
+      if (!project) {
+        throw new CustomException('Project not found');
       }
-    } else {
+
+      if (
+        project.creator.toString() !== user.id &&
+        !project.contributor.some((id) => id.equals(user.id))
+      ) {
+        throw new CustomException(
+          'You are not authorized to change the code of the project',
+        );
+      }
+
+      const file = await ProjectItem.findOneAndUpdate(
+        { _id: new Types.ObjectId(fileId), type: 'file' },
+        { code: realCode },
+        { new: true },
+      );
+
+      if (!file) {
+        throw new CustomException('File not found');
+      }
+
       return { message: 'Code saved successfully' };
+    } catch (error) {
+      if (error instanceof CustomException) {
+        throw error; // rethrow your domain-specific exceptions
+      }
+      throw new CustomException(
+        'An unexpected error occurred while saving code',
+      );
+    }
+  }
+
+  async executeCode({ code }: { code: string }) {
+    try {
+      const realCode = sanitize(code);
+      const response = await fetch('https://emkc.org/api/v2/piston/execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          language: 'javascript',
+          version: '18.15.0',
+          files: [
+            {
+              content: realCode,
+            },
+          ],
+        }),
+      });
+      if (!response.ok) {
+        throw new CustomException('Failed to execute code');
+      }
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      if (error instanceof CustomException) {
+        throw error;
+      }
+      throw new CustomException(
+        'An unexpected error occurred while saving code',
+      );
     }
   }
 }

@@ -12,6 +12,7 @@ const folder_model_1 = require("./schemas/folder.model");
 const custom_exception_1 = require("../custom.exception");
 const sanitize = require("mongo-sanitize");
 const project_model_1 = require("../project/schemas/project.model");
+const mongoose_1 = require("mongoose");
 let FolderService = class FolderService {
     async createFolder(createFolderDto, req) {
         const { user } = req.body;
@@ -96,27 +97,58 @@ let FolderService = class FolderService {
         });
         return { hierarchy, projectName: project.name, projectId: project._id };
     }
-    async saveCode(code, fileId) {
-        const realCode = sanitize(code);
-        const savedCode = await folder_model_1.ProjectItem.findOneAndUpdate({
-            _id: fileId,
-            isFolder: false,
-        }, {
-            code: realCode,
-        });
-        if (!savedCode) {
-            const saveFolderFileCode = await folder_model_1.ProjectItem.updateOne({ 'projecProjectItems._id': fileId }, {
-                $set: { 'projecProjectItems.$.code': realCode },
-            });
-            if (saveFolderFileCode) {
-                return { message: 'Code saved successfully' };
+    async saveCode({ code, fileId, projectId }, req) {
+        try {
+            const user = req.body.user;
+            const realCode = sanitize(code);
+            const project = await project_model_1.Project.findOne({ _id: projectId });
+            if (!project) {
+                throw new custom_exception_1.CustomException('Project not found');
             }
-            else {
-                throw new custom_exception_1.CustomException('Something went wrong');
+            if (project.creator.toString() !== user.id &&
+                !project.contributor.some((id) => id.equals(user.id))) {
+                throw new custom_exception_1.CustomException('You are not authorized to change the code of the project');
             }
-        }
-        else {
+            const file = await folder_model_1.ProjectItem.findOneAndUpdate({ _id: new mongoose_1.Types.ObjectId(fileId), type: 'file' }, { code: realCode }, { new: true });
+            if (!file) {
+                throw new custom_exception_1.CustomException('File not found');
+            }
             return { message: 'Code saved successfully' };
+        }
+        catch (error) {
+            if (error instanceof custom_exception_1.CustomException) {
+                throw error;
+            }
+            throw new custom_exception_1.CustomException('An unexpected error occurred while saving code');
+        }
+    }
+    async executeCode({ code }) {
+        try {
+            const realCode = sanitize(code);
+            const response = await fetch('https://emkc.org/api/v2/piston/execute', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    language: 'javascript',
+                    version: '18.15.0',
+                    files: [
+                        {
+                            content: realCode,
+                        },
+                    ],
+                }),
+            });
+            if (!response.ok) {
+                throw new custom_exception_1.CustomException('Failed to execute code');
+            }
+            const data = await response.json();
+            return data;
+        }
+        catch (error) {
+            if (error instanceof custom_exception_1.CustomException) {
+                throw error;
+            }
+            throw new custom_exception_1.CustomException('An unexpected error occurred while saving code');
         }
     }
 };

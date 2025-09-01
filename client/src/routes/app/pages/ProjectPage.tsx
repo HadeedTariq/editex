@@ -50,7 +50,7 @@ const ProjectPage = () => {
           fileId: fileId || undefined,
           fileName: fileName,
         })
-      ).payload;
+      );
       return data;
     },
     refetchOnWindowFocus: false,

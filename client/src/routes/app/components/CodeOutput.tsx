@@ -1,34 +1,47 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { executeCode } from "@/lib/api";
+import { projectItemApi } from "@/lib/axios";
+import { useMutation } from "@tanstack/react-query";
+
 import { Play } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface CodeOutputType {
   sourceCode: string;
+  fileId: string | undefined;
 }
 
-const CodeOutput = ({ sourceCode }: CodeOutputType) => {
+const CodeOutput = ({ sourceCode, fileId }: CodeOutputType) => {
   const [output, setOutput] = useState<[] | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-
-  const runCode = async () => {
-    try {
-      setIsLoading(true);
-      const { run: result } = await executeCode(sourceCode);
-      setOutput(result.output.split("\n"));
-      result.stderr ? setIsError(true) : setIsError(false);
-    } catch (error: any) {
-      toast({
-        title: "An error occurred.",
-        description: error.message || "Unable to run code",
-        duration: 6000,
+  const { mutate, isPending: isLoading } = useMutation({
+    mutationKey: [`executecurrentProjectOpenFileCode${fileId}`],
+    mutationFn: async () => {
+      const { data } = await projectItemApi.post("executeCode", {
+        code: sourceCode,
       });
-    } finally {
-      setIsLoading(false);
-    }
+      return data;
+    },
+    onSuccess: (data: any) => {
+      setOutput(data.run.output.split("\n"));
+      setIsError(!!data.run.stderr);
+      toast({
+        title: "Code executed successfully",
+      });
+    },
+    onError: (err: ServerError) => {
+      toast({
+        title:
+          err.response.data.message ||
+          "Something wrong happen on the server side",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const runCode = () => {
+    mutate();
   };
 
   useEffect(() => {
@@ -44,7 +57,8 @@ const CodeOutput = ({ sourceCode }: CodeOutputType) => {
           variant={"project"}
           onClick={runCode}
           size={"sm"}
-          disabled={isLoading}>
+          disabled={isLoading}
+        >
           <Play />
         </Button>
       </div>
@@ -53,7 +67,8 @@ const CodeOutput = ({ sourceCode }: CodeOutputType) => {
           ? output.map((line, i) => (
               <p
                 key={i}
-                className={`text-start ${isError ? "text-red-400" : ""}`}>
+                className={`text-start ${isError ? "text-red-400" : ""}`}
+              >
                 {line}
               </p>
             ))

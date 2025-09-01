@@ -27,8 +27,11 @@ let FolderController = class FolderController {
     createFile(createFile, req) {
         return this.folderService.createFile(createFile, req);
     }
-    saveCode({ code, fileId }) {
-        return this.folderService.saveCode(code, fileId);
+    saveCode(saveCode, req) {
+        return this.folderService.saveCode(saveCode, req);
+    }
+    executeCode({ code }) {
+        return this.folderService.executeCode({ code });
     }
     getProjectFilesAndFolders(id, req) {
         return this.folderService.getProjectFilesAndFolders(id, req);
@@ -56,11 +59,20 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Post)('saveCode'),
+    __param(0, (0, common_1.Body)(common_1.ValidationPipe)),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [create_folder_dto_1.SaveCodeDto, Object]),
+    __metadata("design:returntype", void 0)
+], FolderController.prototype, "saveCode", null);
+__decorate([
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, common_1.Post)('executeCode'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], FolderController.prototype, "saveCode", null);
+], FolderController.prototype, "executeCode", null);
 __decorate([
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, common_1.Get)(':id'),

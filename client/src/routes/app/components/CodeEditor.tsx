@@ -39,6 +39,7 @@ const CodeEditor = () => {
       const { data } = await projectItemApi.post("saveCode", {
         code: currentProjectOpenFileCode?.code,
         fileId,
+        projectId: id,
       });
       return data;
     },
@@ -47,9 +48,11 @@ const CodeEditor = () => {
         title: data.message || "Code saved successfully",
       });
     },
-    onError: () => {
+    onError: (err: ServerError) => {
       toast({
-        title: "Something wrong happen on the server side",
+        title:
+          err.response.data.message ||
+          "Something wrong happen on the server side",
         variant: "destructive",
       });
     },
@@ -108,7 +111,10 @@ const CodeEditor = () => {
             }}
           />
         </div>
-        <CodeOutput sourceCode={currentProjectOpenFileCode?.code as string} />
+        <CodeOutput
+          sourceCode={currentProjectOpenFileCode?.code as string}
+          fileId={currentProjectOpenFile?._id}
+        />
       </div>
     </div>
   );

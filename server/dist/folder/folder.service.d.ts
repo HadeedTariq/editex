@@ -1,4 +1,4 @@
-import { CreateFolderDto } from './dto/create-folder.dto';
+import { CreateFolderDto, SaveCodeDto } from './dto/create-folder.dto';
 import { Request } from 'express';
 export declare class FolderService {
     createFolder(createFolderDto: CreateFolderDto, req: Request): Promise<{
@@ -12,7 +12,10 @@ export declare class FolderService {
         projectName: string;
         projectId: unknown;
     }>;
-    saveCode(code: string, fileId: string): Promise<{
+    saveCode({ code, fileId, projectId }: SaveCodeDto, req: Request): Promise<{
         message: string;
     }>;
+    executeCode({ code }: {
+        code: string;
+    }): Promise<any>;
 }

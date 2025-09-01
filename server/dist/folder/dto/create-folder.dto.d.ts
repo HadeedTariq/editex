@@ -8,3 +8,8 @@ export declare class CreateFileDto {
     parentId?: string;
     name: string;
 }
+export declare class SaveCodeDto {
+    code: string;
+    fileId: string;
+    projectId: string;
+}

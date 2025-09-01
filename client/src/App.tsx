@@ -6,10 +6,6 @@ import Home from "./routes/app/pages/Home";
 import NavBar from "./components/Navbar";
 import { useEffect } from "react";
 import { useTheme } from "./hooks/useTheme";
-import { useQuery } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
-import { authApi } from "./lib/axios";
-import { setUser } from "./reducers/fullAppReducer";
 import AuthProtector from "./routes/auth/components/AuthProtector";
 import ProjectHandler from "./routes/app/components/ProjectHandler";
 import ProjectPage from "./routes/app/pages/ProjectPage";
@@ -22,20 +18,10 @@ import NotFound from "./components/NotFound";
 import CreateBlog from "./routes/app/pages/CreateBlog";
 import PublicBlogs from "./routes/app/pages/PublicBlogs";
 import BlogPage from "./routes/app/pages/BlogPage";
-import Loading from "./components/ui/loading";
+import AuthChecker from "./routes/app/components/AuthChecker";
 
 function App() {
   const { theme } = useTheme();
-  const dispatch = useDispatch();
-  const { isLoading } = useQuery({
-    queryKey: ["authenticateUser"],
-    queryFn: async () => {
-      const { data } = await authApi.get("/");
-      dispatch(setUser(data));
-      return data;
-    },
-    retry: 1,
-  });
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -55,8 +41,6 @@ function App() {
     root.classList.add(theme);
   }, [theme]);
 
-  if (isLoading) return <Loading />;
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -64,7 +48,11 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: (
+            <AuthChecker>
+              <Home />
+            </AuthChecker>
+          ),
         },
         {
           path: "/auth",
@@ -89,48 +77,88 @@ function App() {
         },
         {
           path: "/createBlog",
-          element: <CreateBlog />,
+          element: (
+            <AuthChecker>
+              <CreateBlog />
+            </AuthChecker>
+          ),
         },
         {
           path: "/projects",
-          element: <ProjectHandler />,
+          element: (
+            <AuthChecker>
+              <ProjectHandler />
+            </AuthChecker>
+          ),
         },
         {
           path: "/publicProjects",
-          element: <PublicProjects />,
+          element: (
+            <AuthChecker>
+              <PublicProjects />
+            </AuthChecker>
+          ),
         },
         {
           path: "/notifications",
-          element: <Notififcations />,
+          element: (
+            <AuthChecker>
+              <Notififcations />
+            </AuthChecker>
+          ),
         },
         {
           path: "/projectNotifications",
-          element: <ProjectNotifications />,
+          element: (
+            <AuthChecker>
+              <ProjectNotifications />
+            </AuthChecker>
+          ),
         },
         {
           path: "/blogs",
           children: [
             {
               index: true,
-              element: <PublicBlogs />,
+              element: (
+                <AuthChecker>
+                  <PublicBlogs />
+                </AuthChecker>
+              ),
             },
             {
               path: ":id",
-              element: <BlogPage />,
+              element: (
+                <AuthChecker>
+                  <BlogPage />
+                </AuthChecker>
+              ),
             },
           ],
         },
         {
           path: "/projects/:id",
-          element: <ProjectPage />,
+          element: (
+            <AuthChecker>
+              <ProjectPage />
+            </AuthChecker>
+          ),
           children: [
             {
               index: true,
-              element: <DefaultEditor />,
+              element: (
+                <AuthChecker>
+                  <DefaultEditor />
+                </AuthChecker>
+              ),
             },
             {
               path: "js/:fileName",
-              element: <CodeEditor />,
+              element: (
+                <AuthChecker>
+                  <CodeEditor />
+                </AuthChecker>
+              ),
             },
           ],
         },

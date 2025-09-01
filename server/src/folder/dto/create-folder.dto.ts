@@ -27,3 +27,17 @@ export class CreateFileDto {
   @IsNotEmpty()
   name: string;
 }
+
+export class SaveCodeDto {
+  @IsString()
+  @IsNotEmpty()
+  code: string;
+
+  @IsString()
+  @IsNotEmpty()
+  fileId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  projectId: string;
+}

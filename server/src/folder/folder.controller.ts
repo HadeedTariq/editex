@@ -10,7 +10,11 @@ import {
   Req,
 } from '@nestjs/common';
 import { FolderService } from './folder.service';
-import { CreateFileDto, CreateFolderDto } from './dto/create-folder.dto';
+import {
+  CreateFileDto,
+  CreateFolderDto,
+  SaveCodeDto,
+} from './dto/create-folder.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 
@@ -38,8 +42,13 @@ export class FolderController {
 
   @UseGuards(AuthGuard)
   @Post('saveCode')
-  saveCode(@Body() { code, fileId }: { code: string; fileId: string }) {
-    return this.folderService.saveCode(code, fileId);
+  saveCode(@Body(ValidationPipe) saveCode: SaveCodeDto, @Req() req: Request) {
+    return this.folderService.saveCode(saveCode, req);
+  }
+  @UseGuards(AuthGuard)
+  @Post('executeCode')
+  executeCode(@Body() { code }: { code: string }) {
+    return this.folderService.executeCode({ code });
   }
   @UseGuards(AuthGuard)
   @Get(':id')
