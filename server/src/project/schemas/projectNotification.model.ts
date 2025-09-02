@@ -9,10 +9,6 @@ const projectNotificationSchema = new Schema({
     type: String,
     required: true,
   },
-  itemId: {
-    type: Schema.Types.ObjectId,
-    ref: 'ProjectItem',
-  },
   sender: {
     type: Schema.Types.ObjectId,
     ref: 'User',

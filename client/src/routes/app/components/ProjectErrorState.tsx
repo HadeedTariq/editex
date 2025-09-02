@@ -19,8 +19,8 @@ const ProjectErrorState = ({ error }: { error: any }) => {
             <LucideFileWarning size={100} className="text-yellow-500 mb-6" />
           ),
           action: {
-            text: "Go to Dashboard",
-            link: "/dashboard",
+            text: "Go to Home",
+            link: "/",
           },
         };
       case "You are not authorized to access this project":
@@ -32,8 +32,8 @@ const ProjectErrorState = ({ error }: { error: any }) => {
             <LucideUserRoundSearch size={100} className="text-red-500 mb-6" />
           ),
           action: {
-            text: "Go to Dashboard",
-            link: "/dashboard",
+            text: "Go to Home",
+            link: "/home",
           },
         };
       default:

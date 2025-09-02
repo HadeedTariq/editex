@@ -16,11 +16,12 @@ exports.projectSchema = new mongoose_1.Schema({
         ref: 'User',
         required: true,
     },
-    contributor: {
-        type: [mongoose_1.Schema.Types.ObjectId],
-        required: true,
-        unique: true,
-    },
+    contributor: [
+        {
+            type: mongoose_1.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+    ],
     password: {
         type: String,
         required: false,

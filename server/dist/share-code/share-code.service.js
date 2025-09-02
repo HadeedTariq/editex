@@ -32,15 +32,16 @@ let ShareCodeService = class ShareCodeService {
         return allUsers;
     }
     async setProjectContributors(req, allowUserIds, projectId) {
+        const projects = await project_model_1.Project.find();
         const { user } = req.body;
-        const isUserAlreadyExistInContributors = await project_model_1.Project.findOne({
+        const alreadyExistedUser = await project_model_1.Project.findOne({
             _id: projectId,
-            contributor: {
-                $in: allowUserIds,
-            },
-        });
-        if (isUserAlreadyExistInContributors) {
-            return { message: 'These users already exist in contributors' };
+            contributor: { $in: allowUserIds },
+        }).populate('contributor', 'username');
+        if (alreadyExistedUser) {
+            const matched = alreadyExistedUser.contributor.filter((user) => allowUserIds.includes(user._id.toString()));
+            const usernames = matched.map((u) => u.username).join(', ');
+            return { message: `${usernames} already exist in contributors` };
         }
         const updateProject = await project_model_1.Project.findOneAndUpdate({
             creator: user.id,

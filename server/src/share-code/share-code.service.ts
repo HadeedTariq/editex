@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 import { User } from 'src/auth/schema/auth.model';
 import { CustomException } from 'src/custom.exception';
 import { Project } from 'src/project/schemas/project.model';
@@ -31,19 +31,22 @@ export class ShareCodeService {
   async setProjectContributors(
     req: Request,
     allowUserIds: string[],
-    projectId,
+    projectId: string,
   ) {
+    const projects = await Project.find();
+
     const { user } = req.body;
-
-    const isUserAlreadyExistInContributors = await Project.findOne({
+    const alreadyExistedUser = await Project.findOne({
       _id: projectId,
-      contributor: {
-        $in: allowUserIds,
-      },
-    });
+      contributor: { $in: allowUserIds },
+    }).populate('contributor', 'username');
 
-    if (isUserAlreadyExistInContributors) {
-      return { message: 'These users already exist in contributors' };
+    if (alreadyExistedUser) {
+      const matched = alreadyExistedUser.contributor.filter((user) =>
+        allowUserIds.includes(user._id.toString()),
+      );
+      const usernames = matched.map((u: any) => u.username).join(', ');
+      return { message: `${usernames} already exist in contributors` };
     }
 
     const updateProject = await Project.findOneAndUpdate(

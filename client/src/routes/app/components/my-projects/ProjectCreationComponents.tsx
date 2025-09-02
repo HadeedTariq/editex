@@ -75,8 +75,7 @@ const ProjectCreationComponents = () => {
           <X size={25} onClick={() => setIsALert(false)} />
           <AlertTitle>Important Note!</AlertTitle>
           <AlertDescription>
-            Your public projects are available to all the users of the app and
-            anyone can directly change the code
+            Your public projects are available to all the users of the app
           </AlertDescription>
         </Alert>
       )}

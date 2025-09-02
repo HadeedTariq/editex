@@ -8,7 +8,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Share } from "lucide-react";
+import { Share, X } from "lucide-react";
 import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
@@ -30,6 +30,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { shareCodeApi } from "@/lib/axios";
 import Loading from "@/components/ui/loading";
 import { toast } from "@/components/ui/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 interface ShareCodeType {
   projectId: string;
@@ -37,7 +38,8 @@ interface ShareCodeType {
 
 const ShareCode = ({ projectId }: ShareCodeType) => {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState<string[]>([]);
+  const [selectedUserIds, setSelectedUserIds] = React.useState<string[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const { data: users, isLoading } = useQuery({
     queryKey: ["getAllUsers"],
@@ -47,105 +49,147 @@ const ShareCode = ({ projectId }: ShareCodeType) => {
     },
   });
 
-  const { mutate: allowContributors, isPending } = useMutation({
-    mutationKey: [`allowContributors${projectId}`],
+  const { mutate: setContributors, isPending } = useMutation({
+    mutationKey: [`setContributors${projectId}`],
     mutationFn: async () => {
-      if (value.length < 1) {
+      if (selectedUserIds.length < 1) {
         toast({
-          title: "Please select Contributors",
+          title: "Please select contributors",
         });
         return;
       }
       const { data } = await shareCodeApi.put("setContributors", {
-        allowUserIds: value,
+        allowUserIds: selectedUserIds,
         projectId,
       });
       return data;
     },
-    onSuccess: (data: any) => {
+    onSuccess: (data) => {
       toast({
-        title: data.message || "Contributors set successfully",
+        title: data.message || "Contributors updated successfully",
+      });
+      setSelectedUserIds([]);
+    },
+    onError: (error) => {
+      toast({
+        title: "Error setting contributors",
+        description: error.message,
+        variant: "destructive",
       });
     },
   });
 
-  React.useEffect(() => {
-    setValue([]);
-  }, [projectId]);
+  const handleSelectUser = (userId: string) => {
+    setSelectedUserIds((prev) =>
+      prev.includes(userId)
+        ? prev.filter((id) => id !== userId)
+        : [...prev, userId]
+    );
+    setOpen(true);
+  };
+
+  const handleRemoveUser = (userId: string) => {
+    setSelectedUserIds((prev) => prev.filter((id) => id !== userId));
+  };
 
   if (isLoading) return <Loading />;
+
+  const availableUsers = users?.filter(
+    (user) => !selectedUserIds.includes(user._id)
+  );
+
+  const selectedUsers = users?.filter((user) =>
+    selectedUserIds.includes(user._id)
+  );
+
   return (
-    <>
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button
-            variant={"outline"}
-            className="w-full gap-3 items-center flex">
-            Share
-            <Share size={17} />
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent className="w-full">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Share Your project</AlertDialogTitle>
-          </AlertDialogHeader>
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
+    <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <AlertDialogTrigger asChild>
+        <Button variant={"outline"} className="w-full gap-3 items-center flex">
+          Share
+          <Share size={17} />
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent className="w-full">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Share Your Project</AlertDialogTitle>
+        </AlertDialogHeader>
+
+        <div className="flex flex-wrap gap-2 py-2">
+          {selectedUsers?.map((user) => (
+            <Badge
+              key={user._id}
+              variant="secondary"
+              className="flex items-center gap-1"
+            >
+              {user.username}
               <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={open}
-                className="w-full justify-between">
-                {value.length
-                  ? users?.find((user) => value.includes(user._id))?.username
-                  : "Select user"}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                variant="ghost"
+                size="icon"
+                onClick={() => handleRemoveUser(user._id)}
+                className="h-4 w-4 rounded-full"
+              >
+                <X size={12} />
               </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-full p-0">
-              <Command className="w-full">
-                <CommandInput placeholder="Search user..." />
-                <CommandList>
-                  <CommandEmpty>No user found.</CommandEmpty>
-                  <CommandGroup>
-                    {users?.map((user) => (
-                      <CommandItem
-                        key={user.username}
-                        value={user.username}
-                        onSelect={() => {
-                          setValue((prev) =>
-                            value.includes(user._id) ? [] : [...prev, user._id]
-                          );
-                          setOpen(false);
-                        }}>
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            value.includes(user._id)
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                        {user.username}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            </Badge>
+          ))}
+        </div>
+
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
             <Button
-              variant={"edit"}
-              onClick={() => allowContributors()}
-              disabled={isPending}>
-              Share
+              variant="outline"
+              role="combobox"
+              aria-expanded={open}
+              className="w-full justify-between"
+            >
+              Select Users
+              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
+          </PopoverTrigger>
+          <PopoverContent className="w-full p-0">
+            <Command className="w-full">
+              <CommandInput placeholder="Search user..." />
+              <CommandList>
+                <CommandEmpty>No user found.</CommandEmpty>
+                <CommandGroup>
+                  {availableUsers?.map((user) => (
+                    <CommandItem
+                      key={user._id}
+                      value={user.username}
+                      onSelect={() => handleSelectUser(user._id)}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          selectedUserIds.includes(user._id)
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                      {user.username}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
+          </PopoverContent>
+        </Popover>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={() => setIsDialogOpen(false)}>
+            Cancel
+          </AlertDialogCancel>
+          <Button
+            variant={"edit"}
+            onClick={() => setContributors()}
+            disabled={isPending || selectedUserIds.length < 1}
+          >
+            Share
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

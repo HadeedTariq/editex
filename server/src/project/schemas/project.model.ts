@@ -24,11 +24,13 @@ export const projectSchema = new Schema<ProjectDocument>(
       ref: 'User',
       required: true,
     },
-    contributor: {
-      type: [Schema.Types.ObjectId],
-      required: true,
-      unique: true,
-    },
+    contributor: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+
     password: {
       type: String,
       required: false,

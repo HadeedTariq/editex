@@ -11,10 +11,6 @@ const projectNotificationSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
-    itemId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'ProjectItem',
-    },
     sender: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',

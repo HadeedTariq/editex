@@ -104,9 +104,7 @@ const Projects = () => {
                 Delete Project
               </Button>
               <EditProject projectId={project._id} />
-              {project.public === false && (
-                <ShareCode projectId={project._id} />
-              )}
+              <ShareCode projectId={project._id} />
             </CardContent>
           </Card>
         ))}

@@ -121,7 +121,7 @@ const Notififcations = () => {
                 variant={"edit"}
                 className="h-8 gap-1"
                 onClick={() => {
-                  navigate(`/privateProject/${notification.projectId}`);
+                  navigate(`/projects/${notification.projectId}`);
                 }}
               >
                 Visit Repository
