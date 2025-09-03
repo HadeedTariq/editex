@@ -154,6 +154,8 @@ export class FolderService {
       if (error instanceof CustomException) {
         throw error; // rethrow your domain-specific exceptions
       }
+      console.log(error);
+
       throw new CustomException(
         'An unexpected error occurred while saving code',
       );

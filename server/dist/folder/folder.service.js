@@ -119,6 +119,7 @@ let FolderService = class FolderService {
             if (error instanceof custom_exception_1.CustomException) {
                 throw error;
             }
+            console.log(error);
             throw new custom_exception_1.CustomException('An unexpected error occurred while saving code');
         }
     }

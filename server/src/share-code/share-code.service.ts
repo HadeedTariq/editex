@@ -33,9 +33,8 @@ export class ShareCodeService {
     allowUserIds: string[],
     projectId: string,
   ) {
-    const projects = await Project.find();
-
     const { user } = req.body;
+
     const alreadyExistedUser = await Project.findOne({
       _id: projectId,
       contributor: { $in: allowUserIds },

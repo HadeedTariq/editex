@@ -32,7 +32,6 @@ let ShareCodeService = class ShareCodeService {
         return allUsers;
     }
     async setProjectContributors(req, allowUserIds, projectId) {
-        const projects = await project_model_1.Project.find();
         const { user } = req.body;
         const alreadyExistedUser = await project_model_1.Project.findOne({
             _id: projectId,
