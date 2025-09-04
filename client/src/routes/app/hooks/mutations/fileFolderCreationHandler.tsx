@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { v4 as uuid } from "uuid";
+
 import {
   useMutation,
   useQueryClient,
@@ -8,29 +7,20 @@ import {
 } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast";
 import { projectItemApi } from "@/lib/axios";
-import { useFullApp } from "@/hooks/useFullApp";
-import { setItemsCP } from "../../reducer/appReducer";
+
 import { useAppRouter } from "../useAppRouter";
 import {
   findFolderAndCheckFiles,
   findFolderAndCheckFolders,
 } from "@/lib/utils";
 
-type FolderFile = {
-  visible: boolean;
-  isFolder: boolean;
-  folderId: string;
-};
-
 type Props = {
   projectId: string;
 };
 
 export const useFileFolderHandler = ({ projectId }: Props) => {
-  const { user } = useFullApp();
   const { currentProjectFP } = useAppRouter();
   const queryClient = useQueryClient();
-  const dispatch = useDispatch();
 
   const [showInput, setShowInput] = useState<{
     visible: boolean;
