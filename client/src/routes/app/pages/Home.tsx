@@ -36,12 +36,6 @@ const Home = () => {
             <Button onClick={() => redirection("/projects")}>
               Get Started
             </Button>
-            <Button
-              onClick={() => redirection("/createBlog")}
-              variant={"project"}
-            >
-              Create Blog
-            </Button>
           </div>
         </div>
       </div>

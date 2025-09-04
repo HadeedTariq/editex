@@ -38,20 +38,6 @@ type PublicProjectsType = {
   public: boolean;
 };
 
-interface BlogsType {
-  category: string;
-  content: string;
-  description: string;
-  image: string;
-  title: string;
-  _id: string;
-  creator: {
-    username: string;
-    passion: string;
-    _id: string;
-  };
-}
-
 type ProjectItemType = "file" | "folder";
 
 interface ProjectItemTree {

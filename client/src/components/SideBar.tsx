@@ -27,9 +27,8 @@ const SideBar = () => {
 
   const navItems = [
     { path: "/notifications", label: "Notifications" },
-    { path: "/project/publicProjects", label: "Public Projects" },
+    { path: "/publicProjects", label: "Public Projects" },
     { path: "/projectNotifications", label: "Project Notifications" },
-    { path: "/blogs", label: "Blogs" },
   ];
 
   return (

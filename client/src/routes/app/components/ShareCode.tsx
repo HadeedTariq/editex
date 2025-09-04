@@ -92,8 +92,6 @@ const ShareCode = ({ projectId }: ShareCodeType) => {
     setSelectedUserIds((prev) => prev.filter((id) => id !== userId));
   };
 
-  if (isLoading) return <Loading />;
-
   const availableUsers = users?.filter(
     (user) => !selectedUserIds.includes(user._id)
   );
@@ -116,23 +114,25 @@ const ShareCode = ({ projectId }: ShareCodeType) => {
         </AlertDialogHeader>
 
         <div className="flex flex-wrap gap-2 py-2">
-          {selectedUsers?.map((user) => (
-            <Badge
-              key={user._id}
-              variant="secondary"
-              className="flex items-center gap-1"
-            >
-              {user.username}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleRemoveUser(user._id)}
-                className="h-4 w-4 rounded-full"
+          {isLoading && <Loading />}
+          {!isLoading &&
+            selectedUsers?.map((user) => (
+              <Badge
+                key={user._id}
+                variant="secondary"
+                className="flex items-center gap-1"
               >
-                <X size={12} />
-              </Button>
-            </Badge>
-          ))}
+                {user.username}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleRemoveUser(user._id)}
+                  className="h-4 w-4 rounded-full"
+                >
+                  <X size={12} />
+                </Button>
+              </Badge>
+            ))}
         </div>
 
         <Popover open={open} onOpenChange={setOpen}>

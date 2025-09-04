@@ -21,9 +21,5 @@ const shareCodeApi = axios.create({
   baseURL: `${url}/share-code`,
   withCredentials: true,
 });
-const blogApi = axios.create({
-  baseURL: `${url}/blog`,
-  withCredentials: true,
-});
 
-export { authApi, projectApi, projectItemApi, shareCodeApi, blogApi };
+export { authApi, projectApi, projectItemApi, shareCodeApi };

@@ -15,9 +15,6 @@ import PublicProjects from "./routes/app/pages/PublicProjects";
 import Notififcations from "./routes/app/pages/Notififcations";
 import ProjectNotifications from "./routes/app/pages/ProjectNotifications";
 import NotFound from "./components/NotFound";
-import CreateBlog from "./routes/app/pages/CreateBlog";
-import PublicBlogs from "./routes/app/pages/PublicBlogs";
-import BlogPage from "./routes/app/pages/BlogPage";
 import AuthChecker from "./routes/app/components/AuthChecker";
 
 function App() {
@@ -75,14 +72,7 @@ function App() {
             },
           ],
         },
-        {
-          path: "/createBlog",
-          element: (
-            <AuthChecker>
-              <CreateBlog />
-            </AuthChecker>
-          ),
-        },
+
         {
           path: "/projects",
           element: (
@@ -115,27 +105,7 @@ function App() {
             </AuthChecker>
           ),
         },
-        {
-          path: "/blogs",
-          children: [
-            {
-              index: true,
-              element: (
-                <AuthChecker>
-                  <PublicBlogs />
-                </AuthChecker>
-              ),
-            },
-            {
-              path: ":id",
-              element: (
-                <AuthChecker>
-                  <BlogPage />
-                </AuthChecker>
-              ),
-            },
-          ],
-        },
+
         {
           path: "/projects/:id",
           element: (

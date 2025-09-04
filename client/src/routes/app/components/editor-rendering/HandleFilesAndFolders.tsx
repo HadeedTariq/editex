@@ -94,7 +94,6 @@ const HandleFilesAndFolders = ({
 
   const handleFileClick = (item: ProjectItemTree) => {
     if (item.type === "file") {
-      console.log("called");
       dispatch(
         setCurrentProjectOpenFileCode({
           projectId: currentProjectFP.projectId,
@@ -118,7 +117,9 @@ const HandleFilesAndFolders = ({
     level?: number;
   }) => {
     const hasChildren = item.children && item.children.length > 0;
-    const isSelected = currentProjectOpenFile?._id === item._id;
+    const isSelected =
+      currentProjectOpenFile?._id === item._id &&
+      currentProjectOpenFile?._id === item._id;
 
     const paddingLeft = level * 16;
 
@@ -157,6 +158,7 @@ const HandleFilesAndFolders = ({
                         isFolder: false,
                         visible: true,
                       });
+                      setOpenItems((prev) => [...prev, item._id]);
                     }}
                     xlinkTitle="Add file"
                   />
@@ -170,6 +172,7 @@ const HandleFilesAndFolders = ({
                         isFolder: true,
                         visible: true,
                       });
+                      setOpenItems((prev) => [...prev, item._id]);
                     }}
                     xlinkTitle="Add folder"
                   />
@@ -178,7 +181,7 @@ const HandleFilesAndFolders = ({
 
               <AccordionContent className="pb-0">
                 {/* Show input for new file/folder creation */}
-                {showInput?.visible && showInput.parentId === item._id && (
+                {showInput.visible && showInput.parentId === item._id && (
                   <div
                     className="flex items-center gap-2 h-8 px-2"
                     style={{ paddingLeft: `${paddingLeft + 32}px` }}
