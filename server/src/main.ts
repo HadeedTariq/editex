@@ -5,6 +5,12 @@ import { connectToDb } from './dbConnection/connectToDb';
 import * as cookieParser from 'cookie-parser';
 import { CustomExceptionFilter } from './exceptionFilter';
 import { createDummyProject } from 'src/scripts/createDummyProject';
+import { User, userSchema } from './auth/schema/auth.model';
+import {
+  createDummyNotifications,
+  createDummyProjectNotifications,
+} from './scripts/createDummyNotification';
+import { Project } from './project/schemas/project.model';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,8 +31,9 @@ async function bootstrap() {
   app.useGlobalFilters(new CustomExceptionFilter());
 
   await connectToDb(dbUri);
-
   await app.listen(port);
   // await createDummyProject();
+  // await createDummyNotifications();
+  // await createDummyProjectNotifications();
 }
 bootstrap();

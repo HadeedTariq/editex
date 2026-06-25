@@ -31,6 +31,7 @@ let ProjectService = class ProjectService {
         await project_model_1.Project.create({
             ...createProjectDto,
             creator: user.id,
+            contributor: [],
         });
         return { message: 'Project created successfully' };
     }

@@ -2,7 +2,6 @@ import mongoose, { Document, Types } from 'mongoose';
 export interface ProjectDocument extends Document {
     name: string;
     creator: Types.ObjectId;
-    reader: Types.ObjectId[];
     contributor: Types.ObjectId[];
     public: boolean;
     password?: string;
