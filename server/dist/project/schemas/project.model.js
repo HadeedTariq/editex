@@ -6,10 +6,10 @@ exports.projectSchema = new mongoose_1.Schema({
     name: {
         type: String,
         required: true,
-        unique: true,
-        lowercase: true,
         trim: true,
-        index: true,
+        lowercase: true,
+        minlength: 1,
+        maxlength: 100,
     },
     creator: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -24,7 +24,6 @@ exports.projectSchema = new mongoose_1.Schema({
     ],
     password: {
         type: String,
-        required: false,
     },
     public: {
         type: Boolean,
@@ -32,6 +31,18 @@ exports.projectSchema = new mongoose_1.Schema({
     },
 }, {
     timestamps: true,
+});
+exports.projectSchema.index({
+    creator: 1,
+    name: 1,
+}, {
+    unique: true,
+});
+exports.projectSchema.index({
+    creator: 1,
+});
+exports.projectSchema.index({
+    contributor: 1,
 });
 exports.Project = mongoose_1.default.model('Project', exports.projectSchema);
 //# sourceMappingURL=project.model.js.map

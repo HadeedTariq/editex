@@ -1,9 +1,8 @@
-import mongoose, { Schema, Document, Types } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export interface ProjectDocument extends Document {
   name: string;
   creator: Types.ObjectId;
-  reader: Types.ObjectId[];
   contributor: Types.ObjectId[];
   public: boolean;
   password?: string;
@@ -14,16 +13,18 @@ export const projectSchema = new Schema<ProjectDocument>(
     name: {
       type: String,
       required: true,
-      unique: true,
-      lowercase: true,
       trim: true,
-      index: true,
+      lowercase: true,
+      minlength: 1,
+      maxlength: 100,
     },
+
     creator: {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
+
     contributor: [
       {
         type: Schema.Types.ObjectId,
@@ -33,8 +34,8 @@ export const projectSchema = new Schema<ProjectDocument>(
 
     password: {
       type: String,
-      required: false,
     },
+
     public: {
       type: Boolean,
       default: true,
@@ -44,6 +45,27 @@ export const projectSchema = new Schema<ProjectDocument>(
     timestamps: true,
   },
 );
+
+// One user cannot create two projects having the same name.
+projectSchema.index(
+  {
+    creator: 1,
+    name: 1,
+  },
+  {
+    unique: true,
+  },
+);
+
+// Quickly fetch all projects of a user.
+projectSchema.index({
+  creator: 1,
+});
+
+// Quickly lookup contributors.
+projectSchema.index({
+  contributor: 1,
+});
 
 export const Project = mongoose.model<ProjectDocument>(
   'Project',

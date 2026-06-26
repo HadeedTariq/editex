@@ -126,17 +126,17 @@ let FolderService = class FolderService {
     async executeCode({ code }) {
         try {
             const realCode = sanitize(code);
-            const response = await fetch('https://emkc.org/api/v2/piston/execute', {
+            const compilerApiKey = process.env.COMPILER_API_KEY;
+            const response = await fetch('https://api.onlinecompiler.io/api/run-code-sync/', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: compilerApiKey,
+                },
                 body: JSON.stringify({
-                    language: 'javascript',
-                    version: '18.15.0',
-                    files: [
-                        {
-                            content: realCode,
-                        },
-                    ],
+                    compiler: 'typescript-deno',
+                    code: realCode,
+                    input: '',
                 }),
             });
             if (!response.ok) {

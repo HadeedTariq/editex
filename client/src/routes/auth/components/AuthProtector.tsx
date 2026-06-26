@@ -18,7 +18,10 @@ const AuthProtector = ({ children }: AuthProtectorProps) => {
       dispatch(setUser(data));
       return data;
     },
+    refetchOnWindowFocus: false,
     retry: 1,
+    refetchOnMount: true,
+    refetchInterval: 300000,
   });
   if (isLoading) return <Loading />;
   if (!isLoading && user?.email) return <Navigate to={"/"} />;

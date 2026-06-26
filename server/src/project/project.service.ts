@@ -29,6 +29,7 @@ export class ProjectService {
     await Project.create({
       ...createProjectDto,
       creator: user.id,
+      contributor: [],
     });
 
     return { message: 'Project created successfully' };

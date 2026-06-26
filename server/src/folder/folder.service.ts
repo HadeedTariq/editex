@@ -165,25 +165,31 @@ export class FolderService {
   async executeCode({ code }: { code: string }) {
     try {
       const realCode = sanitize(code);
-      const response = await fetch('https://emkc.org/api/v2/piston/execute', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          language: 'javascript',
-          version: '18.15.0',
-          files: [
-            {
-              content: realCode,
-            },
-          ],
-        }),
-      });
+      const compilerApiKey = process.env.COMPILER_API_KEY;
+
+      const response = await fetch(
+        'https://api.onlinecompiler.io/api/run-code-sync/',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: compilerApiKey!,
+          },
+          body: JSON.stringify({
+            compiler: 'typescript-deno',
+            code: realCode,
+            input: '',
+          }),
+        },
+      );
+
       if (!response.ok) {
         throw new CustomException('Failed to execute code');
       }
 
       const data = await response.json();
 
+      // The console output / result is stored in data.output
       return data;
     } catch (error) {
       if (error instanceof CustomException) {
