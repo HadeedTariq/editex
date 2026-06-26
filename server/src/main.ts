@@ -34,6 +34,6 @@ async function bootstrap() {
   await app.listen(port);
   // await createDummyProject();
   // await createDummyNotifications();
-  // await createDummyProjectNotifications();
+  // await createDummyProjectNotifications()
 }
 bootstrap();
