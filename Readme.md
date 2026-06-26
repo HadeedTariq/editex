@@ -135,15 +135,13 @@ To run the project locally:
    DB_URI=your-database-uri #mongodb uri
    PORT=3000
    JWT_SECRET=your-jwt-secret
+   COMPILER_API_KEY=your-online-compiler-key # https://api.onlinecompiler.io/
    ```
 
    For **client** (`client/.env`):
 
    ```bash
-   VITE_CLOUD_PRESET_NAME="" # Cloudinary preset
-   VITE_CLOUD_NAME="" # Cloudinary cloud name
    VITE_BACKEND_URL=http://localhost:3000
-
    ```
 
 4. **Start the application:**
