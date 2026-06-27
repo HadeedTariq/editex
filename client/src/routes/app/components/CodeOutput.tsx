@@ -166,7 +166,7 @@ const CodeOutput = ({ sourceCode, fileId }: CodeOutputType) => {
               </div>
             )}
 
-            <div className="overflow-auto rounded-lg border bg-black p-4 font-mono text-sm text-green-400">
+            <div className="max-h-96 overflow-y-auto rounded-lg border border-zinc-700 bg-black p-4 font-mono text-sm text-green-400 custom-scrollbar">
               {execution.output.trim().length ? (
                 execution.output
                   .trimEnd()
